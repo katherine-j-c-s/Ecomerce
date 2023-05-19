@@ -3,7 +3,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Role } from './role.model';
 
 @Module({
-    imports: [SequelizeModule.forFeature([Role])],
-    exports: [SequelizeModule]
+  imports: [SequelizeModule.forFeature([Role])],
+  exports: [SequelizeModule],
 })
 export class RoleModule {}
