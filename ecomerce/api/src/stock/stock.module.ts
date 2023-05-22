@@ -4,6 +4,6 @@ import { Stock } from './stock.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([Stock])],
-  exports: [SequelizeModule],
+  exports: [SequelizeModule]
 })
 export class StockModule {}

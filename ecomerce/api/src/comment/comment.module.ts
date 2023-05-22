@@ -4,6 +4,6 @@ import { Comment } from './comment.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([Comment])],
-  exports: [SequelizeModule],
+  exports: [SequelizeModule]
 })
 export class CommentModule {}

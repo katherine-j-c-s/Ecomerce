@@ -8,14 +8,14 @@ export class UserService {
       lastName: 'Maldonado',
       adress: 'San Jose 1010',
       email: 'pablo@gmail.com',
-      id: '1',
+      id: '1'
     },
     {
       firstName: 'Agustin',
       lastName: 'Andrada',
       adress: 'San Jose 1020',
       email: 'agustin@gmail.com',
-      id: '2',
+      id: '2'
     },
     {
       firstName: 'Horacio',
@@ -30,7 +30,7 @@ export class UserService {
       adress: 'San Jose 1010',
       email: 'bruno@gmail.com',
       id: '1',
-      profilePhoto: 'asd'
+      profilePhoto: 'asd',
     },
   ];
 
