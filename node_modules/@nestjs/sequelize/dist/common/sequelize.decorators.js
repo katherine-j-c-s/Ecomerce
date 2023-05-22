@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.InjectConnection = exports.InjectModel = void 0;
+const common_1 = require("@nestjs/common");
+const sequelize_constants_1 = require("../sequelize.constants");
+const sequelize_utils_1 = require("./sequelize.utils");
+const InjectModel = (entity, connection = sequelize_constants_1.DEFAULT_CONNECTION_NAME) => (0, common_1.Inject)((0, sequelize_utils_1.getModelToken)(entity, connection));
+exports.InjectModel = InjectModel;
+const InjectConnection = (connection) => (0, common_1.Inject)((0, sequelize_utils_1.getConnectionToken)(connection));
+exports.InjectConnection = InjectConnection;

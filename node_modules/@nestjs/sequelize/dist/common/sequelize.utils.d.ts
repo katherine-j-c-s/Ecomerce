@@ -1,0 +1,10 @@
+import { Type } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { Sequelize } from 'sequelize-typescript';
+import { SequelizeModuleOptions } from '../interfaces';
+export declare function getModelToken(entity: Function, connection?: SequelizeModuleOptions | string): string;
+export declare function getConnectionToken(connection?: SequelizeModuleOptions | string): string | Function | Type<Sequelize>;
+export declare function getConnectionPrefix(connection?: SequelizeModuleOptions | string): string;
+export declare function handleRetry(retryAttempts?: number, retryDelay?: number): <T>(source: Observable<T>) => Observable<T>;
+export declare function getConnectionName(options: SequelizeModuleOptions): string;
+export declare const generateString: () => string;

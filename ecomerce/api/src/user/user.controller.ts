@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 
@@ -13,18 +14,23 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async findAll() {
-    return await this.userService.findAll();
+  async getAllUsers() {
+    return await this.userService.getAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async findById(@Param('id') id: string) {
-    return await this.userService.findById(id);
+  async getById(@Param('id') id: string) {
+    return await this.userService.getById(id);
+  }
+
+  @Get('name')
+  async getByName(@Query('name') name: string) {
+    return await this.userService.getByName(name);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return await this.userService.delete(id);
+  async deleteUser(@Param('id') id: string) {
+    return await this.userService.deleteUser(id);
   }
 }
