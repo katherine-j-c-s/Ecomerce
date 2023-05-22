@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
-import { Roles } from 'src/models/Roles.model';
-import { User } from 'src/models/User.model';
+import { Role } from 'src/role/role.model';
+import { User } from 'src/user/user.model';
 
 dotenv.config();
 
@@ -14,7 +14,7 @@ export const configLoader = () => {
       host: process.env.HOST_DATA_BASE,
       port: process.env.PORT_DATA_BASE,
       dialect: process.env.DIALECT_DATA_BASE,
-      models: [User, Roles]
-    }
+      models: [User, Role],
+    },
   };
 };

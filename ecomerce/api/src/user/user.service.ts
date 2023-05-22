@@ -8,28 +8,31 @@ export class UserService {
       lastName: 'Maldonado',
       adress: 'San Jose 1010',
       email: 'pablo@gmail.com',
-      id: '1'
+      id: '1',
+      profilePhoto: 'asd',
     },
     {
       firstName: 'Agustin',
       lastName: 'Andrada',
       adress: 'San Jose 1020',
       email: 'agustin@gmail.com',
-      id: '2'
+      id: '2',
+      profilePhoto: 'asd',
     },
     {
       firstName: 'Horacio',
       lastName: 'Andrada',
       adress: 'San Jose 1030',
       email: 'horacio@gmail.com',
-      id: '1',
+      id: '3',
+      profilePhoto: 'asd',
     },
     {
       firstName: 'Bruno',
       lastName: 'Vogth',
       adress: 'San Jose 1010',
       email: 'bruno@gmail.com',
-      id: '1',
+      id: '4',
       profilePhoto: 'asd',
     },
   ];
@@ -59,8 +62,7 @@ export class UserService {
   }
 
   async deleteUser(id: string) {
-    const user = this.users.filter((user) => user.id === id);
-    const index = this.users.indexOf(user);
+    const index = this.users.findIndex((user) => user.id === id);
     if (index !== -1) {
       this.users.splice(index, 1); // elimina 1 elemento en la posición encontrada
     }
