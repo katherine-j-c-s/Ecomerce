@@ -22,6 +22,19 @@ module.exports = (sequelize) => {
           isDecimal: true,
         },
       },
+      description: {
+        type: DataTypes.TEXT,
+      },
+      stock: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      rating: {
+        type: DataTypes.FLOAT,
+      },
+      image: {
+        type: DataTypes.TEXT,
+      },
     },
     {
       timestamps: false,
