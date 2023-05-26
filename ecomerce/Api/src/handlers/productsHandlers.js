@@ -1,27 +1,63 @@
-const getProductsHandler = (req, res) => {
-  res.send("Estoy llevando todos los productos");
+const { createProduct, getProducts, getProductByID, deleteProduct, updateProduct } = require("../controllers/productsController");
+
+const getProductsHandler = async (req, res) => {
+  try {
+    let getAllProducts = await getProducts()
+    res.status(200).json(getAllProducts);
+    
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 };
 
-const getProductByIdHandler = (req, res) => {
-  res.send("Estoy llevando un producto por id");
+const getProductByIdHandler = async (req, res) => {
+  try {
+    let { id } = req.params
+    let product = await getProductByID(id)
+    res.stauts(200).json(product)
+    
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 };
 
-const postProductHandler = (req, res) => {
-  res.send("Estoy creando un producto ");
+const createProductHandler = async (req, res) => {
+  try {
+    let {name, price, description, rating, image} = req.body
+    let createdProduct = await createProduct(name, price, description, rating, image)
+    res.status(200).json(createdProduct);
+    
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 };
 
-const deleteProductHandler = (req, res) => {
-  res.send("Estoy eliminando un producto ");
+const deleteProductHandler = async (req, res) => {
+  try {
+    let { id } = req.params
+    let product = await deleteProduct(id)
+    res.stauts(200).json(product)
+    
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 };
 
-const updateProductHandler = (req, res) => {
-  res.send("Estoy actualizando un producto ");
+const updateProductHandler = async (req, res) => {
+  try {
+    let {name, price, description, rating, image} = req.body
+    let product = await updateProduct(name, price, description, rating, image)
+    res.status(200).json(product)
+    
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 };
 
 module.exports = {
   getProductByIdHandler,
   getProductsHandler,
-  postProductHandler,
+  createProductHandler,
   deleteProductHandler,
   updateProductHandler,
 };
