@@ -23,7 +23,7 @@ const getUsersHandler = async (req, res) => {
   }
 };
 
-const getUsersByIdHandler = (req, res) => {
+const getUserByIdHandler = (req, res) => {
   const { id } = req.params;
 
   try {
@@ -66,7 +66,7 @@ const updateUserHandler = (req, res) => {
 };
 
 module.exports = {
-  getUsersByIdHandler,
+  getUserByIdHandler,
   getUsersHandler,
   postUserHandler,
   deleteUserHandler,
