@@ -23,11 +23,11 @@ const getUsersHandler = async (req, res) => {
   }
 };
 
-const getUserByIdHandler = (req, res) => {
+const getUserByIdHandler = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = getUserById(id);
+    const user = await getUserById(id);
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -43,21 +43,21 @@ const postUserHandler = async (req, res) => {
   }
 };
 
-const deleteUserHandler = (req, res) => {
+const deleteUserHandler = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedUser = deleteUser(id);
+    const deletedUser = await deleteUser(id);
     res.status(200).json(deletedUser);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-const updateUserHandler = (req, res) => {
+const updateUserHandler = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updatedUser = updateUser(id, req.body);
+    const updatedUser = await updateUser(id, req.body);
 
     res.status(200).json(updatedUser);
   } catch (error) {

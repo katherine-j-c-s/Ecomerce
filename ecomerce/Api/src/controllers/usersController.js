@@ -1,9 +1,9 @@
-const { User, Product, Comment, Category } = require("../db");
+const { User, Order, Comment, Category } = require("../db");
 const { Op } = require("sequelize");
 
 const getUsers = async () => {
   const users = await User.findAll({
-    include: [{ model: Product }, { model: Comment }],
+    include: [{ model: Order }, { model: Comment }],
   });
 
   if (users.length === 0) {
@@ -16,8 +16,9 @@ const getUsers = async () => {
 const getUsersByName = async (name) => {
   const users = await User.findAll({
     where: {
-      name: { [Op.iLike]: `%${name}%` },
+      first_name: { [Op.iLike]: `%${name}%` },
     },
+    include: [{ model: Order }, { model: Comment }],
   });
 
   if (users.length === 0) {
@@ -28,7 +29,9 @@ const getUsersByName = async (name) => {
 };
 
 const getUserById = async (id) => {
-  const user = await User.findByPk(id);
+  const user = await User.findByPk(id, {
+    include: [{ model: Order }, { model: Comment }],
+  });
 
   if (user) {
     return user;
