@@ -17,11 +17,11 @@ const getCommentByID = async (id) => {
 };
 
 const createComment = async (rate, content) => {
-  console.log("🚀 ~ file: commentController.js:20 ~ createComment ~ rate, content:", rate, content)
   let comment = await Comment.create({
     rate,
     content,
   });
+    console.log("commentController.js:24 rate, content,:", rate, content,)
 
   return comment;
 };
@@ -34,18 +34,16 @@ const deleteComment = async (id) => {
   return removedComment;
 };
 
-const updateComment = async (rate, content) => {
-  let data = { name, price, description, rating, image };
-  let newData = {};
-
-  for (el in data) {
-    if (data[el] !== "" || data[el] !== null || data[el] !== "undefined") {
-      newData[el] = data[el];
-    }
+const updateComment = async (id, rate, content) => {
+  const comment = await Comment.findByPk(id);
+  if (comment) {
+    comment.rate = rate || comment.rate;
+    comment.content = content || comment.content;
+    await comment.save();
+    return comment;
+  } else {
+    throw new Error("Usuario no encontrado");
   }
-  let updatedComment = await Comment.update({ newData }, { name });
-
-  return updatedComment;
 };
 
 module.exports = {

@@ -25,11 +25,24 @@ const postCommentHandler = async (req, res) => {
 };
 
 const deleteCommentHandler = async (req, res) => {
-  res.send("Estoy eliminando un Comment ");
+  try {
+    let { id } = req.params;
+    let comment = await deleteComment(id);
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 const updateCommentHandler = async (req, res) => {
-  res.send("Estoy actualizando un Comment ");
+  try {
+    let { id } = req.params;
+    let { rate, content } = req.body;
+    let commentUpdate = await updateComment(id, rate, content);
+    res.status(200).json(commentUpdate);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 module.exports = {
