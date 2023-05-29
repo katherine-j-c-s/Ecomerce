@@ -15,13 +15,14 @@ const getProductByID = async (id) => {
     return product
 }
 
-const createProduct = async (name, price, description, rating, image) => {
+const createProduct = async (name, price, description, rating, image, stock) => {
     let [product, created] = await Product.findOrCreate({
         where: { name },
         defaults: {
             name,
             price,
             description,
+            stock,
             rating,
             image
         }
