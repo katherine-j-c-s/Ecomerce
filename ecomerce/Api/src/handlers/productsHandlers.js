@@ -23,8 +23,8 @@ const getProductByIdHandler = async (req, res) => {
 
 const createProductHandler = async (req, res) => {
   try {
-    let {name, price, description, rating, image} = req.body
-    let createdProduct = await createProduct(name, price, description, rating, image)
+    let {name, price, description, rating, image, stock} = req.body
+    let createdProduct = await createProduct(name, price, description, rating, image, stock)
     res.status(200).json(createdProduct);
     
   } catch (error) {
