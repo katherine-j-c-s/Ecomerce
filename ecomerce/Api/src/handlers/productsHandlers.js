@@ -14,7 +14,7 @@ const getProductByIdHandler = async (req, res) => {
   try {
     let { id } = req.params
     let product = await getProductByID(id)
-    res.stauts(200).json(product)
+    res.status(200).json(product)
     
   } catch (error) {
     res.status(400).json({message: error.message})
