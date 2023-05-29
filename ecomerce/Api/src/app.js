@@ -1,16 +1,13 @@
 const express = require("express");
 const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const mainRouter = require("./routes");
 
 const app = express();
 
 app.use(morgan("dev"));
+app.use(bodyParser.json({ limit: "50mb" }));
 
-app.use((req, res, next) => {
-  next();
-});
-
-app.get("/", (req, res) => {
-  res.status(200).send("OK");
-});
+app.use("/", mainRouter);
 
 module.exports = app;

@@ -41,10 +41,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: "client",
       },
-      purchases: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
     },
     {
       timestamps: false,
