@@ -28,7 +28,7 @@ export default function Nav() {
         </li>
       </ul>
 
-      <article className="m-3 mt-36 mb-14 p-3">
+      {/* <article className="m-3 mt-36 mb-14 p-3">
         <h1 className="text-7xl text-white font-medium">Just buy it</h1>
         <p className="text-3xl text-white font-light">
           Discover our new styles
@@ -37,7 +37,7 @@ export default function Nav() {
 
       <Link to="/alls" className="text-white hover:text-white">
         <button className="px-20 rounded-sm border-bluey">Buy now</button>
-      </Link>
+      </Link> */}
     </nav>
   );
 }
