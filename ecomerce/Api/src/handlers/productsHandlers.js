@@ -14,7 +14,7 @@ const getProductByIdHandler = async (req, res) => {
   try {
     let { id } = req.params
     let product = await getProductByID(id)
-    res.stauts(200).json(product)
+    res.status(200).json(product)
     
   } catch (error) {
     res.status(400).json({message: error.message})
@@ -23,8 +23,8 @@ const getProductByIdHandler = async (req, res) => {
 
 const createProductHandler = async (req, res) => {
   try {
-    let {name, price, description, rating, image} = req.body
-    let createdProduct = await createProduct(name, price, description, rating, image)
+    let {name, price, description, rating, image, stock} = req.body
+    let createdProduct = await createProduct(name, price, description, rating, image, stock)
     res.status(200).json(createdProduct);
     
   } catch (error) {
