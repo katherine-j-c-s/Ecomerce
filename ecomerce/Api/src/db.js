@@ -6,6 +6,8 @@ const productModel = require("./models/Product");
 const orderModel = require("./models/Order");
 const commentModel = require("./models/Comment");
 const categoryModel = require("./models/Category");
+const colorModel = require("./models/Color");
+const sizeModel = require("./models/Size");
 
 const sequelize = new Sequelize(DB_DEPLOY, {
   logging: false,
@@ -25,6 +27,8 @@ productModel(sequelize);
 orderModel(sequelize);
 commentModel(sequelize);
 categoryModel(sequelize);
+colorModel(sequelize);
+sizeModel(sequelize);
 
 const { User, Product, Order, Category, Comment, Color, Size } =
   sequelize.models;

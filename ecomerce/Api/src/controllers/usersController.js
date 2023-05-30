@@ -1,4 +1,4 @@
-const { User, Order, Comment, Category } = require("../db");
+const { User, Order, Comment } = require("../db");
 const { Op } = require("sequelize");
 
 const getUsers = async () => {
