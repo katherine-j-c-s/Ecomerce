@@ -76,6 +76,7 @@ const updateUser = async (id, datos) => {
       image,
       role,
       purchases,
+      status,
     } = datos;
 
     user.mail = mail || user.mail;
@@ -86,6 +87,7 @@ const updateUser = async (id, datos) => {
     user.image = image || user.image;
     user.role = role || user.role;
     user.purchases = purchases || user.purchases;
+    user.status = status || user.status;
 
     await user.save();
     return user;
@@ -98,9 +100,9 @@ const deleteUser = async (id) => {
   const user = await User.findByPk(id);
 
   if (user) {
-    const deletedUser = { ...user };
-    await user.destroy();
-    return deletedUser;
+    user.status = "inactive";
+    await user.save();
+    return "Usuario eliminado con éxito";
   } else {
     throw new Error("Usuario no encontrado");
   }
