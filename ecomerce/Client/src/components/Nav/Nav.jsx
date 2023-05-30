@@ -1,6 +1,7 @@
 import styles from "../Nav/Nav.module.css";
 
 import { Link } from "react-router-dom";
+import homeLogo from "../../assets/HomeImage.png";
 
 export default function Nav() {
   return (
@@ -8,6 +9,13 @@ export default function Nav() {
       <ul className="flex flex-wrap items-center justify-between p-4">
         <li>
           <article className="flex items-center justify-center p-3 gap-5">
+            <Link to="/">
+              <img
+                src={homeLogo}
+                alt="home route image"
+                className={styles.homeImg}
+              />
+            </Link>
             <Link to="/women">Women</Link>
             <Link to="/man">Man</Link>
             <Link to="/kids">Kids</Link>
