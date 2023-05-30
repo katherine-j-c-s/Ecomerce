@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    "Comment",
+    "Color",
     {
       id: {
         primaryKey: true,
@@ -10,16 +10,12 @@ module.exports = (sequelize) => {
         autoIncrement: true,
         alloNull: false,
       },
-      rate: {
-        type: DataTypes.INTEGER,
+      color: {
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           isNumeric: true,
         },
-      },
-      content: {
-        type: DataTypes.TEXT,
-        alloNull: false,
       },
     },
     {

@@ -26,15 +26,19 @@ orderModel(sequelize);
 commentModel(sequelize);
 categoryModel(sequelize);
 
-const { User, Product, Order, Category, Comment } = sequelize.models;
+const { User, Product, Order, Category, Comment, Color, Size } =
+  sequelize.models;
 
 // Aca vendrian las relaciones
 
-Product.belongsToMany(Order, { through: "Order_detail" });
-Order.belongsToMany(Product, { through: "Order_detail" });
+User.hasMany(Order);
+Order.belongsTo(User);
 
-User.hasMany(Comment);
-Comment.belongsTo(User);
+Order.hasMany(Product);
+Product.belongsTo(Order);
+
+Order.hasMany(Comment);
+Comment.belongsTo(Order);
 
 Product.hasMany(Comment);
 Comment.belongsTo(Product);
@@ -42,8 +46,11 @@ Comment.belongsTo(Product);
 Category.hasMany(Product);
 Product.belongsTo(Category);
 
-User.hasMany(Order);
-Order.belongsTo(User);
+Color.hasMany(Product);
+Product.belongsTo(Color);
+
+Size.hasMany(Product);
+Product.belongsTo(Size);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User, Comment } = require('./db.js');

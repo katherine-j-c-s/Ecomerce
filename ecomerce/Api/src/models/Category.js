@@ -14,12 +14,6 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      color: {
-        type: DataTypes.STRING,
-      },
-      size: {
-        type: DataTypes.STRING,
-      },
     },
     { timestamps: false }
   );
