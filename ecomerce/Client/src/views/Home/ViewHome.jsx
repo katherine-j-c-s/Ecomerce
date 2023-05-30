@@ -23,25 +23,27 @@ const ViewHome =()=>{
             <Home/>
             <div className='h-[60vh] w-auto'></div>
 
-            <div className='h-[70vh] w-auto flex flex-col justify-center items-center mx-[60px]'>
+            <div className='h-[70vh] w-auto flex flex-col justify-center items-center mx-[40px]'>
                 <div className='h-40 w-full flex justify-start'>
                     <h2 className='text-[40px] text-white'>
                         New <strong className='text-teal-400'> styles </strong> just arrive
                     </h2>
                 </div>
-                <div className='flex flex-row gap-4 justify-center items-center overflow'>
-                    {products.map((product, index) => {
-                        return(
-                            <CardsProduct 
-                                key={product.id}
-                                name={product.name} 
-                                price={product.price} 
-                                image={product.image} 
-                                addToCart={seeDetailsHandler} 
-                                seeDetails={() => go(`/product/${product.id}`)}  
-                            />
-                        )
-                    })}
+                <div className='h-auto w-full flex justify-start md:justify-center items-center overflow-x-auto '>
+                    <div className='flex flex-row gap-4 justify-center items-center'>
+                        {products.map((product, index) => {
+                            return(
+                                <CardsProduct 
+                                    key={product.id}
+                                    name={product.name} 
+                                    price={product.price} 
+                                    image={product.image} 
+                                    addToCart={seeDetailsHandler} 
+                                    seeDetails={() => go(`/product/${product.id}`)}  
+                                />
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
             

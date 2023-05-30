@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function CardsProduct({image, price, name, addToCart, seeDetails}) {
   return (
-    <div className='flex w-72 h-80 rounded-lg bg-white flex-col relative shadow hover:shadow-xl' >
-        <img  className='select-none absolute -top-10 left-1/2 transform -translate-x-1/2 mx-2' src={image} alt={name} />
+    <div className='flex w-64 md:w-72 h-80 rounded-lg bg-white flex-col relative shadow hover:shadow-xl mt-10' >
+        <img  className='select-none absolute -top-10 left-1/2 transform -translate-x-1/2 mx-2 ' src={image} alt={name} />
         <div className='flex flex-row absolute bottom-2 left-1/2 transform -translate-x-1/2 mb-10 space-x-8 w-full justify-center'>
             <div className='items-start h-10 w-24'>
               <h3 className='text-xl font-bold text-teal-400 text-left '>${price}</h3>
