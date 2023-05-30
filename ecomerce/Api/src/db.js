@@ -41,8 +41,8 @@ Order.belongsTo(User);
 Order.hasMany(Product);
 Product.belongsTo(Order);
 
-Order.hasMany(Comment);
-Comment.belongsTo(Order);
+User.hasMany(Comment);
+Comment.belongsTo(User);
 
 Product.hasMany(Comment);
 Comment.belongsTo(Product);
