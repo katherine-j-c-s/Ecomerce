@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function CardGenres({title,desc,img}) {
   return (
-    <div className='flex w-1/5 justify-center flex-col align-middle'>
+    <div className='flex w-full px-10 mb-8 justify-center flex-col align-middle md:w-1/5'>
         <div className='flex relative h-full w-full justify-center align-bottom'>
             <img className='h-52 z-10' src={img} alt={title} />
             <div className='absolute bottom-0 h-44 w-44 shadow-xl rounded-lg '></div>

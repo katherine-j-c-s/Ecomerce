@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import CardsProduct from '../CardsProduct/CardsProduct'
+import FeaturedSegment from '../CardsProduct/FeaturedSegment'
 import GenresHome from "../GenresHome/GenresHome";
 
 import stylesHome from "../Home/Home.module.css";
@@ -24,29 +24,21 @@ const Home = ()=>{
                 </Link>
             </div>
             <div className='h-[60vh] w-auto'></div>
-            <div className='h-[70vh] w-auto text-left'>
-                <div className="flex justify-start w-fit">
-                    <h2 className="text-black mb-24 ml-36 text-2xl font-bold">New </h2>
-                    <h2 className="text-sky-500 mb-24 ml-2 text-2xl font-bold">styles</h2>
-                    <h2 className="text-black mb-24 ml-2 text-2xl font-bold"> just arrive</h2>
-                </div>
-                <div className='flex flex-row gap-4 justify-center items-center'>
-                    <CardsProduct/>
-                    <CardsProduct/>
-                    <CardsProduct/>
-                    <CardsProduct/> 
-                </div>
+            <div className='h-fit w-full flex justify-start'>
+                <h2 className='text-[40px] text-black font-bold ms-20'>
+                    New <strong className='text-teal-400'> styles </strong> just arrive
+                </h2>
             </div>
-            <div className="w-full bg-black flex flex-col p-10 text-left">
+            <FeaturedSegment/>
+            <div className="w-full bg-black overflow-x-auto md: flex flex-col p-10 text-left">
                 <h2 className="ms-20 mb-8 font-bold text-2xl">Our brands</h2>
-                <div className="flex w-full justify-evenly">
+                <div className="flex w-full md:justify-evenly justify-start ">
                     {brands.map((b,i)=>{
                         return(
-                            <img key={i} src={imageB} alt={b} />
+                            <img className="mx-2" key={i} src={imageB} alt={b} />
                         )
                     })}
                 </div>
-                
             </div>
             <GenresHome/>
         </div>
