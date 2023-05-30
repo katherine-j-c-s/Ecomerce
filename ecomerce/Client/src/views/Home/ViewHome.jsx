@@ -5,24 +5,16 @@ import CardsProduct from '../../components/CardsProduct/CardsProduct';
 const ViewHome =()=>{
     return(
         <div>
-
-
-
-
-
-
-            {/* Bloque de cards*/}
-
-            <div className='h-screen w-screen'>
-                <div className='h-full w-full flex flex-row gap-4 justify-center items-center bg-white'>
+            <Home/>
+            <div className='relative'>
+                <h2>New styles just arrive</h2>
+                <div className='flex flex-row gap-4 justify-center items-center bg-white'>
                     <CardsProduct/>
                     <CardsProduct/>
                     <CardsProduct/>
                     <CardsProduct/>
                 </div>
             </div>
-
-
             
         </div>
     )
