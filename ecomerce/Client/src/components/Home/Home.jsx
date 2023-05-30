@@ -1,7 +1,10 @@
+import { Link } from "react-router-dom";
+
+import CardsProduct from '../CardsProduct/CardsProduct'
+import GenresHome from "../GenresHome/GenresHome";
+
 import stylesHome from "../Home/Home.module.css";
 import imageB from '../../images/image41.svg'
-import CardsProduct from '../CardsProduct/CardsProduct'
-import { Link } from "react-router-dom";
 
 const brands = [1,2,3,4,5,6]
 
@@ -45,6 +48,7 @@ const Home = ()=>{
                 </div>
                 
             </div>
+            <GenresHome/>
         </div>
     )
 }
