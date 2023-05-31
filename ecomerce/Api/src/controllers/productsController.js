@@ -1,65 +1,81 @@
-const { Product } = require('../db')
-
+const { Product } = require("../db");
 
 const getProducts = async () => {
-    let products = await Product.findAll()
+  let products = await Product.findAll();
 
-    return products
-}
+  return products;
+};
 
 const getProductByID = async (id) => {
-    let product = await Product.findOne({
-        where: { id }
-    })
+  let product = await Product.findOne({
+    where: { id },
+  });
 
-    return product
-}
+  return product;
+};
 
-const createProduct = async (name, price, description, rating, image) => {
-    let [product, created] = await Product.findOrCreate({
-        where: { name },
-        defaults: {
-            name,
-            price,
-            description,
-            rating,
-            image
-        }
-    })
+const createProduct = async (
+  name,
+  price,
+  description,
+  rating,
+  image,
+  stock
+) => {
+  if (!stock) {
+    stock = 1; // Asignar valor predeterminado
+  }
 
-    if(!created) {
-        await Product.increment('stock', {by: 1})
-    }
+  let [product, created] = await Product.findOrCreate({
+    where: { name },
+    defaults: {
+      name,
+      price,
+      description,
+      rating,
+      image,
+      stock,
+    },
+  });
 
-    return product
-}
+  if (!created) {
+    await Product.increment("stock", { by: 1 });
+  }
+
+  return product;
+};
 
 const deleteProduct = async (id) => {
-    let removedProduct = await Product.destroy({
-        where: { id }
-    })
+  let removedProduct = await Product.destroy({
+    where: { id },
+  });
 
-    return removedProduct
-}
+  return removedProduct;
+};
 
-const updateProduct = async (name, price, description, rating, image) => {
-    let data = {name, price, description, rating, image}
-    let newData = {}
+const updateProduct = async (id, datos) => {
+  const product = await Product.findByPk(id);
 
-    for(el in data) {
-        if(data[el] !== '' || data[el] !== null || data[el] !== 'undefined') {
-            newData[el] = data[el]
-        }
-    }
-    let updatedProduct = await Product.update({ newData }, { name })
+  if (product) {
+    const { name, price, description, rating, image, stock } = datos;
+    product.name = name || product.name;
+    product.price = price || product.price;
+    product.description = description || product.description;
+    product.rating = rating || product.rating;
+    product.stock = stock || product.stock;
+    product.image = image || product.image;
 
-    return updatedProduct
-}
+    await product.save();
+    return product;
+  } else {
+    throw new Error("Producto no encontrado");
+  }
+};
 
 module.exports = {
-    createProduct,
-    getProducts,
-    getProductByID,
-    deleteProduct,
-    updateProduct,
-}
+  createProduct,
+  getProducts,
+  getProductByID,
+  deleteProduct,
+  updateProduct,
+};
