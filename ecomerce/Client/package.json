@@ -14,7 +14,10 @@
     "postcss": "^8.4.23",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.7",
     "react-router-dom": "^6.11.2",
+    "redux": "^4.2.1",
+    "redux-thunk": "^2.4.2",
     "tailwindcss": "^3.3.2"
   },
   "devDependencies": {
