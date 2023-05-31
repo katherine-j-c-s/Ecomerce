@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import FeaturedSegment from '../CardsProduct/FeaturedSegment'
+import FeaturedSegment from "../CardsProduct/FeaturedSegment";
 import GenresHome from "../GenresHome/GenresHome";
 
 import stylesHome from "../Home/Home.module.css";
