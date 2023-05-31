@@ -4,7 +4,7 @@ import FeaturedSegment from '../CardsProduct/FeaturedSegment'
 import GenresHome from "../GenresHome/GenresHome";
 
 import stylesHome from "../Home/Home.module.css";
-import imageB from "../../images/image41.svg";
+import imageB from "../../assets/image41.svg";
 
 const brands = [1, 2, 3, 4, 5, 6];
 
