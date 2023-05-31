@@ -36,7 +36,7 @@ const deleteProductHandler = async (req, res) => {
   try {
     let { id } = req.params
     let product = await deleteProduct(id)
-    res.stauts(200).json(product)
+    res.status(200).json(product)
     
   } catch (error) {
     res.status(400).json({message: error.message})
@@ -45,8 +45,9 @@ const deleteProductHandler = async (req, res) => {
 
 const updateProductHandler = async (req, res) => {
   try {
-    let {name, price, description, rating, image} = req.body
-    let product = await updateProduct(name, price, description, rating, image)
+    let { id } =req.params
+    let { name, price, description, rating, image} = req.body
+    let product = await updateProduct(id, name, price, description, rating, image)
     res.status(200).json(product)
     
   } catch (error) {
