@@ -45,55 +45,53 @@ export default function SignInForm() {
     }
     return(
         <div className='flex justify-between text-white'>
-            <div className='bg-black w-2/5'>
+            <div className='bg-black w-full md:w-2/5'>
                 <Link to={'/'}>
-                    <p className='text-white'>Go Back</p>
+                    <p className='text-white relative top-4 left-10 w-fit'>Go Back</p>
                 </Link>
-                <div className='flex flex-col align-middle justify-center h-screen '>
-                    <h2 className='mb-20'>Sign In</h2>
-                    <form onSubmit={handleSubmit}>
-                        <div className='relative w-fit mb-6'>
-                            <label className='absolute w-16 bg-black h-fit bottom-16 left-8'>Email </label>
+                <div className=' h-screen mt-28'>
+                    <h2 className='mb-16 font-bold text-3xl'>Sign In</h2>
+                    <form className='flex flex-col align-middle justify-center w-10/12 md:w-3/5 mx-auto' onSubmit={handleSubmit}>
+                        <div className='flex flex-col justify-center w-full relative mb-6'>
+                            <label className='absolute w-16 bg-black h-fit bottom-10 left-8 text-cyan-400'>Email </label>
                             <input
-                                className='text-white m-2 border border-cyan-400 bg-transparent rounded-md p-2 pr-20 pl-4'
+                                className='placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-white bg-transparent rounded-md p-2 pl-10'
                                 name="email"
                                 value={inputs.email}
                                 onChange={handleChange}
-                                placeholder=""
+                                placeholder="ejemplo@gmail.com"
                             ></input>
                         </div>
-                        <p className='text-rose-500 relative bottom-0'>{errors.email}</p>
-                        <div className='relative w-fit'>
-                            <label className='absolute w-16 bg-black h-fit bottom-16 left-8'>Password </label>
+                        <p className='text-rose-500 relative bottom-6 md:bottom-8'>{errors.email}</p>
+                        <div className='flex flex-col justify-center w-full relative'>
+                            <label className='absolute w-16 bg-black h-fit bottom-10 left-8 text-cyan-400'>Password </label>
                             <input
-                                className='text-white m-2 border border-cyan-400 bg-transparent rounded-md p-1 pr-20 pl-4'
+                                className='placeholder-slate-400 py-2 focus:outline-none focus:border-cyan-500 md:m-2 border border-white bg-transparent rounded-md p-1 pl-10'
                                 name="password"
                                 value={inputs.password}
                                 onChange={handleChange}
-                                placeholder=""
+                                placeholder="********"
                             ></input>
                         </div>
-                        <p className='text-rose-500'>{errors.password}</p>
-                        <p className='text-cyan-400 underline'>Me olvide mi contraseña</p>
+                        <p className='text-rose-500 relative bottom-0 md:bottom-2'>{errors.password}</p>
+                        <p className='text-cyan-500 underline mt-3 font-thin text-sm'>Me olvide mi contraseña</p>
         
-                        {Object.keys(errors).length === 0 ? (
-                        <button type="submit">Ingresar</button>
-                        ) : null}
+                        <button className='bg-cyan-400 py-3 my-6 text-slate-300 ' type="submit">Iniciar</button>
                     </form>
                     <Link to={'/signUp'}>
-                        <p className='text-white'>Sign Up</p>
+                        <p className='text-cyan-500 underline mt-3 font-thin text-sm'>Sign Up</p>
                     </Link>
                 </div>
                 
             </div>
-            <div className='flex w-3/5 bg-cyan-500  h-screm'>
-                <div>
-                    <div>
-                        <p>“</p>
+            <div className='hidden md:flex w-3/5 bg-gradient-to-r from-gray-600 to-sky-950 h-screm'>
+                <div className='relative w-full flex align-middle justify-center'>
+                    <div className='absolute top-40'>
+                        <p className='text-9xl text-slate-500'>“</p>
                     </div>
-                    <div>
+                    <div className='w-2/6 text-left mt-60 font-thin text-slate-300'>
                         <p>El deporte es el lenguaje universal que conecta mente, cuerpo y espíritu en la búsqueda de la excelencia</p>
-                        <p>Aristóteles.</p>
+                        <p className='mt-6'>Aristóteles.</p>
                     </div>
                 </div>
             </div>
