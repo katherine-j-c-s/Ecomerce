@@ -9,18 +9,18 @@ const categoryModel = require("./models/Category");
 const colorModel = require("./models/Color");
 const sizeModel = require("./models/Size");
 
-const sequelize = new Sequelize(DB_DEPLOY, {
-  logging: false,
-  native: false,
-});
+// const sequelize = new Sequelize(DB_DEPLOY, {
+//   logging: false,
+//   native: false,
+// });
 
-// const sequelize = new Sequelize(
-//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`,
-//   {
-//     logging: false, // set to console.log to see the raw SQL queries
-//     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-//   }
-// );
+const sequelize = new Sequelize(
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecomerce`,
+  {
+    logging: false, // set to console.log to see the raw SQL queries
+    native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+  }
+);
 
 userModel(sequelize);
 productModel(sequelize);

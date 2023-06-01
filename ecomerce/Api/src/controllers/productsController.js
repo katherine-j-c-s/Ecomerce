@@ -44,8 +44,8 @@ const convertSingleProduct = (res) => {
 
 const getProducts = async () => {
   let allProducts = [];
-  await Product.findAll({ include: { all: true } }).then((responses) => {
-    responses.map((res) =>
+  await Product.findAll({ include: { all: true } }).then(async (responses) => {
+    await responses.map((res) =>
       allProducts.push(convertAllProducts(res.dataValues))
     );
   });
@@ -53,7 +53,7 @@ const getProducts = async () => {
   // Data hardcodeada
   let hard = [
     {
-      id: "1h",
+      id: 1,
       name: "Adicolor Heritage Now Flared",
       price: 61999,
       description:
@@ -65,9 +65,13 @@ const getProducts = async () => {
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/57054d7dd2714be79246aef3011a4a84_9366/Pantalon_Adicolor_Heritage_Now_Flared_Rojo_IB2020_HM4.jpg",
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/e99818f9c534446a8806aef3011aa3b1_9366/Pantalon_Adicolor_Heritage_Now_Flared_Rojo_IB2020_HM5.jpg",
       ],
+      available: true,
+      category: "pantalones",
+      color: "rojo",
+      size: "40",
     },
     {
-      id: "2h",
+      id: 2,
       name: "Adicolor Heritage Now",
       price: 58999,
       description:
@@ -79,9 +83,13 @@ const getProducts = async () => {
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/6a8edd549b1940b38015af0100c2cac6_9366/Pantalon_Adicolor_Heritage_Now_Verde_IB2054_HM4.jpg",
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/279d031f4efc43d7b8bdaf0100c2ff71_9366/Pantalon_Adicolor_Heritage_Now_Verde_IB2054_HM5.jpg",
       ],
+      available: true,
+      category: "pantalones",
+      color: "verde",
+      size: "40",
     },
     {
-      id: "3h",
+      id: 3,
       name: "Adicolor Heritage Now",
       price: 58999,
       description:
@@ -93,9 +101,13 @@ const getProducts = async () => {
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/795f17920798499980bfaef301211095_9366/Pantalon_Adicolor_Heritage_Now_Azul_IB2055_HM4.jpg",
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/aa6b1bb7abb146d9befeaef301214c6c_9366/Pantalon_Adicolor_Heritage_Now_Azul_IB2055_HM5.jpg",
       ],
+      available: true,
+      category: "pantalones",
+      color: "azul",
+      size: "40",
     },
     {
-      id: "4h",
+      id: 4,
       name: "Deportivo Python",
       price: 58999,
       description:
@@ -107,9 +119,13 @@ const getProducts = async () => {
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/bd02664926a649bc8951af0400bcf1f7_9366/Pantalon_Deportivo_Python_Negro_IC6083_25_model.jpg",
         "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/6cd6624cf09a4b079db7af0400bd19bb_9366/Pantalon_Deportivo_Python_Negro_IC6083_01_laydown.jpg",
       ],
+      available: true,
+      category: "pantalones",
+      color: "gris",
+      size: "40",
     },
     {
-      id: "5h",
+      id: 5,
       name: "Nike Court Vision Low Nex Nature",
       price: 38999,
       description:
@@ -120,9 +136,13 @@ const getProducts = async () => {
         "https://media.karousell.com/media/photos/products/2022/12/19/nike_mens_court_vision_low_nex_1671425915_e1dac9c2_progressive.jpg",
         "https://media.karousell.com/media/photos/products/2022/12/19/nike_mens_court_vision_low_nex_1671425915_8cd0abbd_progressive.jpg",
       ],
+      available: true,
+      category: "calzado",
+      color: "negro",
+      size: "43",
     },
     {
-      id: "6h",
+      id: 6,
       name: "Nike Dunk High Retro",
       price: 32008.377,
       description:
@@ -131,9 +151,13 @@ const getProducts = async () => {
       image: [
         "https://media.karousell.com/media/photos/products/2023/5/22/nike_dunk_high_retro_se_mens_s_1684756351_47896705_progressive.jpg",
       ],
+      available: true,
+      category: "calzado",
+      color: "blanco",
+      size: "43",
     },
     {
-      id: "7h",
+      id: 7,
       name: "WIND HALF-ZIP ROSE",
       price: 26990,
       description:
@@ -145,9 +169,13 @@ const getProducts = async () => {
         "https://cdn.shopify.com/s/files/1/0430/9594/9479/products/C-WINDHALFZIPROSEEDITADA-2_700x.jpg?v=1683656290",
         "https://cdn.shopify.com/s/files/1/0430/9594/9479/products/C-WINDHALFZIPROSEEDITADA-4_700x.jpg?v=1683656290",
       ],
+      available: true,
+      category: "camperas",
+      color: "rosa",
+      size: "l",
     },
     {
-      id: "8h",
+      id: 8,
       name: "WIND HALF-ZIP ROSE",
       price: 26990,
       description:
@@ -158,9 +186,13 @@ const getProducts = async () => {
         "https://cdn.shopify.com/s/files/1/0430/9594/9479/products/C-WINDHALFZIPBEIGEEDITADA-2_700x.jpg?v=1683656292",
         "https://cdn.shopify.com/s/files/1/0430/9594/9479/products/C-WINDHALFZIPBEIGEEDITADA-4_700x.jpg?v=1683656292",
       ],
+      available: true,
+      category: "camperas",
+      color: "beige",
+      size: "l",
     },
     {
-      id: "9h",
+      id: 9,
       name: "WIND HALF-ZIP ROSE",
       price: 26990,
       description:
@@ -171,6 +203,10 @@ const getProducts = async () => {
         "https://cdn.shopify.com/s/files/1/0430/9594/9479/products/C-WINDHALFZIPBLACKEDITADA-2_700x.jpg?v=1683656285",
         "https://cdn.shopify.com/s/files/1/0430/9594/9479/products/C-WINDHALFZIPBLACKEDITADA-4_700x.jpg?v=1683656285",
       ],
+      available: true,
+      category: "camperas",
+      color: "negro",
+      size: "l",
     },
   ];
   return allProducts.concat(hard);
@@ -188,15 +224,7 @@ const getProductByID = async (id) => {
 
 const createProduct = async (name, price, description, image, stock) => {
   let available;
-  if (stock === null) {
-    stock = 1;
-  }
-  if (stock === 0) {
-    available = false;
-  }
-  if (stock != 0) {
-    available = true;
-  }
+  if (stock === 0 || stock === null) available = false;
 
   let [product, created] = await Product.findOrCreate({
     where: { name },
