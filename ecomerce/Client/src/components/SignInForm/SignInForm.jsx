@@ -40,8 +40,17 @@ export default function SignInForm() {
         );
     }
     function handleSubmit(e) {
-        e.preventDefault();
-        alert('listo')
+        if (Object.keys(errors).length === 0) {
+            setInputs({
+              email: "",
+              password: "",
+            });
+              setErrors({
+                email: "",
+                password: "",
+            });
+            alert('Bienvenido!')
+        }
     }
     return(
         <div className='flex justify-between text-white'>

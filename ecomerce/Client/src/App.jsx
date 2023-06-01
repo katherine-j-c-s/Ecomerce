@@ -9,6 +9,7 @@ import Details from "./views/Details/Details";
 import Footer from "./components/Footer/Footer";
 import SignIn from "./views/SignIn/SignIn";
 import SideBarCar from "./components/sideBarCar/SideBarCar";
+import SignUn from "./views/SignUp/SignUp";
 
 function App() {
   const location = useLocation();
@@ -25,7 +26,7 @@ function App() {
         <Route path="/kids" element={<h1>kids</h1>}></Route>
         <Route path="/alls" element={<h1>alls</h1>}></Route>
         <Route path="/signIn" element={<SignIn/>}></Route>
-        <Route path="/signUp" element={<h1>sign up</h1>}></Route>
+        <Route path="/signUp" element={<SignUn/>}></Route>
         <Route path="/product/:id" element={<Details/>}></Route>
       </Routes>
       {location.pathname === "/signIn" || location.pathname === "/signUp" ? null : (
