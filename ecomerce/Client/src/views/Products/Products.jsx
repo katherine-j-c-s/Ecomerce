@@ -70,7 +70,7 @@ export default function Products() {
                         isOpen={false}
                     />
                 </div>
-                <div className='w-3/4 h-auto grid grid-cols-3 gap-2 items-center' >
+                <div className='w-3/4 h-auto grid grid-cols-3 gap-2 items-center flex flex-wrap' >
                     {products.map((product, index) => {
                         return(
                             <div className='flex justify-center'>
