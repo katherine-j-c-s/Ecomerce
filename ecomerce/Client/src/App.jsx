@@ -10,7 +10,7 @@ import Footer from "./components/Footer/Footer";
 import SignIn from "./views/SignIn/SignIn";
 import SideBarCar from "./components/sideBarCar/SideBarCar";
 import SignUn from "./views/SignUp/SignUp";
-
+import Products from "./views/Products/Products";
 function App() {
   const location = useLocation();
   return (
@@ -24,7 +24,7 @@ function App() {
         <Route path="/women" element={<h1>women</h1>}></Route>
         <Route path="/man" element={<h1>man</h1>}></Route>
         <Route path="/kids" element={<h1>kids</h1>}></Route>
-        <Route path="/alls" element={<h1>alls</h1>}></Route>
+        <Route path="/alls" element={<Products/>}></Route>
         <Route path="/signIn" element={<SignIn/>}></Route>
         <Route path="/signUp" element={<SignUn/>}></Route>
         <Route path="/product/:id" element={<Details/>}></Route>
