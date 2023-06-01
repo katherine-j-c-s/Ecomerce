@@ -53,7 +53,6 @@ const getProducts = async () => {
   // Data hardcodeada
   let hard = [
     {
-      id: 1,
       name: "Adicolor Heritage Now Flared",
       price: 61999,
       description:
@@ -71,7 +70,6 @@ const getProducts = async () => {
       size: "40",
     },
     {
-      id: 2,
       name: "Adicolor Heritage Now",
       price: 58999,
       description:
@@ -89,7 +87,6 @@ const getProducts = async () => {
       size: "40",
     },
     {
-      id: 3,
       name: "Adicolor Heritage Now",
       price: 58999,
       description:
@@ -107,7 +104,6 @@ const getProducts = async () => {
       size: "40",
     },
     {
-      id: 4,
       name: "Deportivo Python",
       price: 58999,
       description:
@@ -125,7 +121,6 @@ const getProducts = async () => {
       size: "40",
     },
     {
-      id: 5,
       name: "Nike Court Vision Low Nex Nature",
       price: 38999,
       description:
@@ -142,7 +137,6 @@ const getProducts = async () => {
       size: "43",
     },
     {
-      id: 6,
       name: "Nike Dunk High Retro",
       price: 32008.377,
       description:
@@ -157,7 +151,6 @@ const getProducts = async () => {
       size: "43",
     },
     {
-      id: 7,
       name: "WIND HALF-ZIP ROSE",
       price: 26990,
       description:
@@ -175,7 +168,6 @@ const getProducts = async () => {
       size: "l",
     },
     {
-      id: 8,
       name: "WIND HALF-ZIP ROSE",
       price: 26990,
       description:
@@ -192,7 +184,6 @@ const getProducts = async () => {
       size: "l",
     },
     {
-      id: 9,
       name: "WIND HALF-ZIP ROSE",
       price: 26990,
       description:
@@ -209,7 +200,14 @@ const getProducts = async () => {
       size: "l",
     },
   ];
-  return allProducts.concat(hard);
+
+  const count = await Product.count();
+  if (count === 0) {
+    await Product.bulkCreate(hard);
+    return allProducts;
+  } else {
+    return allProducts;
+  }
 };
 
 const getProductByID = async (id) => {
