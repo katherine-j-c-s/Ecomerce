@@ -11,25 +11,29 @@ import SignIn from "./views/SignIn/SignIn";
 import SideBarCar from "./components/sideBarCar/SideBarCar";
 import SignUn from "./views/SignUp/SignUp";
 import Products from "./views/Products/Products";
+import Admin from "./views/Admin/Admin";
+
+
 function App() {
   const location = useLocation();
   return (
     <>
       {/* <SideBarCar /> */}
-      {location.pathname === "/signIn" || location.pathname === "/signUp" ? null : (
+      {location.pathname === "/signIn" || location.pathname === "/signUp" || location.pathname === "/admin" ? null : (
         <Nav/>
       )}
       <Routes>
-        <Route path="/" element={<ViewHome />}></Route>
-        <Route path="/women" element={<Products/>}></Route>
-        <Route path="/man" element={<Products/>}></Route>
-        <Route path="/kids" element={<Products/>}></Route>
-        <Route path="/alls" element={<Products/>}></Route>
-        <Route path="/signIn" element={<SignIn/>}></Route>
-        <Route path="/signUp" element={<SignUn/>}></Route>
-        <Route path="/product/:id" element={<Details/>}></Route>
+        <Route path="/" element={<ViewHome />}/>
+        <Route path="/women" element={<Products/>}/>
+        <Route path="/man" element={<Products/>}/>
+        <Route path="/kids" element={<Products/>}/>
+        <Route path="/alls" element={<Products/>}/>
+        <Route path="/signIn" element={<SignIn/>}/>
+        <Route path="/signUp" element={<SignUn/>}/>
+        <Route path="/product/:id" element={<Details/>}/>
+        <Route path="/admin" element={<Admin/>}/>
       </Routes>
-      {location.pathname === "/signIn" || location.pathname === "/signUp" ? null : (
+      {location.pathname === "/signIn" || location.pathname === "/signUp" || location.pathname === "/admin" ? null : (
         <Footer/>
       )}
     </>
