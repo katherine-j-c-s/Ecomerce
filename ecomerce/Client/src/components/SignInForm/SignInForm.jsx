@@ -1,10 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
 export default function SignInForm() {
+    const navigate = useNavigate()
     const [inputs, setInputs] = useState({
         email: "",
         password: "",
@@ -50,6 +51,7 @@ export default function SignInForm() {
                 password: "",
             });
             alert('Bienvenido!')
+            navigate("/");
         }
     }
     return(
