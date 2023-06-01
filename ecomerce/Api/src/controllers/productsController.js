@@ -13,14 +13,14 @@ const convertAllProducts = (res) => {
 }
 
 const convertSingleProduct = (res) => {
-    let { id, name, price, image, description, stock, rating, available, Comments, Category, Color, Size } = res
+    let { id, name, price, image, description, stock, available, Comments, Category, Color, Size } = res
+
     return newObj = {
         id,
         name,
         price,
         description,
         stock,
-        rating,
         available,
         category: Category,
         color: Color,
@@ -48,26 +48,29 @@ const getProductByID = async (id) => {
         where: { id },
         include: { all: true }
     })
+    if(product === null) throw new Error('No se encuentra el producto')
 
     return convertSingleProduct(product)
 }
 
-const createProduct = async (name, price, description, rating, image, stock) => {
+const createProduct = async (name, price, description, image, stock) => {
+    let available
+    if(stock === 0 || stock === null) available = false
+
     let [product, created] = await Product.findOrCreate({
         where: { name },
         defaults: {
             name,
             price,
             description,
+            image,
             stock,
-            rating,
-            image
+            available,
         }
     })
 
     if(!created) {
-        // await Product.increment('stock', {by: 1})
-        return 'Este producto ya existe'
+        throw new Error('Este producto ya existe')
     }
 
     return convertSingleProduct(product)
@@ -82,21 +85,23 @@ const deleteProduct = async (id) => {
     if(removedProduct === 0) throw new Error('No se pudo eliminar el producto')
 }
 
-const updateProduct = async (id, name, price, description, rating, image) => {
+const updateProduct = async (id, name, price, description, image, stock) => {
     const product = await Product.findOne({
         where: { id },
         include: { all: true },
     })
     
     if(!product) throw new Error('Producto no encontrado')
+    if(stock <= 0 || stock === null) product.available = false
+    if(stock > 0) product.available = true
 
     product.name = name || product.name
     product.price = price || product.price
     product.description = description || product.description
-    product.rating = rating || product.rating
     product.image = image || product.image
-
+    product.stock = stock || product.stock
     await product.save()
+    
     return convertSingleProduct(product)
 }
 
