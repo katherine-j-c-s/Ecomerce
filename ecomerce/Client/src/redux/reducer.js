@@ -1,7 +1,8 @@
-import { GET_ALL_PRODUCTS, FILTER_PRODUCTS, AGREGAR_FILTRO, REMOVER_FILTRO, SIGN_IN } from "./types";
+import { ADD_PRODUCT,GET_ALL_PRODUCTS, FILTER_PRODUCTS, AGREGAR_FILTRO, REMOVER_FILTRO, SIGN_IN } from "./types";
 
 const initialState = {
   products: [],
+  created: [],
   productsFiltered: [],
   filtros: [],
   access: false,
@@ -9,6 +10,11 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        created: [...state.created, action.payload],
+      }
     case GET_ALL_PRODUCTS:
       return { ...state, products: action.payload };
     case FILTER_PRODUCTS:

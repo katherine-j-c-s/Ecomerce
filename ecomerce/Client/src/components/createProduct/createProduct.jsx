@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../../redux/actions';
 import { useState } from 'react';
 import vectorAdd from '../../assets/VectorAdd.png'
 
@@ -7,7 +9,8 @@ const reguexURL = /^(ftp|http|https):\/\/[^ "]+$/;
 
 const CreateProduct = ()=>{
     const navigate = useNavigate()
-    
+    const dispatch = useDispatch()
+
     const [ready,setReady] = useState(true)
 
     const [addImg, setAddImg] = useState(false)
@@ -62,7 +65,6 @@ const CreateProduct = ()=>{
     function deleteType(e) {
         let id = e.target.id
         let newlist = inputs.type.filter(t=> t.id !== Number(id))
-        console.log(inputs.type);
         setInputs({...inputs, type:newlist})
     }
     function validate(inputs) {
@@ -138,7 +140,6 @@ const CreateProduct = ()=>{
         if (newlist.length < inputs.type.length) {
             newlist.push(type)
             setInputs({...inputs, type:newlist})
-            console.log(newlist);
         }else{
             inputs.type.push(type)
         }
@@ -153,14 +154,13 @@ const CreateProduct = ()=>{
     }
     function handleSubmit(e) {
         e.preventDefault()
-        console.log(inputs);
-        console.log(Object.values(errors));
 
         if (inputs.imagenes.length === 0) {
             setReady(false)
             setErrors({...errors, img: 'debe agregar imagenes del producto'})
         }
         if (Object.keys(errors).length === 0) {
+            dispatch(addProduct(inputs))
             setInputs({
                 nombre: "",
                 desc: "",
@@ -178,7 +178,6 @@ const CreateProduct = ()=>{
                 genero: "",
                 img:"",
             });
-            console.log(inputs);
             setReady(true)
             alert('producto creado!')
             navigate("/admin?pestaña=productos");
@@ -187,13 +186,13 @@ const CreateProduct = ()=>{
         }
     }
     return(
-        <div className=''>
+        <div className='relative'>
             <div className="w-full text-black " >
-                <Link to={'/admin?pestaña=productos'}>
-                    <p className=''>Go Back</p>
+                <Link className='absolute left-10 top-6 text-cyan-400' to={'/admin?pestaña=productos'}>
+                    <p>Go Back</p>
                 </Link>
-                <div className='relative'>
-                    <h2 className='absolute top-0'>Agregar</h2>
+                <div className='mt-20 w-full'>
+                    <h2 className=''>Agregar</h2>
                     <form className='' onSubmit={handleSubmit}>
                         <div className=''>
                             <label className=''>Nombre</label>

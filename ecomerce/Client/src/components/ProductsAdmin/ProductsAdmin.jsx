@@ -1,16 +1,18 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllProducts } from '../../redux/actions'
 import vectorAdd from '../../assets/VectorAdd.png'
 import CardsProduct from '../CardsProduct/CardsProduct'
-const products = [
-  {id:1,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-  {id:2,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-  {id:3,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-  {id:4,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-]
 
 export default function ProductsAdmin() {
+  const dispatch = useDispatch()
+  const {products, created} = useSelector(state=> state)
+
+  useEffect(()=>{
+    dispatch(getAllProducts())
+  },[])
   const navigate = useNavigate()
     const go = (ruta) => {
         navigate(ruta)
@@ -33,7 +35,7 @@ export default function ProductsAdmin() {
                 key={product.id}
                 name={product.name} 
                 price={product.price} 
-                image={product.image} 
+                image={product.image[0]} 
                 addToCart={seeDetailsHandler} 
                 seeDetails={() => go(`/product/${product.id}`)}  
             />
