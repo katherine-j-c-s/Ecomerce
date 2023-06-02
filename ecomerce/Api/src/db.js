@@ -33,7 +33,7 @@ sizeModel(sequelize);
 const { User, Product, Order, Category, Comment, Color, Size } =
   sequelize.models;
 
-// Aca vendrian las relaciones
+//  Aca vendrian las relaciones
 
 User.hasMany(Order);
 Order.belongsTo(User);
