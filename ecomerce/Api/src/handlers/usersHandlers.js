@@ -3,6 +3,7 @@ const {
   getUsersByName,
   getUserById,
   createUser,
+  login,
   updateUser,
   deleteUser,
 } = require("../controllers/usersController");
@@ -34,10 +35,21 @@ const getUserByIdHandler = async (req, res) => {
   }
 };
 
-const postUserHandler = async (req, res) => {
+const signupHandler = async (req, res) => {
   try {
     const newUser = await createUser(req.body);
     res.status(201).json(newUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const loginHandler = async (req, res) => {
+  const { user } = req; // El objeto `user` estará disponible después de la autenticación exitosa
+  try {
+    const tokenUser = login(user);
+    // Envía el token como respuesta al cliente
+    res.status(200).json(tokenUser);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -68,7 +80,8 @@ const updateUserHandler = async (req, res) => {
 module.exports = {
   getUserByIdHandler,
   getUsersHandler,
-  postUserHandler,
+  signupHandler,
+  loginHandler,
   deleteUserHandler,
   updateUserHandler,
 };
