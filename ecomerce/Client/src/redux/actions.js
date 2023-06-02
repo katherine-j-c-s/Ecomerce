@@ -1,4 +1,4 @@
-import { GET_ALL_PRODUCTS, FILTER_PRODUCTS,  AGREGAR_FILTRO, REMOVER_FILTRO, SIGN_IN, GET_PRODUCT_BY_ID, CLEAR_PRODUCT_DETAIL  } from "./types";
+import { GET_ALL_PRODUCTS, FILTER_PRODUCTS,  AGREGAR_FILTRO, REMOVER_FILTRO, SIGN_IN, GET_PRODUCT_BY_ID, CLEAR_PRODUCT_DETAIL, ADD_PRODUCT  } from "./types";
 
 import axios from 'axios'
 
@@ -57,3 +57,8 @@ export const removerFiltro = (valor) => {
   return { type: REMOVER_FILTRO, payload: valor };
 }
 export const clearProductDetail = () => ({ type: CLEAR_PRODUCT_DETAIL  });
+  
+export const addProduct = (obj) => {
+  console.log(obj);
+  return {type: ADD_PRODUCT, payload: obj}
+}
