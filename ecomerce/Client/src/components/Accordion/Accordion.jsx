@@ -1,8 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { filterProducts, agregarFiltro , removerFiltro} from '../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Accordion({ options, isOpen }) {
+
+  const filtros = useSelector(state => state.filtros)
+  const dispatch = useDispatch()
   const [isAccordionOpen, setIsAccordionOpen] = useState(isOpen);
 
+  const handleCheckboxChange = (event, item, title) => {
+    if (event.target.checked) {
+
+      dispatch(agregarFiltro({ name: title, valor: item }));
+      dispatch(filterProducts())
+    } else {
+      dispatch(filterProducts())
+      dispatch(removerFiltro({ name: title, valor: item }));
+    }
+  };
+  
+  
   return (
     <div className="mb-4 w-full">
       <div
@@ -28,7 +45,13 @@ export default function Accordion({ options, isOpen }) {
         <div className="ml-12 mt-2 space-y-2  flex flex-col">
           {options.items.map((item, index) => (
             <label className="inline-flex items-center" key={index}>
-              <input type="checkbox" className="form-checkbox" />
+              <input
+                type="checkbox"
+                className="form-checkbox"
+                //checked={filtros?.some(filtro => filtro.name === options.title && filtro.valor === item)} 
+                onChange={(event) => handleCheckboxChange(event, item, options.title)}
+              />
+
               <span className="ml-2 text-black">{item}</span>
             </label>
           ))}
