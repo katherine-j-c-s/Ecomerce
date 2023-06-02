@@ -2,10 +2,13 @@ const { Router } = require("express");
 const {
   getUsersHandler,
   getUserByIdHandler,
-  postUserHandler,
+  signupHandler,
+  loginHandler,
   deleteUserHandler,
   updateUserHandler,
 } = require("../handlers/usersHandlers");
+
+const passport = require("passport");
 
 const usersRouter = Router();
 
@@ -13,7 +16,9 @@ usersRouter.get("/", getUsersHandler);
 
 usersRouter.get("/:id", getUserByIdHandler);
 
-usersRouter.post("/", postUserHandler);
+usersRouter.post("/signup", signupHandler);
+
+usersRouter.post("/login", passport.authenticate("local"), loginHandler);
 
 usersRouter.delete("/:id", deleteUserHandler);
 

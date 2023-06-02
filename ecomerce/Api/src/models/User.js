@@ -51,14 +51,4 @@ module.exports = (sequelize) => {
       timestamps: false,
     }
   );
-
-  User.encryptPassword = function (password) {
-    // Se genera un salt para la contrasenia
-    var salt = bcrypt.genSaltSync(10);
-    // Se hashea la contrasenia con el salt generado arriba
-    return bcrypt.hashSync(password, salt);
-  };
-  User.comparePassword = function (password, userPassword) {
-    return bcrypt.compareSync(password, userPassword);
-  };
 };

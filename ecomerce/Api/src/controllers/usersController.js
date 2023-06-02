@@ -1,5 +1,8 @@
 const { User, Order, Comment } = require("../db");
 const { Op } = require("sequelize");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const getUsers = async () => {
   const users = await User.findAll({
@@ -50,9 +53,11 @@ const createUser = async ({
   role,
   purchases,
 }) => {
+  const hashedPassword = bcrypt.hashSync(password, 10); // Encripta la contraseña
+
   const newUser = await User.create({
     mail,
-    password,
+    password: hashedPassword, // Almacena la contraseña encriptada
     first_name,
     last_name,
     address,
@@ -61,6 +66,17 @@ const createUser = async ({
     purchases,
   });
   return newUser;
+};
+
+const login = (user) => {
+  // Genera un token JWT con una clave secreta
+  const token = jwt.sign(
+    { id: user.id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+
+  return token;
 };
 
 const updateUser = async (id, datos) => {
@@ -100,8 +116,7 @@ const deleteUser = async (id) => {
   const user = await User.findByPk(id);
 
   if (user) {
-    user.status = "inactive";
-    await user.save();
+    await user.destroy();
     return "Usuario eliminado con éxito";
   } else {
     throw new Error("Usuario no encontrado");
@@ -113,6 +128,7 @@ module.exports = {
   getUsersByName,
   getUserById,
   createUser,
+  login,
   updateUser,
   deleteUser,
 };
