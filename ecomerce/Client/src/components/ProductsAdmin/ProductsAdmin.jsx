@@ -16,6 +16,7 @@ export default function ProductsAdmin() {
   const navigate = useNavigate()
     const go = (ruta) => {
         navigate(ruta)
+        console.log(created);
     }
     const seeDetailsHandler = () => {
         alert('Shoop')

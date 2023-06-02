@@ -16,6 +16,7 @@ const rootReducer = (state = initialState, action) => {
         created: [...state.created, action.payload],
       }
     case GET_ALL_PRODUCTS:
+      console.log(state.created);
       return { ...state, products: action.payload };
     case FILTER_PRODUCTS:
       console.log(state.filtros)
