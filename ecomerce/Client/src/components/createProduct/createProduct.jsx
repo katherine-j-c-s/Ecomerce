@@ -15,7 +15,6 @@ const CreateProduct = ()=>{
 
     const [showType, setShowTypes]= useState(false)
     const [readyType, setReadyType] = useState(false)
-    const [addType, setAddType] = useState(false)
     
     const [img, setImg] = useState('')
     const [type, setType] = useState({
@@ -47,8 +46,24 @@ const CreateProduct = ()=>{
             setAddImg(false)
             inputs.imagenes.push(img)
             setvalidateImge({...validateImg,ready:false})
-            setErrors({...errors, img: ''})
         }
+    }
+    function editType(e) {
+        let allProps = e.target.id.split(',')
+        setType({
+            id:Number(allProps[0]),
+            color:allProps[1],
+            talla:allProps[2],
+            cantidad:Number(allProps[3]),
+        })
+        setShowTypes(true)
+        setReadyType(true)
+    }
+    function deleteType(e) {
+        let id = e.target.id
+        let newlist = inputs.type.filter(t=> t.id !== Number(id))
+        console.log(inputs.type);
+        setInputs({...inputs, type:newlist})
     }
     function validate(inputs) {
         const errors = {};
@@ -119,7 +134,14 @@ const CreateProduct = ()=>{
         }
     }
     function handleType(e) {
-        inputs.type.push(type)
+        let newlist = inputs.type.filter(t=> t.id !== type.id)
+        if (newlist.length < inputs.type.length) {
+            newlist.push(type)
+            setInputs({...inputs, type:newlist})
+            console.log(newlist);
+        }else{
+            inputs.type.push(type)
+        }
         setType({
             id:++type.id,
             color:'',
@@ -131,11 +153,14 @@ const CreateProduct = ()=>{
     }
     function handleSubmit(e) {
         e.preventDefault()
+        console.log(inputs);
+        console.log(Object.values(errors));
+
         if (inputs.imagenes.length === 0) {
             setReady(false)
             setErrors({...errors, img: 'debe agregar imagenes del producto'})
         }
-        if (Object.values(errors).length === 0) {
+        if (Object.keys(errors).length === 0) {
             setInputs({
                 nombre: "",
                 desc: "",
@@ -286,7 +311,54 @@ const CreateProduct = ()=>{
                                             <p>Cantidad: {t.cantidad}</p>
                                         </div>
                                         <div>
+                                            <ul className="flex flex-row items-center gap-2">
+                                                <li onClick={editType}>
+                                                    <button
+                                                        id={`${t.id},${t.color},${t.talla},${t.cantidad}`}
+                                                        className="p-1.5 bg-bluey rounded-full"
+                                                    >
+                                                        <svg
+                                                        width="24px"
+                                                        height="24px"
+                                                        viewBox="0 0 24 24"
+                                                        strokeWidth="1.5"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        color="#000000"
+                                                        >
+                                                            <path
+                                                                d="M14.363 5.652l1.48-1.48a2 2 0 012.829 0l1.414 1.414a2 2 0 010 2.828l-1.48 1.48m-4.243-4.242l-9.616 9.615a2 2 0 00-.578 1.238l-.242 2.74a1 1 0 001.084 1.085l2.74-.242a2 2 0 001.24-.578l9.615-9.616m-4.243-4.242l4.243 4.242"
+                                                                stroke="#000000"
+                                                                strokeWidth="1.5"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            ></path>
+                                                        </svg>
+                                                    </button>
+                                                </li>
 
+                                                <li onClick={deleteType}>
+                                                    <button id={t.id} className="p-1.5 border-bluey rounded-full">
+                                                        <svg
+                                                        width="24px"
+                                                        height="24px"
+                                                        viewBox="0 0 24 24"
+                                                        strokeWidth="1.5"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        color="#000000"
+                                                        >
+                                                            <path
+                                                                d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"
+                                                                stroke="#000000"
+                                                                strokeWidth="1.5"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                            ></path>
+                                                        </svg>
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 )
