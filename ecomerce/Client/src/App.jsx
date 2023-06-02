@@ -10,14 +10,16 @@ import Footer from "./components/Footer/Footer";
 import SignIn from "./views/SignIn/SignIn";
 import SideBarCar from "./components/sideBarCar/SideBarCar";
 import SignUn from "./views/SignUp/SignUp";
+import Profile from "./views/Profile/Profile";
 
 function App() {
   const location = useLocation();
   return (
     <>
       {/* <SideBarCar /> */}
-      {location.pathname === "/signIn" || location.pathname === "/signUp" ? null : (
-        <Nav/>
+      {location.pathname === "/signIn" ||
+      location.pathname === "/signUp" ? null : (
+        <Nav />
       )}
       <Routes>
         <Route path="/" element={<ViewHome />}></Route>
@@ -25,12 +27,15 @@ function App() {
         <Route path="/man" element={<h1>man</h1>}></Route>
         <Route path="/kids" element={<h1>kids</h1>}></Route>
         <Route path="/alls" element={<h1>alls</h1>}></Route>
-        <Route path="/signIn" element={<SignIn/>}></Route>
-        <Route path="/signUp" element={<SignUn/>}></Route>
-        <Route path="/product/:id" element={<Details/>}></Route>
+        <Route path="/signIn" element={<SignIn />}></Route>
+        <Route path="/signUp" element={<SignUn />}></Route>
+        <Route path="/product/:id" element={<Details />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
       </Routes>
-      {location.pathname === "/signIn" || location.pathname === "/signUp" ? null : (
-        <Footer/>
+      {location.pathname === "/signIn" ||
+      location.pathname === "/signUp" ||
+      location.pathname === "/profile" ? null : (
+        <Footer />
       )}
     </>
   );
