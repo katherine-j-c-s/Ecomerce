@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
-export default function CardsProduct({ image, price, name, sideBarMenu }) {
+export default function CardsProduct({ image, price, name, sideBarMenu, seeDetails }) {
   return (
-    <Link to="/product/:id">
+    <div className="cursor-pointer" onClick={seeDetails}>
       <div className="flex w-64 md:w-72 h-80 lg:h-72 rounded-lg bg-white flex-col relative shadow hover:shadow-xl mt-10">
         <img
           className="select-none absolute -top-10 left-1/2 transform -translate-x-1/2 mx-2 "
@@ -29,6 +29,6 @@ export default function CardsProduct({ image, price, name, sideBarMenu }) {
           </div>
         )}
       </div>
-    </Link>
+    </div>
   );
 }
