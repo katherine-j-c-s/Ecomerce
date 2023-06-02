@@ -1,8 +1,9 @@
-import { GET_ALL_PRODUCTS, FILTER_PRODUCTS, AGREGAR_FILTRO, REMOVER_FILTRO, SIGN_IN } from "./types";
+import { GET_ALL_PRODUCTS, FILTER_PRODUCTS, AGREGAR_FILTRO, REMOVER_FILTRO, SIGN_IN, GET_PRODUCT_BY_ID, CLEAR_PRODUCT_DETAIL } from "./types";
 
 const initialState = {
   products: [],
   productsFiltered: [],
+  productDetail: [],
   filtros: [],
   access: false,
 };
@@ -11,6 +12,10 @@ const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_PRODUCTS:
       return { ...state, products: action.payload };
+    case GET_PRODUCT_BY_ID:
+      return {...state, productDetail: action.payload}
+    case CLEAR_PRODUCT_DETAIL:
+          return { ...state,  productDetail: state.productDetail,  };
     case FILTER_PRODUCTS:
       console.log(state.filtros)
       let resultado = state.products
