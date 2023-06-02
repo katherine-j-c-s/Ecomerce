@@ -1,14 +1,15 @@
-const { Product } = require("../db");
+const { Product, Color, Category, Size } = require("../db");
 const { hard } = require("./mockedData/mockedProducts");
 
 const convertAllProducts = (res) => {
-  let { id, name, price, image, Color, Size } = res;
+  let { id, name, price, image, Color, Size, Category } = res;
   return (newObj = {
     id,
     name,
     price,
-    color: Color,
-    size: Size,
+    color: Color?.dataValues.color || null,
+    size: Size?.dataValues.size || null,
+    category: Category?.dataValues.name || null,
     image,
   });
 };
@@ -35,9 +36,9 @@ const convertSingleProduct = (res) => {
     description,
     stock,
     available,
-    category: Category,
-    color: Color,
-    size: Size,
+    color: Color?.dataValues.color || null,
+    size: Size?.dataValues.size || null,
+    category: Category?.dataValues.name || null,
     comments: Comments,
     image,
   });
@@ -50,9 +51,6 @@ const getProducts = async () => {
       allProducts.push(convertAllProducts(res.dataValues))
     );
   });
-
-  // Data hardcodeada
-  
 
   const count = await Product.count();
   if (count === 0) {
@@ -73,9 +71,28 @@ const getProductByID = async (id) => {
   return convertSingleProduct(product);
 };
 
-const createProduct = async (name, price, description, image, stock) => {
+const createProduct = async (name, price, description, image, stock, color, category, size) => {
   let available;
   if (stock === 0 || stock === null) available = false;
+
+  if(color) {
+      let { id } = await Color.findOne({
+        where: { color }
+      })
+      color = id
+  }
+  if(category) {
+      let { id } = await Category.findOne({
+        where: { name: category }
+      })
+      category = id
+  }
+  if(size) {
+      let { id } = await Size.findOne({
+        where: { size }
+      })
+      size = id
+  }
 
   let [product, created] = await Product.findOrCreate({
     where: { name },
@@ -86,10 +103,11 @@ const createProduct = async (name, price, description, image, stock) => {
       image,
       stock,
       available,
+      ColorId: color,
+      CategoryId: category,
+      SizeId: size,
     },
   });
-
-  
 
   if (!created) {
     throw new Error("Este producto ya existe");
@@ -107,7 +125,7 @@ const deleteProduct = async (id) => {
   if (removedProduct === 0) throw new Error("No se pudo eliminar el producto");
 };
 
-const updateProduct = async (id, name, price, description, image, stock) => {
+const updateProduct = async (id, name, price, description, image, stock, color, category, size) => {
   const product = await Product.findOne({
     where: { id },
     include: { all: true },
@@ -117,11 +135,33 @@ const updateProduct = async (id, name, price, description, image, stock) => {
   if (stock <= 0 || stock === null) product.available = false;
   if (stock > 0) product.available = true;
 
+  if(color) {
+    let { id } = await Color.findOne({
+      where: { color }
+    })
+    color = id
+  }   
+  if(category) {
+    let { id } = await Category.findOne({
+      where: { name: category }
+    })
+    category = id
+  }
+  if(size) {
+    let { id } = await Size.findOne({
+      where: { size }
+    })
+    size = id
+  }
+
   product.name = name || product.name;
   product.price = price || product.price;
   product.description = description || product.description;
-  product.image = image || product.image;
   product.stock = stock || product.stock;
+  product.image = image || product.image;
+  await product.setColor(color)
+  await product.setCategory(category)
+  await product.setSize(size)
   await product.save();
 
   return convertSingleProduct(product);

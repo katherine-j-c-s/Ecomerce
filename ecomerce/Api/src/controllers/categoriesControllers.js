@@ -2,17 +2,17 @@ const { Category } = require("../db");
 
 const getCategories = async () => {
   let categories = [
-    { name: "Remeras" },
-    { name: "Pantalones" },
-    { name: "Calzado" },
-    { name: "Calzas" },
-    { name: "Camperas" },
-    { name: "Buzos" },
-    { name: "Shorts" },
-    { name: "Trajes de Baño" },
-    { name: "Medias" },
-    { name: "Accesorios" },
-    { name: "Gorras" },
+    { name: "remeras" },
+    { name: "pantalones" },
+    { name: "calzado" },
+    { name: "calzas" },
+    { name: "camperas" },
+    { name: "buzos" },
+    { name: "shorts" },
+    { name: "trajes de baño" },
+    { name: "medias" },
+    { name: "accesorios" },
+    { name: "gorras" },
   ];
 
   const count = await Category.count();
