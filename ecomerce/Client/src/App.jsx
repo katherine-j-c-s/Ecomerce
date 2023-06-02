@@ -12,7 +12,7 @@ import SideBarCar from "./components/sideBarCar/SideBarCar";
 import SignUn from "./views/SignUp/SignUp";
 import Products from "./views/Products/Products";
 import Admin from "./views/Admin/Admin";
-
+import Profile from "./views/Profile/Profile";
 
 function App() {
   const location = useLocation();
@@ -32,9 +32,10 @@ function App() {
         <Route path="/signUp" element={<SignUn/>}/>
         <Route path="/product/:id" element={<Details/>}/>
         <Route path="/admin" element={<Admin/>}/>
+        <Route path="/profile" element={<Profile />}/>
       </Routes>
-      {location.pathname === "/signIn" || location.pathname === "/signUp" || location.pathname === "/admin" ? null : (
-        <Footer/>
+      {location.pathname === "/signIn" || location.pathname === "/signUp" || location.pathname === "/profile" || location.pathname === "/admin" ? null : (
+        <Footer />
       )}
     </>
   );
