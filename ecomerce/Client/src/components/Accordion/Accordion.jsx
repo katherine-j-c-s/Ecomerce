@@ -49,7 +49,7 @@ export default function Accordion({ options, isOpen }) {
                 type="checkbox"
                 className="form-checkbox"
                 //checked={filtros?.some(filtro => filtro.name === options.title && filtro.valor === item)} 
-                onChange={(event) => handleCheckboxChange(event, item, options.title)}
+                onChange={(event) => handleCheckboxChange(event, item, options.name)}
               />
 
               <span className="ml-2 text-black">{item}</span>

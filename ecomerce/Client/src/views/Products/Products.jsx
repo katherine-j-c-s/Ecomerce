@@ -42,14 +42,16 @@ export default function Products() {
                     <Accordion
                         options={{
                             title: 'Tallas',
-                            items: ['XS', 'S', 'M', 'XL', 'XLL']
+                            name: 'size',
+                            items: ['xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl']
                         }}
                         isOpen={false}
                     />
                     <Accordion
                         options={{
                             title: 'Categoría',
-                            items: ['Remeras', 'Pantalones', 'Zapatillas', 'Medias']
+                            name: 'category',
+                            items: ['remeras', 'pantalones', 'calzado', 'calzas', 'buzos', 'shorts', 'trajes de baño', 'medias', 'accesorios', 'gorras',]
                         }}
                         isOpen={false}
                     />
@@ -63,7 +65,8 @@ export default function Products() {
                     <Accordion
                         options={{
                             title: 'Color',
-                            items: ['Rojo', 'Azul', 'Verde', 'Negro', 'Naranja']
+                            name: 'color',
+                            items: ['rojo', 'negro', 'blanco', 'gris', 'azul','verde', 'amarillo', 'naranja', 'beige', 'rosa', 'morado', 'cian']
                         }}
                         isOpen={false}
                     />
