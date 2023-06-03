@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addProduct } from '../../redux/actions';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProduct, loadFiltersFromLocalStorage } from '../../redux/actions';
+import { useState, useEffect } from 'react';
 import vectorAdd from '../../assets/VectorAdd.png'
 
 const reguexURL = /^(ftp|http|https):\/\/[^ "]+$/;
@@ -10,7 +10,7 @@ const reguexURL = /^(ftp|http|https):\/\/[^ "]+$/;
 const CreateProduct = ()=>{
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
+    const {filtros} = useSelector(st=>st)
     const [ready,setReady] = useState(true)
 
     const [addImg, setAddImg] = useState(false)
@@ -43,6 +43,10 @@ const CreateProduct = ()=>{
         genero: "",
         img:"",
     });
+    useEffect(()=>{
+        dispatch(loadFiltersFromLocalStorage())
+        console.log(filtros);
+    },[])
     function addImage() {
         if (validateImg.ready === true) {
             setImg('')
@@ -136,12 +140,16 @@ const CreateProduct = ()=>{
         }
     }
     function handleType(e) {
+        console.log(type);
+        console.log(inputs);
         let newlist = inputs.type.filter(t=> t.id !== type.id)
+        console.log(newlist);
         if (newlist.length < inputs.type.length) {
             newlist.push(type)
             setInputs({...inputs, type:newlist})
         }else{
             inputs.type.push(type)
+            console.log(inputs);
         }
         setType({
             id:++type.id,

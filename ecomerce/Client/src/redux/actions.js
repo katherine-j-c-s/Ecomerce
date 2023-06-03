@@ -63,5 +63,19 @@ export const removerFiltro = (valor) => {
 
 export const addProduct = (obj) => {
   console.log(obj);
+  let products = obj.type.map(t=>{
+    let prodct = {
+      name: obj.name,
+      price: obj.precio,
+      description: obj.desc,
+      image: obj.imagenes,
+      stock: Number(t.cantidad),
+      color: t.color,
+      category: obj.categoria,
+      size: t.talla
+    }
+    return prodct
+  })
+  console.log(products);
   return {type: ADD_PRODUCT, payload: obj}
 }
