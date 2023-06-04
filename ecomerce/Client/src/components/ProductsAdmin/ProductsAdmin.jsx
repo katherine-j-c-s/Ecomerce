@@ -12,17 +12,17 @@ export default function ProductsAdmin() {
 
   useEffect(()=>{
     dispatch(getAllProducts())
+    console.log(created);
   },[])
   const navigate = useNavigate()
     const go = (ruta) => {
-        navigate(ruta)
-        console.log(created);
+      navigate(ruta)
     }
     const seeDetailsHandler = () => {
         alert('Shoop')
     }
   return (
-    <div className='text-black flex flex-wrap'>
+    <div className='text-black flex flex-wrap mt-6 md:mt-0'>
       <Link to={'/admin?pestaña=formProducts'} className=' mx-4 mt-10 w-64 md:w-72 h-72 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
         <div className='flex h-full justify-center align-center flex-col'>
           <img className='w-8 h-8 mx-auto' src={vectorAdd} alt="vector" />

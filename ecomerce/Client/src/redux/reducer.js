@@ -12,9 +12,11 @@ const initialState = {
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PRODUCT:
+      let listCreated = [...state.created]
+      listCreated.push(action.payload)
       return {
         ...state,
-        created: [...state.created, action.payload],
+        created: listCreated,
       }
     case GET_ALL_PRODUCTS:
       return { ...state, products: action.payload };
