@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 
+const defaultImage = require("../assets/user.png");
+
 module.exports = (sequelize) => {
   const User = sequelize.define(
     "User",
@@ -34,6 +36,7 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: defaultImage,
       },
       role: {
         type: DataTypes.ENUM("client", "admin"),
