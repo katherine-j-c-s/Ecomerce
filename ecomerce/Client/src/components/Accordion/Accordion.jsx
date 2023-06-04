@@ -1,30 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { filterProducts, agregarFiltro , removerFiltro} from '../../redux/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-export default function Accordion({ options, isOpen }) {
+export default function Accordion({ options, isOpen, filtros }) {
 
-  const filtros = useSelector(state => state.filtros)
+  const [checkedItems, setCheckedItems] = useState({});
   const dispatch = useDispatch()
-  const [isAccordionOpen, setIsAccordionOpen] = useState(isOpen);
+  const [isAccordionOpen, setIsAccordionOpen] = useState(
+    JSON.parse(localStorage.getItem(`${options.name}_isOpen`)) || isOpen
+  );
 
   const handleCheckboxChange = (event, item, title) => {
     if (event.target.checked) {
-
       dispatch(agregarFiltro({ name: title, valor: item }));
-      dispatch(filterProducts())
+      dispatch(filterProducts());
+      setCheckedItems(prev => ({ ...prev, [item]: true }));
     } else {
-      dispatch(filterProducts())
+      dispatch(filterProducts());
       dispatch(removerFiltro({ name: title, valor: item }));
+      setCheckedItems(prev => ({ ...prev, [item]: false }));
     }
   };
-  
-  
+
+  const toggleAccordion = () => {
+    const newState = !isAccordionOpen;
+    setIsAccordionOpen(newState);
+    localStorage.setItem(`${options.name}_isOpen`, JSON.stringify(newState));
+  };
+
+  useEffect(() => {
+    setCheckedItems(
+      options.items.reduce((acc, item) => ({
+        ...acc,
+        [item]: filtros.some(filtro => filtro.name === options.name && filtro.valor === item)
+      }), {})
+    );
+  }, [filtros, options.items, options.name]);
+
   return (
     <div className="mb-4 w-full">
       <div
         className="select-none cursor-pointer flex items-center justify-start w-full  pr-4 bg-none text-black rounded-md"
-        onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+        onClick={toggleAccordion}
       >
         <svg
           className={`h-4 w-4 ${isAccordionOpen ? 'transform rotate-360' : ''}`}
@@ -48,7 +65,7 @@ export default function Accordion({ options, isOpen }) {
               <input
                 type="checkbox"
                 className="form-checkbox"
-                //checked={filtros?.some(filtro => filtro.name === options.title && filtro.valor === item)} 
+                checked={checkedItems[item] || false}
                 onChange={(event) => handleCheckboxChange(event, item, options.name)}
               />
 
