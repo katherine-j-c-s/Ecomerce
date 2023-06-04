@@ -69,7 +69,7 @@ module.exports = function (passport) {
       async (mail, password, done) => {
         try {
           // Encuentra al usuario en la base de datos por correo electrónico
-          const user = await User.findOne({ where: { mail } });
+          const user = await User.findOne({ where: { mail: mail } });
 
           // Si no se encuentra el usuario o la contraseña no coincide, devuelve un mensaje de error
           if (!user || !bcrypt.compareSync(password, user.password)) {
