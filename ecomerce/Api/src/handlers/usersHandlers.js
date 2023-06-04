@@ -45,11 +45,8 @@ const signupHandler = async (req, res) => {
 };
 
 const loginHandler = async (req, res) => {
-  const { user } = req; // El objeto `user` estará disponible después de la autenticación exitosa
   try {
-    const tokenUser = login(user);
-    // Envía el token como respuesta al cliente
-    res.status(200).json(tokenUser);
+    res.status(200).json({ message: "Login exitoso" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

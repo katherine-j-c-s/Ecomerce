@@ -1,7 +1,6 @@
 const { User, Order, Comment } = require("../db");
 const { Op } = require("sequelize");
 require("dotenv").config();
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const getUsers = async () => {
@@ -50,10 +49,10 @@ const createUser = async ({
   last_name,
   address,
   image,
-  role,
-  purchases,
 }) => {
-  const hashedPassword = bcrypt.hashSync(password, 10); // Encripta la contraseña
+  if (password) {
+    const hashedPassword = bcrypt.hashSync(password, 10); // Encripta la contraseña
+  }
 
   const newUser = await User.create({
     mail,
@@ -66,17 +65,6 @@ const createUser = async ({
     purchases,
   });
   return newUser;
-};
-
-const login = (user) => {
-  // Genera un token JWT con una clave secreta
-  const token = jwt.sign(
-    { id: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: "1h" }
-  );
-
-  return token;
 };
 
 const updateUser = async (id, datos) => {
@@ -128,7 +116,6 @@ module.exports = {
   getUsersByName,
   getUserById,
   createUser,
-  login,
   updateUser,
   deleteUser,
 };
