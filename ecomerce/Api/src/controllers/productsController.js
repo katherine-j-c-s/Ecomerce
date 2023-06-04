@@ -1,5 +1,15 @@
 const { Product, Color, Category, Size } = require("../db");
 const { hard } = require("./mockedData/mockedProducts");
+const cloudinary = require("cloudinary").v2;
+require("dotenv").config();
+const { CLOUD_NAME, API_KEY, API_SECRET } = process.env
+
+cloudinary.config({ 
+  cloud_name: CLOUD_NAME, 
+  api_key: API_KEY, 
+  api_secret: API_SECRET,
+  secure: true
+});
 
 const convertAllProducts = (res) => {
   let { id, name, price, image, Color, Size, Category } = res;
@@ -43,6 +53,13 @@ const convertSingleProduct = (res) => {
     image,
   });
 };
+
+
+const testCloudinary = async () => {
+  cloudinary.uploader
+  .upload("")
+  .then(result=>console.log(result));
+}
 
 const getProducts = async () => {
   let allProducts = [];
@@ -94,15 +111,28 @@ const createProduct = async (name, price, description, image, stock, color, cate
       size = id
   }
 
+  let imagesPromises = []
+  let imagesURLs = []
+  image.forEach(img => {
+    imagesPromises.push(
+      cloudinary.uploader
+      .upload(img)
+    )
+  })
+  uploadImages = await Promise.all(imagesPromises)
+  .then(responses => {
+    return responses.map(res => imagesURLs.push(res.url))
+  })
+
   let [product, created] = await Product.findOrCreate({
     where: { name },
     defaults: {
       name,
       price,
       description,
-      image,
       stock,
       available,
+      image: imagesURLs,
       ColorId: color,
       CategoryId: category,
       SizeId: size,
@@ -173,4 +203,5 @@ module.exports = {
   getProductByID,
   deleteProduct,
   updateProduct,
+  testCloudinary,
 };
