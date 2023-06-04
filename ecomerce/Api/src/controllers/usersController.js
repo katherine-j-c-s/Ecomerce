@@ -49,9 +49,11 @@ const createUser = async ({
   last_name,
   address,
   image,
+  role,
 }) => {
+  let hashedPassword = null;
   if (password) {
-    const hashedPassword = bcrypt.hashSync(password, 10); // Encripta la contraseña
+    hashedPassword = bcrypt.hashSync(password, 10); // Encripta la contraseña
   }
 
   const newUser = await User.create({
@@ -62,7 +64,6 @@ const createUser = async ({
     address,
     image,
     role,
-    purchases,
   });
   return newUser;
 };

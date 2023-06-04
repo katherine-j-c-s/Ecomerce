@@ -43,6 +43,8 @@ sessionStore.sync();
 
 app.use(passport.initialize()); // Inicializa Passport.js
 
+app.use(passport.session());
+
 app.use("/", mainRouter);
 
 module.exports = app;

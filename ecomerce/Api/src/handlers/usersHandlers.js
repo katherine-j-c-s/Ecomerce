@@ -3,7 +3,6 @@ const {
   getUsersByName,
   getUserById,
   createUser,
-  login,
   updateUser,
   deleteUser,
 } = require("../controllers/usersController");
@@ -52,6 +51,15 @@ const loginHandler = async (req, res) => {
   }
 };
 
+const logoutHandler = async (req, res) => {
+  try {
+    req.logout(); // Cierra la sesión actual del usuario
+    res.status(200).json({ message: "Sesión cerrada exitosamente" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const deleteUserHandler = async (req, res) => {
   const { id } = req.params;
   try {
@@ -79,6 +87,7 @@ module.exports = {
   getUsersHandler,
   signupHandler,
   loginHandler,
+  logoutHandler,
   deleteUserHandler,
   updateUserHandler,
 };

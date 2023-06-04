@@ -16,7 +16,7 @@ module.exports = function (passport) {
   passport.deserializeUser(async (id, done) => {
     try {
       // Recupera el objeto de usuario utilizando la identificación almacenada en la sesión
-      const user = await User.findById(id);
+      const user = await User.findByPk(id);
       done(null, user);
     } catch (error) {
       done(error);

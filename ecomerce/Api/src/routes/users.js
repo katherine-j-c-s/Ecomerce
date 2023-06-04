@@ -4,6 +4,7 @@ const {
   getUserByIdHandler,
   signupHandler,
   loginHandler,
+  logoutHandler,
   deleteUserHandler,
   updateUserHandler,
 } = require("../handlers/usersHandlers");
@@ -33,6 +34,8 @@ usersRouter.get(
 );
 
 usersRouter.use(ensureAuthenticated);
+
+usersRouter.post("/logout", logoutHandler);
 
 usersRouter.get("/", getUsersHandler);
 
