@@ -154,7 +154,6 @@ const createProduct = async (name, price, description, image, stock, color, cate
         )
       })
       await Promise.all(deletePromises)
-      .then(res => console.log(res))
     }
     throw new Error("Este producto ya existe");
   }
@@ -214,7 +213,10 @@ const updateProduct = async (id, name, price, description, image, stock, color, 
 };
 
 const removeImage = async (image) => {
-  console.log(image)
+  let { result } = await cloudinary.uploader
+  .destroy(image)
+
+  return result
 }
 
 module.exports = {
