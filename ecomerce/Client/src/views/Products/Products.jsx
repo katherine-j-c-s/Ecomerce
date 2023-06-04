@@ -5,29 +5,35 @@ import Accordion from '../../components/Accordion/Accordion';
 import image from '../../assets/productHeader.png'
 import { useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import { getAllProducts } from '../../redux/actions';
+import { getAllProducts, getFilters, filterProducts } from '../../redux/actions';
 
 export default function Products() {
     
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const sizes = useSelector(state => state.sizes)
+    const categories = useSelector(state => state.categories)
+    const colors = useSelector(state => state.colors)
+    const filtros = useSelector(state => state.filtros)
 
+    const go = (ruta) => { navigate(ruta) }
 
-    const go = (ruta) => {
-        navigate(ruta)
-    }
     const products = useSelector(state => {
-        if(state.productsFiltered.length <= 0 && state.filtros.length > 0){
-            return state.products
-        }else if(state.productsFiltered.length <= 0 || state.filtros.length <= 0){
-            return state.products
-        }else{
+        if(filtros.length > 0){
             return state.productsFiltered
+        }else{
+            return state.products
         }
     })
     useEffect(()=>{
         dispatch(getAllProducts())
-    },[])
+        if(filtros.length > 0){
+            dispatch(filterProducts())
+        }
+        dispatch(getFilters('sizes'))
+        dispatch(getFilters('categories'))
+        dispatch(getFilters('colors'))
+    },[filtros.length])
     return (
         <div>
             <div className="h-auto w-auto flex justify-center mb-16 relative">
@@ -36,39 +42,37 @@ export default function Products() {
                 <h1 className="absolute top-60 left-20 text-white font-bold text-7xl border-white  px-2">POWER</h1>
             </div>
 
-            <div className="flex flex-row  h-auto my-4 px-[60px]">
-                <div className="w-1/4 h-screen  p-10 flex flex-col items-start justify-start">
+            <div className="flex flex-row  h-auto my-4 px-[60px] ">
+                <div className="w-1/4 h-screen  p-10 flex flex-col items-start justify-start overflow-y-auto">
                     <h1 className="text-black font-extrabold text-2xl text-start mb-10">Filtros</h1>
-                    <Accordion
-                        options={{
-                            title: 'Tallas',
-                            name: 'size',
-                            items: ['xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl']
-                        }}
-                        isOpen={false}
-                    />
                     <Accordion
                         options={{
                             title: 'Categoría',
                             name: 'category',
-                            items: ['remeras', 'pantalones', 'calzado', 'calzas', 'buzos', 'shorts', 'trajes de baño', 'medias', 'accesorios', 'gorras',]
+                            items: categories.map(item => item.name)
                         }}
+                        isOpen={false}
+                        filtros={filtros}
+
+                    />
+                    <Accordion
+                        options={{
+                            title: 'Tallas',
+                            name: 'size', 
+                            items: sizes.map(item => item.size)
+                        }}
+                        filtros={filtros}
                         isOpen={false}
                     />
-                    {/*<Accordion
-                        options={{
-                            title: 'Precio',
-                            items: ['XS', 'S', 'M']
-                        }}
-                        isOpen={false}
-                    />*/}
                     <Accordion
                         options={{
                             title: 'Color',
                             name: 'color',
-                            items: ['rojo', 'negro', 'blanco', 'gris', 'azul','verde', 'amarillo', 'naranja', 'beige', 'rosa', 'morado', 'cian']
+                            items: colors.map(item => item.color)
                         }}
                         isOpen={false}
+                        filtros={filtros}
+
                     />
                 </div>
                 <div className='w-3/4 h-auto grid-cols-3 gap-2 items-center flex flex-wrap' >

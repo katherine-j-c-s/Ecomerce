@@ -1,4 +1,13 @@
-import { GET_ALL_PRODUCTS, FILTER_PRODUCTS, AGREGAR_FILTRO, REMOVER_FILTRO, SIGN_IN, GET_PRODUCT_BY_ID, CLEAR_PRODUCT_DETAIL } from "./types";
+import { 
+  GET_ALL_PRODUCTS, 
+  FILTER_PRODUCTS, 
+  AGREGAR_FILTRO, 
+  REMOVER_FILTRO, 
+  SIGN_IN, GET_PRODUCT_BY_ID, 
+  CLEAR_PRODUCT_DETAIL,
+  GET_FILTERS,
+  SET_FILTERS,
+} from "./types";
 
 const initialState = {
   products: [],
@@ -6,23 +15,49 @@ const initialState = {
   productDetail: [],
   filtros: [],
   access: false,
+
+  sizes: [],
+  categories: [],
+  colors: [],
+  
 };
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_PRODUCTS:
-      return { ...state, products: action.payload };
+      return { ...state, products: action.payload};
     case GET_PRODUCT_BY_ID:
       return {...state, productDetail: action.payload}
     case CLEAR_PRODUCT_DETAIL:
           return { ...state,  productDetail: state.productDetail,  };
     case FILTER_PRODUCTS:
-      console.log(state.filtros)
-      let resultado = state.products
-      state.filtros.forEach(({name, valor}) => {
-        resultado = resultado.filter(product => product[name] === valor)
+      const filtrosPorCategoria = state.filtros.filter(filtro => filtro.name === 'category');
+      const filtrosOtros = state.filtros.filter(filtro => filtro.name !== 'category');
+      
+      // Agrupar los otros filtros por su nombre
+      const filtrosAgrupados = filtrosOtros.reduce((acc, filtro) => {
+        if (!acc[filtro.name]) acc[filtro.name] = [];
+        acc[filtro.name].push(filtro.valor);
+        return acc;
+      }, {});
+
+      let resultado = filtrosPorCategoria.length > 0 ? state.products.filter(product => 
+        filtrosPorCategoria.some(filtro => product[filtro.name] === filtro.valor)
+      ) : [...state.products];
+      
+      // Aplicar cada grupo de filtros
+      Object.keys(filtrosAgrupados).forEach(name => {
+        const valores = filtrosAgrupados[name];
+        resultado = resultado.filter(product => valores.includes(product[name]));
       });
+
       return {...state, productsFiltered: resultado};
+    case SET_FILTERS: {
+      return {
+        ...state,
+        filtros: action.payload
+      };
+    }
     case SIGN_IN:
         return { ...state, access: true };
     case AGREGAR_FILTRO:
@@ -31,10 +66,12 @@ const rootReducer = (state = initialState, action) => {
         filtros: [...state.filtros, action.payload],
       };
     case REMOVER_FILTRO:
-      console.log(state.filtros)
       const index = state.filtros.findIndex(filtro => filtro.name === action.payload.name && filtro.valor === action.payload.valor )
       state.filtros.splice(index, 1)
       return {...state, };
+    
+    case GET_FILTERS: 
+      return{...state, [action.payload[0]]: action.payload[1]  }
     default:
       return state;
   }
