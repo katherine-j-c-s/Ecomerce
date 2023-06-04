@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
-const bcrypt = require("bcrypt");
+
+const defaultImage = require("../assets/user.png");
 
 module.exports = (sequelize) => {
   const User = sequelize.define(
@@ -18,7 +19,7 @@ module.exports = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       first_name: {
         type: DataTypes.STRING,
@@ -30,30 +31,26 @@ module.exports = (sequelize) => {
       },
       address: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: defaultImage,
       },
       role: {
         type: DataTypes.ENUM("client", "admin"),
         allowNull: false,
         defaultValue: "client",
       },
+      status: {
+        type: DataTypes.ENUM("active", "inactive"),
+        allowNull: false,
+        defaultValue: "active",
+      },
     },
     {
       timestamps: false,
     }
   );
-
-  User.encryptPassword = function (password) {
-    // Se genera un salt para la contrasenia
-    var salt = bcrypt.genSaltSync(10);
-    // Se hashea la contrasenia con el salt generado arriba
-    return bcrypt.hashSync(password, salt);
-  };
-  User.comparePassword = function (password, userPassword) {
-    return bcrypt.compareSync(password, userPassword);
-  };
 };

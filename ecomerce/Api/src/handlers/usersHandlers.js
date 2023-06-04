@@ -34,10 +34,27 @@ const getUserByIdHandler = async (req, res) => {
   }
 };
 
-const postUserHandler = async (req, res) => {
+const signupHandler = async (req, res) => {
   try {
     const newUser = await createUser(req.body);
     res.status(201).json(newUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const loginHandler = async (req, res) => {
+  try {
+    res.status(200).json({ message: "Login exitoso" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const logoutHandler = async (req, res) => {
+  try {
+    req.logout(); // Cierra la sesión actual del usuario
+    res.status(200).json({ message: "Sesión cerrada exitosamente" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -68,7 +85,9 @@ const updateUserHandler = async (req, res) => {
 module.exports = {
   getUserByIdHandler,
   getUsersHandler,
-  postUserHandler,
+  signupHandler,
+  loginHandler,
+  logoutHandler,
   deleteUserHandler,
   updateUserHandler,
 };
