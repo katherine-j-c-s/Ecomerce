@@ -6,6 +6,7 @@ const {
   createProductHandler,
   deleteProductHandler,
   updateProductHandler,
+  removeImageHandler,
 } = require("../handlers/productsHandlers");
 
 const productsRouter = Router();
@@ -19,5 +20,7 @@ productsRouter.delete("/:id", deleteProductHandler);
 productsRouter.post("/", createProductHandler);
 
 productsRouter.patch("/:id", updateProductHandler);
+
+productsRouter.delete("/remove_image/:image", removeImageHandler)
 
 module.exports = productsRouter;

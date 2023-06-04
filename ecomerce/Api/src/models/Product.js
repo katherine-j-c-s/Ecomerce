@@ -32,7 +32,7 @@ module.exports = (sequelize) => {
         type: DataTypes.FLOAT,
       },
       image: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
+        type: DataTypes.ARRAY(DataTypes.JSON),
       },
       available: {
         type: DataTypes.BOOLEAN,

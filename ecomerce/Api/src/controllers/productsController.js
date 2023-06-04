@@ -55,11 +55,7 @@ const convertSingleProduct = (res) => {
 };
 
 
-const testCloudinary = async () => {
-  cloudinary.uploader
-  .upload("")
-  .then(result=>console.log(result));
-}
+
 
 const getProducts = async () => {
   let allProducts = [];
@@ -112,7 +108,7 @@ const createProduct = async (name, price, description, image, stock, color, cate
   }
 
   let imagesPromises = []
-  let imagesURLs = []
+  let imagesObjects = []
   if(image.length > 0) {
     image.forEach(img => {
       if(img) {
@@ -123,9 +119,12 @@ const createProduct = async (name, price, description, image, stock, color, cate
       }
     })
     if(imagesPromises.length > 0) {
-      uploadImages = await Promise.all(imagesPromises)
+      await Promise.all(imagesPromises)
       .then(responses => {
-        return responses.map(res => imagesURLs.push(res.url))
+        return responses.map(res => imagesObjects.push({
+          public_id: res.public_id, 
+          url: res.url,
+        }))
       })
     }
   }
@@ -138,7 +137,7 @@ const createProduct = async (name, price, description, image, stock, color, cate
       description,
       stock,
       available,
-      image: imagesURLs,
+      image: imagesObjects,
       ColorId: color,
       CategoryId: category,
       SizeId: size,
@@ -146,6 +145,17 @@ const createProduct = async (name, price, description, image, stock, color, cate
   });
 
   if (!created) {
+    let deletePromises = []
+    if(imagesObjects.length > 0) {
+      imagesObjects.forEach(obj => {
+        deletePromises.push(
+          cloudinary.uploader
+          .destroy(obj.public_id)
+        )
+      })
+      await Promise.all(deletePromises)
+      .then(res => console.log(res))
+    }
     throw new Error("Este producto ya existe");
   }
 
@@ -203,11 +213,15 @@ const updateProduct = async (id, name, price, description, image, stock, color, 
   return convertSingleProduct(product);
 };
 
+const removeImage = async (image) => {
+  console.log(image)
+}
+
 module.exports = {
   createProduct,
   getProducts,
   getProductByID,
   deleteProduct,
   updateProduct,
-  testCloudinary,
+  removeImage,
 };
