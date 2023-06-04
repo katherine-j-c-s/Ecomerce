@@ -113,16 +113,22 @@ const createProduct = async (name, price, description, image, stock, color, cate
 
   let imagesPromises = []
   let imagesURLs = []
-  image.forEach(img => {
-    imagesPromises.push(
-      cloudinary.uploader
-      .upload(img)
-    )
-  })
-  uploadImages = await Promise.all(imagesPromises)
-  .then(responses => {
-    return responses.map(res => imagesURLs.push(res.url))
-  })
+  if(image.length > 0) {
+    image.forEach(img => {
+      if(img) {
+        imagesPromises.push(
+          cloudinary.uploader
+          .upload(img)
+        )
+      }
+    })
+    if(imagesPromises.length > 0) {
+      uploadImages = await Promise.all(imagesPromises)
+      .then(responses => {
+        return responses.map(res => imagesURLs.push(res.url))
+      })
+    }
+  }
 
   let [product, created] = await Product.findOrCreate({
     where: { name },
