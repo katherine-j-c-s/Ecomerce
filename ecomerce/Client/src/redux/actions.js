@@ -59,25 +59,22 @@ export const removerFiltro = (valor) => {
 export const clearProductDetail = () => ({ type: CLEAR_PRODUCT_DETAIL  });
   
 export const addProduct = (obj) => {
-  console.log(obj);
+  let products = obj.type.map(t=>{
+    let prodct = {
+      name: obj.nombre,
+      price: Number(obj.precio),
+      description: obj.desc,
+      image: obj.imagenes,
+      stock: Number(t.cantidad),
+      color: t.color,
+      category: obj.categoria,
+      size: t.talla
+    }
+    return prodct
+  })
   return async function (dispatch) {
     try { 
-      let products = obj.type.map(t=>{
-        let prodct = {
-          name: obj.nombre,
-          price: Number(obj.precio),
-          description: obj.desc,
-          image: obj.imagenes,
-          stock: Number(t.cantidad),
-          color: t.color,
-          category: obj.categoria,
-          size: t.talla
-        }
-        return prodct
-      })
-      for (let i = 0; i < products.length; i++) {
-        const data = await axios.post(`https://ecomerce-production-8f61.up.railway.app/`,products[i]);
-      }
+      const data = await axios.all(products.map((product)=> axios.post(`https://ecomerce-production-8f61.up.railway.app/products`,product)))
       return dispatch({
         type: ADD_PRODUCT,
         payload: products,
