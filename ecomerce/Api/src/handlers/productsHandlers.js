@@ -23,8 +23,8 @@ const getProductByIdHandler = async (req, res) => {
 
 const createProductHandler = async (req, res) => {
   try {
-    let {name, price, description, image, stock} = req.body
-    let createdProduct = await createProduct(name, price, description, image, stock)
+    let {name, price, description, image, stock, color, category, size} = req.body
+    let createdProduct = await createProduct(name, price, description, image, stock, color, category, size)
     res.status(200).json(createdProduct);
     
   } catch (error) {
@@ -46,8 +46,8 @@ const deleteProductHandler = async (req, res) => {
 const updateProductHandler = async (req, res) => {
   try {
     let { id } = req.params
-    let { name, price, description, image, stock} = req.body
-    let product = await updateProduct(id, name, price, description, image, stock)
+    let { name, price, description, image, stock, color, category, size} = req.body
+    let product = await updateProduct(id, name, price, description, image, stock, color, category, size)
     res.status(200).json(product)
     
   } catch (error) {
