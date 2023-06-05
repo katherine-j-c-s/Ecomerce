@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const mainRouter = require("./routes");
 const passport = require("passport");
@@ -17,16 +18,14 @@ app.use(morgan("dev"));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-  next();
-});
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+    methods: "GET, POST, OPTIONS, PUT, DELETE",
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+  })
+);
 
 require("./auth")(passport); // Importa y configura la autenticación
 
