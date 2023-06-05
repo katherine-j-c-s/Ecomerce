@@ -2,7 +2,7 @@ import React from 'react'
 import SidebarAdmin from '../../components/SidebarAdmin/SidebarAdmin'
 import { useLocation } from 'react-router-dom'
 import ProductsAdmin from '../../components/ProductsAdmin/ProductsAdmin'
-import CreateProduct from '../../components/CreateProduct/CreateProduct'
+import CreateProduct from '../../components/createProduct/createProduct'
 
 export default function Admin() {
   let { search } = useLocation();
