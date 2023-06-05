@@ -1,4 +1,4 @@
-const { createProduct, getProducts, getProductByID, deleteProduct, updateProduct, removeImage } = require("../controllers/productsController");
+const { createProduct, getProducts, getProductByID, deleteProduct, updateProduct, removeImage, addImage } = require("../controllers/productsController");
 
 const getProductsHandler = async (req, res) => {
   try {
@@ -57,10 +57,21 @@ const updateProductHandler = async (req, res) => {
 
 const removeImageHandler = async (req, res) => {
   try {
-    let { image } = req.params
-    let product = await removeImage(image)
+    let { id, image } = req.body
+    let product = await removeImage(id, image)
     res.status(200).json(product)
-    
+
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}
+
+const addImageHandler = async (req, res) => {
+  try {
+    let { id, image } = req.body
+    let product = await addImage(id, image)
+    res.status(200).json(product)
+
   } catch (error) {
     res.status(400).json({message: error.message})
   }
@@ -73,4 +84,5 @@ module.exports = {
   deleteProductHandler,
   updateProductHandler,
   removeImageHandler,
+  addImageHandler,
 };

@@ -212,11 +212,61 @@ const updateProduct = async (id, name, price, description, image, stock, color, 
   return convertSingleProduct(product);
 };
 
-const removeImage = async (image) => {
-  let { result } = await cloudinary.uploader
-  .destroy(image)
+const removeImage = async (id, image) => {
+  let product = await Product.findOne({
+    where: { id }
+  })
+  if(product) {
+    let { result } = await cloudinary.uploader
+    .destroy(image)
+    if(result == 'ok') {
+      let updatedImage = product.image.filter(img => img.public_id != image)
+      product.image = updatedImage
+      await product.save()
+    }else {
+      throw new Error('No se ha encontrado la imagen para eliminar')
+    }
+  }else {
+    throw new Error('Producto no encontrado')
+  }
 
-  return result
+  return ('Imagen eliminada correctamente')
+}
+
+const addImage = async (id, images) => {
+  let product = await Product.findOne({
+    where: { id }
+  })
+  
+  let imagesPromises = []
+  let imagesObjects = []
+  if(images.length > 0) {
+    images.forEach(img => {
+      if(img) {
+        imagesPromises.push(
+          cloudinary.uploader
+          .upload(img)
+        )
+      }
+    })
+    if(imagesPromises.length > 0) {
+      await Promise.all(imagesPromises)
+      .then(responses => {
+        return responses.map(res => imagesObjects.push({
+          public_id: res.public_id, 
+          url: res.url,
+        }))
+      })
+    }else {
+      throw new Error('Campos vacios')
+    }
+  }else {
+    throw new Error('No hay imagenes para añadir')
+  }
+  product.image = product.image.concat(imagesObjects)
+  await product.save()
+
+  return 'Imagen añadida correctamente'
 }
 
 module.exports = {
@@ -226,4 +276,5 @@ module.exports = {
   deleteProduct,
   updateProduct,
   removeImage,
+  addImage,
 };

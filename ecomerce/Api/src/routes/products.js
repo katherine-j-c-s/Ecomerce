@@ -1,5 +1,5 @@
 const { Router } = require("express");
-
+const productsRouter = Router();
 const {
   getProductsHandler,
   getProductByIdHandler,
@@ -7,20 +7,22 @@ const {
   deleteProductHandler,
   updateProductHandler,
   removeImageHandler,
+  addImageHandler,
 } = require("../handlers/productsHandlers");
 
-const productsRouter = Router();
+productsRouter.get("/get_products", getProductsHandler);
 
-productsRouter.get("/", getProductsHandler);
+productsRouter.get("/get_product/:id", getProductByIdHandler);
 
-productsRouter.get("/:id", getProductByIdHandler);
+productsRouter.delete("/remove_product/:id", deleteProductHandler);
 
-productsRouter.delete("/:id", deleteProductHandler);
+productsRouter.post("/createProduct", createProductHandler);
 
-productsRouter.post("/", createProductHandler);
+productsRouter.delete("/remove_image", removeImageHandler)
 
-productsRouter.patch("/:id", updateProductHandler);
+productsRouter.post("/add_image", addImageHandler)
 
-productsRouter.delete("/remove_image/:image", removeImageHandler)
+productsRouter.patch("/update_product/:id", updateProductHandler);
+
 
 module.exports = productsRouter;
