@@ -22,7 +22,7 @@ const genres = [
 const GenresHome = ()=>{
     return (
         <div className='w-full text-center mt-12 md:text-left'>
-            <h1 className='text-2xl font-bold text-black md:ms-20'>Categorizes</h1>
+            <h1 className='text-2xl font-bold text-black md:ms-20'>Categorías</h1>
             <div className='flex justify-evenly mt-20 text-center flex-col md:flex-row'>
                 {genres.map(g=>{
                     return(
