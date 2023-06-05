@@ -1,10 +1,6 @@
 import "./App.css";
 
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-
-import { useEffect } from "react";
-
-import { useSelector, useDispatch } from "react-redux";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import ViewHome from "./views/Home/ViewHome";
 import Nav from "./components/Nav/Nav";
@@ -20,30 +16,6 @@ import Profile from "./views/Profile/Profile";
 function App() {
   const location = useLocation();
 
-  const navigate = useNavigate();
-
-  const Email = "grupoPF@gmail.com";
-
-  const PASSWORD = "Semeolvido1";
-
-  const access = useSelector((state) => state.access);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    !access;
-  }, [access, navigate]);
-
-  function signIn(userData) {
-    if (
-      userData.email.toString() === Email &&
-      userData.password.toString() === PASSWORD
-    ) {
-      dispatch({ type: "SIGN_IN" });
-      navigate("/");
-    }
-  }
-
   return (
     <>
       {/* <SideBarCar /> */}
@@ -58,7 +30,7 @@ function App() {
         <Route path="/man" element={<Products />} />
         <Route path="/kids" element={<Products />} />
         <Route path="/alls" element={<Products />} />
-        <Route path="/signIn" element={<SignIn login={signIn} />} />
+        <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUn />} />
         <Route path="/product/:id" element={<Details />} />
         <Route path="/admin" element={<Admin />} />

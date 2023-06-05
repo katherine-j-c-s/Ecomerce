@@ -1,16 +1,28 @@
 import userL from "../../assets/user.svg";
 import styles from "../Profile/Profile.module.css";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { useSelector } from "react-redux";
+
+import { useNavigate } from "react-router-dom";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
 export default function Profile() {
+  const navigate = useNavigate();
+
+  const access = useSelector((state) => state.access);
+
+  useEffect(() => {
+    !access && navigate("/");
+  }, [access, navigate]);
+
   const [inputs, setInputs] = useState({
-    name: "Amadeo Euralto",
-    lastName: "Amadeo Euralto",
+    name: "Amadeo",
+    lastName: "Euralto",
     email: "amadeo@gmail.com",
-    password: "amadeo123",
+    password: "12345",
   });
   const [errors, setErrors] = useState({
     name: "",
@@ -78,7 +90,9 @@ export default function Profile() {
     <section className={styles.container}>
       <article className="m-5 p-3 flex flex-col lg:flex-row items-center justify-center gap-4 xl:w-3/4">
         <div className="flex flex-col items-center justify-center gap-2">
-          <h2 className="text-black capitalize font-bold text-xl">settings</h2>
+          <h2 className="text-black capitalize font-bold text-xl">
+            configuración
+          </h2>
 
           <button className="flex items-center gap-1.5 text-grey capitalize">
             <svg
@@ -98,7 +112,7 @@ export default function Profile() {
                 strokeLinejoin="round"
               ></path>
             </svg>
-            account
+            cuenta
           </button>
 
           <button className="flex items-center gap-1.5 text-grey capitalize">
@@ -144,7 +158,7 @@ export default function Profile() {
                 strokeLinejoin="round"
               ></path>
             </svg>
-            products
+            productos
           </button>
           <button className="flex items-center gap-1.5 text-grey capitalize">
             <svg
@@ -177,7 +191,7 @@ export default function Profile() {
                 strokeLinejoin="round"
               ></path>
             </svg>
-            password
+            contraseña
           </button>
         </div>
 
@@ -241,11 +255,11 @@ export default function Profile() {
 
           <form
             onSubmit={handleSubmit}
-            className="flex flex-wrap items-center justify-center"
+            className="flex flex-col items-center justify-center gap-2 lg:flex-row flex-wrap"
           >
-            <div className="flex flex-col justify-center md:w-full lg:w-min relative mb-6">
-              <label className="absolute w-16 bg-white h-fit bottom-10 left-8 text-cyan-400">
-                Name
+            <div className="flex flex-col items-center justify-center">
+              <label className="relative right-24 top-2 text-cyan-400 capitalize">
+                nombre
               </label>
 
               {!activateInputs ? (
@@ -266,15 +280,13 @@ export default function Profile() {
                   onChange={handleChange}
                 ></input>
               )}
+
+              <p className="text-rose-500">{errors.name}</p>
             </div>
 
-            <p className="text-rose-500 relative bottom-6 md:bottom-8">
-              {errors.name}
-            </p>
-
-            <div className="flex flex-col justify-center md:w-full lg:w-min relative mb-6">
-              <label className="absolute w-20 bg-white h-fit bottom-10 left-8 text-cyan-400">
-                Last name
+            <div className="flex flex-col items-center justify-center">
+              <label className="relative right-24 top-2 text-cyan-400 capitalize">
+                apellido
               </label>
 
               {!activateInputs ? (
@@ -295,15 +307,13 @@ export default function Profile() {
                   onChange={handleChange}
                 ></input>
               )}
+
+              <p className="text-rose-500">{errors.lastName}</p>
             </div>
 
-            <p className="text-rose-500 relative bottom-6 md:bottom-8">
-              {errors.lastName}
-            </p>
-
-            <div className="flex flex-col justify-center md:w-full lg:w-min relative mb-6">
-              <label className="absolute w-16 bg-white h-fit bottom-10 left-8 text-cyan-400">
-                Email
+            <div className="flex flex-col items-center justify-center">
+              <label className="relative right-24 top-2 text-cyan-400 capitalize">
+                correo
               </label>
 
               {!activateInputs ? (
@@ -326,15 +336,13 @@ export default function Profile() {
                   placeholder="ejemplo@gmail.com"
                 ></input>
               )}
+
+              <p className="text-rose-500">{errors.email}</p>
             </div>
 
-            <p className="text-rose-500 relative bottom-6 md:bottom-8">
-              {errors.email}
-            </p>
-
-            <div className="flex flex-col justify-center md:w-full lg:w-min relative mb-6">
-              <label className="absolute w-16 bg-white h-fit bottom-10 left-8 text-cyan-400">
-                Password
+            <div className="flex flex-col items-center justify-center">
+              <label className="relative right-24 top-2 text-cyan-400 capitalize">
+                contraseña
               </label>
 
               {!activateInputs ? (
@@ -357,11 +365,9 @@ export default function Profile() {
                   placeholder="********"
                 ></input>
               )}
-            </div>
 
-            <p className="text-rose-500 relative bottom-6 md:bottom-8">
-              {errors.password}
-            </p>
+              <p className="text-rose-500">{errors.password}</p>
+            </div>
 
             {!activateInputs ? null : (
               <button className="px-16 bg-bluey capitalize md:w-full lg:w-min">

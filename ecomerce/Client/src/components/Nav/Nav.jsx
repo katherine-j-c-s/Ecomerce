@@ -1,11 +1,11 @@
 import styles from "../Nav/Nav.module.css";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import homeLogo from "../../assets/HomeImage.png";
-import { useLocation } from "react-router-dom";
 import { useState } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logOut } from "../../redux/actions";
 
 export default function Nav() {
   const location = useLocation();
@@ -14,9 +14,18 @@ export default function Nav() {
 
   const access = useSelector((state) => state.access);
 
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const toggleSideBar = () => {
     setSideBarIsOpen(!sideBarIsOpen);
   };
+
+  function signOut() {
+    dispatch(logOut());
+    navigate("/");
+  }
 
   return (
     <nav id={styles.navBackground}>
@@ -65,8 +74,12 @@ export default function Nav() {
                   <button>Cart</button>
 
                   <Link to="/profile">
-                    <button>Account</button>
+                    <button onClick={() => navigate("/profile")}>
+                      Account
+                    </button>
                   </Link>
+
+                  <button onClick={signOut}>Logout</button>
                 </>
               ) : (
                 <>
