@@ -1,0 +1,9 @@
+#backgroundHome {
+    background-image: url('../../assets/FondoNav.png');
+    background-size: cover;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    height: 60vh;
+    width: 100%;
+}

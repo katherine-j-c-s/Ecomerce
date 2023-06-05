@@ -1,6 +1,9 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require("bcrypt");
+
+const createUser = require("./controllers/usersController");
 
 const { User } = require("./db"); // Asegúrate de importar el modelo User correctamente
 
@@ -13,12 +16,49 @@ module.exports = function (passport) {
   passport.deserializeUser(async (id, done) => {
     try {
       // Recupera el objeto de usuario utilizando la identificación almacenada en la sesión
-      const user = await User.findById(id);
+      const user = await User.findByPk(id);
       done(null, user);
     } catch (error) {
       done(error);
     }
   });
+
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_SECRET,
+        callbackURL: "http://localhost:3001",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        // Verificar si el usuario ya existe en tu base de datos usando profile.id o profile.email
+        const user = await User.findOne({ where: { mail: profile.email } });
+
+        // Si el usuario ya existe, puedes autenticarlo llamando a done() con el usuario como argumento
+        // done(null, usuario);
+        if (user) {
+          return done(null, user);
+        } else {
+          // Si el usuario no existe, lo creas y lo autenticas
+
+          const newUser = {
+            id: profile.id,
+            mail: profile.email,
+            first_name:
+              profile.displayName.split(" ")[0] || profile.displayName,
+            last_name: profile.displayName.split(" ")[1] || profile.displayName,
+            image:
+              profile.photos && profile.photos.length > 0
+                ? profile.photos[0].value
+                : null,
+          };
+
+          await createUser(newUser);
+          return done(null, newUser);
+        }
+      }
+    )
+  );
 
   passport.use(
     new LocalStrategy(
@@ -29,7 +69,7 @@ module.exports = function (passport) {
       async (mail, password, done) => {
         try {
           // Encuentra al usuario en la base de datos por correo electrónico
-          const user = await User.findOne({ where: { mail } });
+          const user = await User.findOne({ where: { mail: mail } });
 
           // Si no se encuentra el usuario o la contraseña no coincide, devuelve un mensaje de error
           if (!user || !bcrypt.compareSync(password, user.password)) {

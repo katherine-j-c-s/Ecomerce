@@ -3,7 +3,6 @@ const {
   getUsersByName,
   getUserById,
   createUser,
-  login,
   updateUser,
   deleteUser,
 } = require("../controllers/usersController");
@@ -45,11 +44,17 @@ const signupHandler = async (req, res) => {
 };
 
 const loginHandler = async (req, res) => {
-  const { user } = req; // El objeto `user` estará disponible después de la autenticación exitosa
   try {
-    const tokenUser = login(user);
-    // Envía el token como respuesta al cliente
-    res.status(200).json(tokenUser);
+    res.status(200).json({ message: "Login exitoso" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const logoutHandler = async (req, res) => {
+  try {
+    req.logout(); // Cierra la sesión actual del usuario
+    res.status(200).json({ message: "Sesión cerrada exitosamente" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -82,6 +87,7 @@ module.exports = {
   getUsersHandler,
   signupHandler,
   loginHandler,
+  logoutHandler,
   deleteUserHandler,
   updateUserHandler,
 };
