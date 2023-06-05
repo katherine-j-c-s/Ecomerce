@@ -7,7 +7,7 @@ import CreateProduct from '../../components/CreateProduct/CreateProduct'
 export default function Admin() {
   let { search } = useLocation();
   let query = search.slice(14, search.length);
-  return (
+  return ( 
     <div className="flex bg-slate-300">
       <SidebarAdmin />
       {query === "dashboard" ? <h2 className="text-black">{query}</h2> : null}
