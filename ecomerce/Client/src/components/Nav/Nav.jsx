@@ -44,25 +44,25 @@ export default function Nav() {
                 className={actualRoute !== "" ? "text-teal-400" : "text-white"}
                 to="/women"
               >
-                Women
+                Mujeres
               </Link>
               <Link
                 className={actualRoute !== "" ? "text-teal-400" : "text-white"}
                 to="/man"
               >
-                Man
+                Hombres
               </Link>
               <Link
                 className={actualRoute !== "" ? "text-teal-400" : "text-white"}
                 to="/kids"
               >
-                Kids
+                Niños
               </Link>
               <Link
                 className={actualRoute !== "" ? "text-teal-400" : "text-white"}
                 to="/alls"
               >
-                Alls
+                Todos
               </Link>
             </article>
           </li>
@@ -91,7 +91,7 @@ export default function Nav() {
                         : "text-white hover:text-white"
                     }
                   >
-                    <button className="hover:bg-bluey">Sign in</button>
+                    <button className="hover:bg-bluey">Inicia sesión</button>
                   </Link>
                   <Link
                     to="/signUp"
@@ -101,7 +101,7 @@ export default function Nav() {
                         : "text-white hover:text-white"
                     }
                   >
-                    <button className="hover:bg-bluey">Sign Up</button>
+                    <button className="hover:bg-bluey">Regístrate</button>
                   </Link>
                 </>
               )}
@@ -181,7 +181,7 @@ export default function Nav() {
                   : "text-white hover:text-white"
               }
             >
-              <button className="hover:bg-bluey">Sign in</button>
+              <button className="hover:bg-bluey">Inicia sesión</button>
             </Link>
 
             <Link
@@ -193,7 +193,7 @@ export default function Nav() {
                   : "text-white hover:text-white"
               }
             >
-              <button className="hover:bg-bluey">Sign Up</button>
+              <button className="hover:bg-bluey">Regístrate</button>
             </Link>
           </div>
         </div>

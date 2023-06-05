@@ -92,20 +92,21 @@ export default function Details() {
             setFixedImage(detail.image[0])
         }
     }, [detail])
+    console.log(detail)
   return (
-    <div className='h-auto flex flex-col px-[60px] mt-20'>
-        <div className='w-full h-auto flex flex-row'>
-            <div className='basis-[10%] mx-10 flex flex-col gap-y-6'>
+    <div className='h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 sm:mt-20'>
+        <div className='w-full h-auto flex flex-col sm:flex-row'>
+            <div className='basis-[10%] mx-2 sm:mx-10 flex flex-col gap-y-4 sm:gap-y-6'>
                 {detail?.image?.filter(image => image !== fixedImage ).map((ima, index) => {
                     return(
                         <img onLoad={()=>setLoadedImage(true)} style={{opacity: loadedImage? 1 : 0, transition: 'opacity 0.3s' }} key={index} onClick={()=> handleFixedImage(ima)} className='w- h-32 object-cover cursor-pointer hover:opacity-[.8]' src={ima} alt="imagendeProducto" />
                     )
                 })}
             </div>
-            <div className='basis-[45%]  flex justify-center align-center'>
+            <div className='basis-[45%] flex justify-center items-center mt-10 sm:mt-0'>
                 <img onLoad={()=>setLoadedImage(true)} style={{opacity: loadedImage? 1 : 0, transition: 'opacity 0.3s' }} className='w-full object-cover' src={fixedImage} alt="imagendeProducto" />
             </div>
-            <div className='basis-[45%] flex flex-col justify-center align-start ml-12'>
+            <div className='basis-[45%] flex flex-col justify-center items-start ml-2 sm:ml-12 mt-10 sm:mt-0'>
                 <div className='flex flex-row text-left text-black font-thin '>
                     <span className='cursor-pointer' onClick={() => navigate('/')}>HOME/</span>
                     <span>PRODUCTS/</span>   
@@ -145,7 +146,7 @@ export default function Details() {
         </div>
         <div className='flex h-auto flex-col w-full my-10'>
             <h2 className='font-bold text-2xl text-black text-start my-6 '>Descripción</h2>
-            <span className='text-black text-justify'>{detail.descripcion}</span>
+            <span className='text-black text-justify'>{detail.description}</span>
         </div>
     </div>
   )

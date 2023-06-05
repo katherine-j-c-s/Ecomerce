@@ -35,15 +35,15 @@ export default function Products() {
         dispatch(getFilters('colors'))
     },[filtros.length])
     return (
-        <div>
+        <div >
             <div className="h-auto w-auto flex justify-center mb-16 relative">
-                <img className="object-contain w-full" src={image} alt="atleta corriendo" />
+                <img className="object-cover w-full md:h-auto h-96 " src={image} alt="atleta corriendo" />
                 <h1 className="absolute top-44 left-20 text-white font-thin text-5xl ml-3">Find your</h1>
                 <h1 className="absolute top-60 left-20 text-white font-bold text-7xl border-white  px-2">POWER</h1>
             </div>
 
-            <div className="flex flex-row  h-auto my-4 px-[60px] ">
-                <div className="w-1/4 h-screen  p-10 flex flex-col items-start justify-start overflow-y-auto">
+            <div className="flex flex-col lg:flex-row  h-auto my-4 px-4 lg:px-[60px] ">
+                <div className="w-full lg:w-1/4 h-auto lg:h-[80vh] p-4 lg:p-10 flex flex-col items-start justify-start overflow-y-auto mb-4 lg:mb-0">
                     <h1 className="text-black font-extrabold text-2xl text-start mb-10">Filtros</h1>
                     <Accordion
                         options={{
@@ -75,7 +75,7 @@ export default function Products() {
 
                     />
                 </div>
-                <div className='w-3/4 h-auto grid-cols-3 gap-2 items-center flex flex-wrap' >
+                <div className='w-full lg:w-3/4 h-auto grid grid-cols-1 lg:grid-cols-3 gap-2 items-center flex flex-wrap' >
                     {products.map((product, index) => {
                         return(
                             <div key={index} className='flex justify-center'>
@@ -94,4 +94,3 @@ export default function Products() {
         </div>
     );
   }
-  
