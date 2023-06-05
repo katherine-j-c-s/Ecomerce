@@ -1,13 +1,16 @@
-import { 
-  GET_ALL_PRODUCTS, 
-  FILTER_PRODUCTS, 
-  AGREGAR_FILTRO, 
-  REMOVER_FILTRO, 
-  SIGN_IN, GET_PRODUCT_BY_ID, 
-  CLEAR_PRODUCT_DETAIL,
+import {
   ADD_PRODUCT,
+  GET_ALL_PRODUCTS,
+  FILTER_PRODUCTS,
+  AGREGAR_FILTRO,
+  REMOVER_FILTRO,
   GET_FILTERS,
-  SET_FILTERS,
+  SET_FILTERS,  
+  SIGN_IN,
+  SIGN_UP,
+  LOG_OUT,
+  GET_PRODUCT_BY_ID,
+  CLEAR_PRODUCT_DETAIL,
 } from "./types";
 
 const initialState = {
@@ -35,9 +38,9 @@ const rootReducer = (state = initialState, action) => {
     case GET_ALL_PRODUCTS:
       return { ...state, products: action.payload};
     case GET_PRODUCT_BY_ID:
-      return {...state, productDetail: action.payload}
+      return { ...state, productDetail: action.payload };
     case CLEAR_PRODUCT_DETAIL:
-          return { ...state,  productDetail: state.productDetail,  };
+      return { ...state, productDetail: state.productDetail };
     case FILTER_PRODUCTS:
       const filtrosPorCategoria = state.filtros.filter(filtro => filtro.name === 'category');
       const filtrosOtros = state.filtros.filter(filtro => filtro.name !== 'category');
@@ -67,7 +70,17 @@ const rootReducer = (state = initialState, action) => {
       };
     }
     case SIGN_IN:
-        return { ...state, access: true };
+      console.log(action.payload);
+      return { ...state, access: true };
+
+    case SIGN_UP:
+      console.log(action.payload);
+
+      return { ...state, access: true };
+
+    case LOG_OUT:
+      return { ...state, access: false };
+
     case AGREGAR_FILTRO:
       return {
         ...state,

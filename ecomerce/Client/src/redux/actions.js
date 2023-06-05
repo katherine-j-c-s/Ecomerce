@@ -1,29 +1,63 @@
-import { 
-  GET_ALL_PRODUCTS, 
-  FILTER_PRODUCTS,  
-  AGREGAR_FILTRO, 
-  REMOVER_FILTRO, 
-  SIGN_IN, 
-  GET_PRODUCT_BY_ID, 
+import {
+  GET_ALL_PRODUCTS,
+  FILTER_PRODUCTS,
+  AGREGAR_FILTRO,
+  REMOVER_FILTRO,
+  GET_FILTERS,
+  SET_FILTERS,  
+  SIGN_IN,
+  SIGN_UP,
+  LOG_OUT,
+  GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
   ADD_PRODUCT,
-  GET_FILTERS,
-  SET_FILTERS,
-
 } from "./types";
 
-import axios from 'axios'
+import axios from "axios";
 
-axios.defaults.baseURL = 'https://ecomerce-production-8f61.up.railway.app/'
+axios.defaults.baseURL = "https://ecomerce-production-8f61.up.railway.app/";
 
 
-export const signIn = () => {
-  return {
-    type: SIGN_IN,
+export const signIn = (user) => {
+  return async function (dispatch) {
+    let { data } = await axios.post(
+      "https://ecomerce-production-8f61.up.railway.app/users/login",
+      user
+    );
+
+    return dispatch({ type: SIGN_IN, payload: data });
+  };
+};
+
+export function signUp(user) {
+  return async function (dispatch) {
+    let { data } = await axios.post(
+      "https://ecomerce-production-8f61.up.railway.app/users/signup",
+      user
+    );
+
+    return dispatch({ type: SIGN_UP, payload: data });
   };
 }
 
+export function logOut() {
+  return async function (dispatch) {
+    axios.post("https://ecomerce-production-8f61.up.railway.app/users/logout");
 
+    return dispatch({ type: LOG_OUT });
+  };
+}
+
+export const loadFiltersFromLocalStorage = () => {
+  return function (dispatch) {
+    const localStorageFilters = JSON.parse(localStorage.getItem("filtros"));
+    if (localStorageFilters) {
+      localStorageFilters.forEach((filtro) => {
+        dispatch(agregarFiltro(filtro));
+      });
+    }
+  };
+};
 
 export const getAllProducts = () => {
   return async  function(dispatch){
@@ -44,16 +78,16 @@ export const getAllProducts = () => {
   }
 }
 export const getProductById = (id) => {
-  return async function(dispatch){
-      const Data = await axios.get(`/products/${id}`)
-      const producto = Data.data
-      dispatch({type: GET_PRODUCT_BY_ID, payload: producto})
-  }
-}
+  return async function (dispatch) {
+    const Data = await axios.get(`/products/${id}`);
+    const producto = Data.data;
+    dispatch({ type: GET_PRODUCT_BY_ID, payload: producto });
+  };
+};
 
-export const filterProducts = () =>{
-    return{type: FILTER_PRODUCTS}
-}
+export const filterProducts = () => {
+  return { type: FILTER_PRODUCTS };
+};
 
 export const agregarFiltro = (filtro) => {
   return (dispatch, getState) => {
