@@ -16,7 +16,7 @@ productsRouter.get("/get_product/:id", getProductByIdHandler);
 
 productsRouter.delete("/remove_product/:id", deleteProductHandler);
 
-productsRouter.post("/createProduct", createProductHandler);
+productsRouter.post("/create_product", createProductHandler);
 
 productsRouter.delete("/remove_image", removeImageHandler)
 

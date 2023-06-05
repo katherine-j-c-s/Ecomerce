@@ -162,15 +162,23 @@ const createProduct = async (name, price, description, image, stock, color, cate
 };
 
 const deleteProduct = async (id) => {
-  let removedProduct = await Product.destroy({
-    where: { id },
-  });
+  let product = await Product.findOne({
+    where: { id }
+  })
+  if(!product) throw new Error('No se encontro el producto')
 
-  if (removedProduct === 1) return "Producto eliminado con exito";
-  if (removedProduct === 0) throw new Error("No se pudo eliminar el producto");
+  if(product.image) {
+    let images = []
+    product.image.map(img => images.push(img.public_id))
+    
+    await Promise.all(images.map(img => cloudinary.uploader.destroy(img)))
+  }
+  await product.destroy()
+
+  return 'Producto eliminado con exito'
 };
 
-const updateProduct = async (id, name, price, description, image, stock, color, category, size) => {
+const updateProduct = async (id, name, price, description, stock, color, category, size) => {
   const product = await Product.findOne({
     where: { id },
     include: { all: true },
@@ -203,7 +211,6 @@ const updateProduct = async (id, name, price, description, image, stock, color, 
   product.price = price || product.price;
   product.description = description || product.description;
   product.stock = stock || product.stock;
-  product.image = image || product.image;
   await product.setColor(color)
   await product.setCategory(category)
   await product.setSize(size)
