@@ -23,7 +23,7 @@ const options= [
             {name:'blanco',class:'bg-white border border-black'},
             {name:'gris',class:'bg-slate-600'},
             {name:'azul',class:'bg-blue-800'},
-            {name:'verde',class:'bg-lime-700'},
+            {name:'verde',class:'bg-lime-700'}, 
             {name:'amarillo',class:'bg-yellow-400'},
             {name:'naranja',class:'bg-orange-500'},
             {name:'beige',class:'bg-orange-300'},
