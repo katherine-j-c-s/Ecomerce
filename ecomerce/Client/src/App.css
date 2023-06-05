@@ -4,6 +4,14 @@
   /*padding: 2rem;*/  
   text-align: center;
 }
+.footerImg {
+  position: relative;
+  translate: 0 -52px;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  z-index: 10;
+}
 
 .logo {
   height: 6em;

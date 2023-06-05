@@ -1,0 +1,24 @@
+export const GET_ALL_PRODUCTS= 'GET_ALL_PRODUCTS'
+export const GET_PRODUCT_BY_ID = 'GET_PRODUCTS_BY_ID'
+export const CLEAR_PRODUCT_DETAIL = "CLEAR_PRODUCT_DETAIL"
+export const FILTER_PRODUCTS = 'FILTER_PRODUCTS'
+export const REMOVER_FILTRO = 'REMOVER_FILTRO'
+export const AGREGAR_FILTRO = 'AGREGAR_FILTRO'
+export const SET_FILTERS = 'SET_FILTERS'
+
+export const GET_FILTERS = "GET_FILTERS"
+
+export const ALL_PRODUCTS = "ALL_PRODUCTS";
+
+export const CANTIDAD_PRODUCT = "CANTIDAD_PRODUCT";
+
+export const ADD_PRODUCT = "ADD_PRODUCT";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const SHOW_SIDEBAR = "SHOW_SIDEBAR";
+
+export const SUMAR_PRODUCT = "SUMAR_PRODUCT";
+export const RESTAR_PRODUCT = "RESTAR_PRODUCT";
+
+export const SIGN_IN = "SIGN_IN";
+export const SIGN_UP = "SIGN_IN";
+export const LOG_OUT = "LOG_OUT";

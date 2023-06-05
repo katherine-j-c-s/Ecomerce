@@ -1,24 +1,47 @@
-import ViewHome from "./views/Home/ViewHome";
-import Nav from "./components/Nav/Nav";
-import { Routes, Route } from "react-router-dom";
-
 import "./App.css";
 
+import { Routes, Route, useLocation } from "react-router-dom";
+
+import ViewHome from "./views/Home/ViewHome";
+import Nav from "./components/Nav/Nav";
+import Details from "./views/Details/Details";
+import Footer from "./components/Footer/Footer";
+import SignIn from "./views/SignIn/SignIn";
+import SideBarCar from "./components/sideBarCar/SideBarCar";
+import SignUn from "./views/SignUp/SignUp";
+import Products from "./views/Products/Products";
+import Admin from "./views/Admin/Admin";
+import Profile from "./views/Profile/Profile";
+
 function App() {
+  const location = useLocation();
+
   return (
     <>
-      <Nav />
+      {/* <SideBarCar /> */}
+      {location.pathname === "/signIn" ||
+      location.pathname === "/signUp" ||
+      location.pathname === "/admin" ? null : (
+        <Nav />
+      )}
       <Routes>
-        <Route path="/" element={<ViewHome />}></Route>
-        <Route path="/women" element={<h1>women</h1>}></Route>
-        <Route path="/man" element={<h1>man</h1>}></Route>
-        <Route path="/kids" element={<h1>kids</h1>}></Route>
-        <Route path="/alls" element={<h1>alls</h1>}></Route>
-        <Route path="/signin" element={<h1>sign in</h1>}></Route>
-        <Route path="/signup" element={<h1>sign up</h1>}></Route>
-        <Route path="/product/:id" element={<h1>Detalles del producto</h1>}></Route>
-
+        <Route path="/" element={<ViewHome />} />
+        <Route path="/women" element={<Products />} />
+        <Route path="/man" element={<Products />} />
+        <Route path="/kids" element={<Products />} />
+        <Route path="/alls" element={<Products />} />
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/signUp" element={<SignUn />} />
+        <Route path="/product/:id" element={<Details />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
+      {location.pathname === "/signIn" ||
+      location.pathname === "/signUp" ||
+      location.pathname === "/profile" ||
+      location.pathname === "/admin" ? null : (
+        <Footer />
+      )}
     </>
   );
 }

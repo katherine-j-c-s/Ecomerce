@@ -1,6 +1,6 @@
-import image1 from '../../images/image-PhotoRoom1.png'
-import image2 from '../../images/image-PhotoRoom4.png'
-import image3 from '../../images/image-PhotoRoom6.png'
+import image1 from '../../assets/image-PhotoRoom1.png'
+import image2 from '../../assets/image-PhotoRoom4.png'
+import image3 from '../../assets/image-PhotoRoom6.png'
 import CardGenres from '../CardG/CardG'
 
 const genres = [
