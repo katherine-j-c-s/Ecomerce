@@ -1,4 +1,5 @@
 import React from 'react'
+import swal from 'sweetalert';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addProduct } from '../../redux/actions';
@@ -216,7 +217,7 @@ const CreateProduct = ()=>{
                 img:"",
             });
             setReady(true)
-            alert('producto creado!')
+            swal("Producto Creado", "Exitosamente!", "success");
             navigate("/admin?pestaña=productos");
         }else{
             setReady(false)
