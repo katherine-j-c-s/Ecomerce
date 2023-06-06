@@ -56,13 +56,20 @@ const createUser = async ({
     hashedPassword = bcrypt.hashSync(password, 10); // Encripta la contraseña
   }
 
+  const response = await cloudinary.uploader.upload(image); // Espera la carga de la imagen
+
+  const imageObject = {
+    public_id: response.public_id,
+    url: response.url,
+  };
+
   const newUser = await User.create({
     mail,
     password: hashedPassword, // Almacena la contraseña encriptada
     first_name,
     last_name,
     address,
-    image,
+    image: imageObject,
     role,
   });
   return newUser;
@@ -80,18 +87,26 @@ const updateUser = async (id, datos) => {
       address,
       image,
       role,
-      purchases,
       status,
     } = datos;
+
+    let imageObject = null;
+    if (image) {
+      await cloudinary.uploader.destroy(user.image.public_id);
+      const response = await cloudinary.uploader.upload(image);
+      imageObject = {
+        public_id: response.public_id,
+        url: response.url,
+      };
+    }
 
     user.mail = mail || user.mail;
     user.password = password || user.password;
     user.first_name = first_name || user.first_name;
     user.last_name = last_name || user.last_name;
     user.address = address || user.address;
-    user.image = image || user.image;
+    user.image = imageObject || user.image;
     user.role = role || user.role;
-    user.purchases = purchases || user.purchases;
     user.status = status || user.status;
 
     await user.save();
@@ -105,6 +120,7 @@ const deleteUser = async (id) => {
   const user = await User.findByPk(id);
 
   if (user) {
+    await cloudinary.uploader.destroy(user.image.public_id);
     await user.destroy();
     return "Usuario eliminado con éxito";
   } else {

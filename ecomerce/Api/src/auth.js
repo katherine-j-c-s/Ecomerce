@@ -28,7 +28,7 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_SECRET,
-        callbackURL: "http://localhost:3001",
+        callbackURL: "http://localhost:5173/",
       },
       async (accessToken, refreshToken, profile, done) => {
         // Verificar si el usuario ya existe en tu base de datos usando profile.id o profile.email
