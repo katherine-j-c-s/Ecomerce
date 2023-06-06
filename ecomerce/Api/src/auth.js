@@ -2,8 +2,20 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require("bcrypt");
-const defaultImage = require("../../Client/src/assets/user.svg");
-const createUser = require("./controllers/usersController");
+const { createUser } = require("./controllers/usersController");
+
+const path = require("path");
+
+// ...
+
+const defaultImage = path.join(
+  __dirname,
+  "..",
+  "Client",
+  "src",
+  "assets",
+  "default-image.png"
+);
 
 const { User } = require("./db"); // Asegúrate de importar el modelo User correctamente
 
@@ -28,11 +40,15 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_SECRET,
-        callbackURL: "http://localhost:5173/",
+        callbackURL: "http://localhost:3001/users/google/callback",
+        scope: ["profile", "email"],
       },
       async (accessToken, refreshToken, profile, done) => {
         // Verificar si el usuario ya existe en tu base de datos usando profile.id o profile.email
-        const user = await User.findOne({ where: { mail: profile.email } });
+        console.log(profile);
+        const user = await User.findOne({
+          where: { mail: profile.emails[0].value },
+        });
 
         // Si el usuario ya existe, puedes autenticarlo llamando a done() con el usuario como argumento
         // done(null, usuario);
@@ -43,7 +59,7 @@ module.exports = function (passport) {
 
           const newUser = {
             id: profile.id,
-            mail: profile.email,
+            mail: profile.emails[0].value,
             first_name:
               profile.displayName.split(" ")[0] || profile.displayName,
             last_name: profile.displayName.split(" ")[1] || profile.displayName,

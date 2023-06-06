@@ -100,9 +100,6 @@ const googleHandler = async (req, res) => {
 
     // Devuelve el usuario al cliente como respuesta JSON
     res.status(200).json(user);
-
-    // Redirige al usuario a la página de inicio o a otra página deseada después de la autenticación exitosa
-    res.redirect("http://localhost:5173/");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
