@@ -2,6 +2,7 @@ const { User, Order, Comment } = require("../db");
 const { Op } = require("sequelize");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
+const cloudinary = require("../cloudinary");
 
 const getUsers = async () => {
   const users = await User.findAll({
