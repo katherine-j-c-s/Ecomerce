@@ -134,7 +134,6 @@ const CreateProduct = ()=>{
         }
     }
     function handleColors(e) {
-        console.log(e.target.id);
         setColor(e.target.id)
         setType({
             ...type,
@@ -145,7 +144,6 @@ const CreateProduct = ()=>{
         }
     }
     function handleTalla(e) {
-        console.log(e.target.id);
         setTalla(e.target.id)
         setType({
             ...type,
@@ -357,14 +355,8 @@ const CreateProduct = ()=>{
                                                 <p className='w-full my-4'>{options[2].title}</p>
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[2].items.map(i=>{
-                                                        let selected = false
-                                                        if (i.name === color) {
-                                                            selected = true
-                                                        }
                                                         return(
-                                                        <div className={`w-fit bg-slate-400 rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex ${selected ? ' bg-sky-300' : null}`}>
-                                                            <p onClick={handleColors}id={i.name} className='text-black'>{i.name}</p>
-                                                        </div>
+                                                        <p onClick={handleColors}id={i.name} className={`text-black w-fit rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex ${i.name === color ? ' bg-sky-300' : 'bg-slate-400'}`} >{i.name}</p>
                                                     ) 
                                                     })}
                                                 </div>
@@ -373,14 +365,8 @@ const CreateProduct = ()=>{
                                                 <p className='w-full my-4'>{options[1].title}</p>
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[1].items.map(i=>{
-                                                        let selected = false
-                                                        if (i === talla) {
-                                                            selected = true
-                                                        }
                                                         return(
-                                                        <div className={`w-fit bg-slate-400 rounded-lg p-2 px-6 m-2 hover:bg-sky-300 transition-all flex ${selected ? ' bg-sky-300' : null}`}>
-                                                            <p onClick={handleTalla} id={i} className='text-black'>{i}</p>
-                                                        </div>
+                                                            <p onClick={handleTalla} id={i} className={`text-black w-fit rounded-lg p-2 px-4 m-2 hover:bg-sky-300 transition-all flex ${i === talla ? ' bg-sky-300' : 'bg-slate-400'}`}>{i}</p>
                                                     ) 
                                                     })}
                                                 </div>
