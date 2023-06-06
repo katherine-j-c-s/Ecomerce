@@ -27,14 +27,18 @@ module.exports = (sequelize) => {
       },
       stock: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
       rating: {
         type: DataTypes.FLOAT,
       },
       image: {
-        type: DataTypes.TEXT,
+        type: DataTypes.ARRAY(DataTypes.TEXT),
       },
+      available: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      }
     },
     {
       timestamps: false,

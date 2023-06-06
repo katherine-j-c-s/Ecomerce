@@ -1,65 +1,176 @@
-const { Product } = require('../db')
+const { Product, Color, Category, Size } = require("../db");
+const { hard } = require("./mockedData/mockedProducts");
 
+const convertAllProducts = (res) => {
+  let { id, name, price, image, Color, Size, Category } = res;
+  return (newObj = {
+    id,
+    name,
+    price,
+    color: Color?.dataValues.color || null,
+    size: Size?.dataValues.size || null,
+    category: Category?.dataValues.name || null,
+    image,
+  });
+};
+
+const convertSingleProduct = (res) => {
+  let {
+    id,
+    name,
+    price,
+    image,
+    description,
+    stock,
+    available,
+    Comments,
+    Category,
+    Color,
+    Size,
+  } = res;
+
+  return (newObj = {
+    id,
+    name,
+    price,
+    description,
+    stock,
+    available,
+    color: Color?.dataValues.color || null,
+    size: Size?.dataValues.size || null,
+    category: Category?.dataValues.name || null,
+    comments: Comments,
+    image,
+  });
+};
 
 const getProducts = async () => {
-    let products = await Product.findAll()
+  let allProducts = [];
+  await Product.findAll({ include: { all: true } }).then(async (responses) => {
+    await responses.map((res) =>
+      allProducts.push(convertAllProducts(res.dataValues))
+    );
+  });
 
-    return products
-}
+  const count = await Product.count();
+  if (count === 0) {
+    await Product.bulkCreate(hard);
+    return allProducts;
+  } else {
+    return allProducts;
+  }
+};
 
 const getProductByID = async (id) => {
-    let product = await Product.findOne({
-        where: { id }
-    })
+  let product = await Product.findOne({
+    where: { id },
+    include: { all: true },
+  });
+  if (product === null) throw new Error("No se encuentra el producto");
 
-    return product
-}
+  return convertSingleProduct(product);
+};
 
-const createProduct = async (name, price, description, rating, image) => {
-    let [product, created] = await Product.findOrCreate({
-        where: { name },
-        defaults: {
-            name,
-            price,
-            description,
-            rating,
-            image
-        }
-    })
+const createProduct = async (name, price, description, image, stock, color, category, size) => {
+  let available;
+  if (stock === 0 || stock === null) available = false;
 
-    if(!created) {
-        await Product.increment('stock', {by: 1})
-    }
+  if(color) {
+      let { id } = await Color.findOne({
+        where: { color }
+      })
+      color = id
+  }
+  if(category) {
+      let { id } = await Category.findOne({
+        where: { name: category }
+      })
+      category = id
+  }
+  if(size) {
+      let { id } = await Size.findOne({
+        where: { size }
+      })
+      size = id
+  }
 
-    return product
-}
+  let [product, created] = await Product.findOrCreate({
+    where: { name },
+    defaults: {
+      name,
+      price,
+      description,
+      image,
+      stock,
+      available,
+      ColorId: color,
+      CategoryId: category,
+      SizeId: size,
+    },
+  });
+
+  if (!created) {
+    throw new Error("Este producto ya existe");
+  }
+
+  return convertSingleProduct(product);
+};
 
 const deleteProduct = async (id) => {
-    let removedProduct = await Product.destroy({
-        where: { id }
+  let removedProduct = await Product.destroy({
+    where: { id },
+  });
+
+  if (removedProduct === 1) return "Producto eliminado con exito";
+  if (removedProduct === 0) throw new Error("No se pudo eliminar el producto");
+};
+
+const updateProduct = async (id, name, price, description, image, stock, color, category, size) => {
+  const product = await Product.findOne({
+    where: { id },
+    include: { all: true },
+  });
+
+  if (!product) throw new Error("Producto no encontrado");
+  if (stock <= 0 || stock === null) product.available = false;
+  if (stock > 0) product.available = true;
+
+  if(color) {
+    let { id } = await Color.findOne({
+      where: { color }
     })
+    color = id
+  }   
+  if(category) {
+    let { id } = await Category.findOne({
+      where: { name: category }
+    })
+    category = id
+  }
+  if(size) {
+    let { id } = await Size.findOne({
+      where: { size }
+    })
+    size = id
+  }
 
-    return removedProduct
-}
+  product.name = name || product.name;
+  product.price = price || product.price;
+  product.description = description || product.description;
+  product.stock = stock || product.stock;
+  product.image = image || product.image;
+  await product.setColor(color)
+  await product.setCategory(category)
+  await product.setSize(size)
+  await product.save();
 
-const updateProduct = async (name, price, description, rating, image) => {
-    let data = {name, price, description, rating, image}
-    let newData = {}
-
-    for(el in data) {
-        if(data[el] !== '' || data[el] !== null || data[el] !== 'undefined') {
-            newData[el] = data[el]
-        }
-    }
-    let updatedProduct = await Product.update({ newData }, { name })
-
-    return updatedProduct
-}
+  return convertSingleProduct(product);
+};
 
 module.exports = {
-    createProduct,
-    getProducts,
-    getProductByID,
-    deleteProduct,
-    updateProduct,
-}
+  createProduct,
+  getProducts,
+  getProductByID,
+  deleteProduct,
+  updateProduct,
+};
