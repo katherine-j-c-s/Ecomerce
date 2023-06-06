@@ -2,7 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require("bcrypt");
-
+const defaultImage = require("../../Client/src/assets/user.svg");
 const createUser = require("./controllers/usersController");
 
 const { User } = require("./db"); // Asegúrate de importar el modelo User correctamente
@@ -50,7 +50,7 @@ module.exports = function (passport) {
             image:
               profile.photos && profile.photos.length > 0
                 ? profile.photos[0].value
-                : null,
+                : defaultImage,
           };
 
           await createUser(newUser);
