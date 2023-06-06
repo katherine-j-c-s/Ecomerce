@@ -1,5 +1,7 @@
 const { User, Order, Comment } = require("../db");
 const { Op } = require("sequelize");
+require("dotenv").config();
+const bcrypt = require("bcrypt");
 
 const getUsers = async () => {
   const users = await User.findAll({
@@ -48,17 +50,20 @@ const createUser = async ({
   address,
   image,
   role,
-  purchases,
 }) => {
+  let hashedPassword = null;
+  if (password) {
+    hashedPassword = bcrypt.hashSync(password, 10); // Encripta la contraseña
+  }
+
   const newUser = await User.create({
     mail,
-    password,
+    password: hashedPassword, // Almacena la contraseña encriptada
     first_name,
     last_name,
     address,
     image,
     role,
-    purchases,
   });
   return newUser;
 };
@@ -100,8 +105,7 @@ const deleteUser = async (id) => {
   const user = await User.findByPk(id);
 
   if (user) {
-    user.status = "inactive";
-    await user.save();
+    await user.destroy();
     return "Usuario eliminado con éxito";
   } else {
     throw new Error("Usuario no encontrado");
