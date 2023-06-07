@@ -31,7 +31,7 @@ usersRouter.get(
   googleHandler
 );
 
-// usersRouter.use(ensureAuthenticated);
+usersRouter.use(ensureAuthenticated);
 
 usersRouter.post("/logout", logoutHandler);
 

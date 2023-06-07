@@ -10,6 +10,11 @@ module.exports = (sequelize) => {
         allowNull: false,
         autoIncrement: true,
       },
+      googleId: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: true,
+      },
       mail: {
         type: DataTypes.STRING,
         allowNull: false,
