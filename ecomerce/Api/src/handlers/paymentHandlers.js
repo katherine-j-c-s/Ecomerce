@@ -8,7 +8,8 @@ const {
 
 const createOrderHandler = async (req, res) => {
   try {
-    const createOrders = await createOrder();
+    let { carrito } = req.params;
+    const createOrders = await createOrder(id);
 
     res.status(200).json(createOrders);
   } catch (error) {
