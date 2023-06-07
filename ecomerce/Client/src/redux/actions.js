@@ -61,7 +61,7 @@ export const loadFiltersFromLocalStorage = () => {
 
 export const getAllProducts = () => {
   return async  function(dispatch){
-      let Data = await axios.get("/products")
+      let Data = await axios.get("/products/get_products")
       const Products = Data.data
 
       //Leemos filtros desde local storage
@@ -79,7 +79,7 @@ export const getAllProducts = () => {
 }
 export const getProductById = (id) => {
   return async function (dispatch) {
-    const Data = await axios.get(`/products/${id}`);
+    const Data = await axios.get(`products/get_product/${id}`);
     const producto = Data.data;
     dispatch({ type: GET_PRODUCT_BY_ID, payload: producto });
   };
@@ -134,7 +134,7 @@ export const addProduct = (obj) => {
   })
   return async function (dispatch) {
     try { 
-      const data = await axios.all(products.map((product)=> axios.post(`https://ecomerce-production-8f61.up.railway.app/products`,product)))
+      const data = await axios.all(products.map((product)=> axios.post(`https://ecomerce-production-8f61.up.railway.app/products/create_product`,product)))
       return dispatch({
         type: ADD_PRODUCT,
         payload: products,
