@@ -7,6 +7,7 @@ const {
   logoutHandler,
   deleteUserHandler,
   updateUserHandler,
+  googleHandler,
 } = require("../handlers/usersHandlers");
 
 const { ensureAuthenticated } = require("./authMiddleware");
@@ -27,10 +28,7 @@ usersRouter.get(
 usersRouter.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    // Redirige al usuario a la página de inicio o a otra página deseada después de la autenticación exitosa
-    res.redirect("http://localhost:3001");
-  }
+  googleHandler
 );
 
 // usersRouter.use(ensureAuthenticated);
