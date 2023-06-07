@@ -54,8 +54,12 @@ const loginHandler = async (req, res) => {
 
 const logoutHandler = async (req, res) => {
   try {
-    req.logout(); // Cierra la sesión actual del usuario
-    res.status(200).json({ message: "Sesión cerrada exitosamente" });
+    req.logout((err) => {
+      if (err) {
+        throw new Error("Error al cerrar la sesión");
+      }
+      res.status(200).json({ message: "Sesión cerrada exitosamente" });
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
