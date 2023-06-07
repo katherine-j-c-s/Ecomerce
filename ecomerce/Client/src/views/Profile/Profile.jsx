@@ -3,25 +3,33 @@ import styles from "../Profile/Profile.module.css";
 
 import { useState, useEffect } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { updateUser } from "../../redux/actions";
 
 import { useNavigate } from "react-router-dom";
+
+import toast, { Toaster } from "react-hot-toast";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
 export default function Profile() {
   const navigate = useNavigate();
 
-  const access = useSelector((state) => state.access);
+  const { name, lastName, email, password, access } = useSelector(
+    (state) => state.userData
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     !access && navigate("/");
   }, [access, navigate]);
 
   const [inputs, setInputs] = useState({
-    name: "Amadeo",
-    lastName: "Euralto",
-    email: "amadeo@gmail.com",
+    name: name,
+    lastName: lastName,
+    email: email,
     password: "12345",
   });
   const [errors, setErrors] = useState({
@@ -50,6 +58,7 @@ export default function Profile() {
     }
     return errors;
   }
+
   function handleChange(e) {
     setInputs({
       ...inputs,
@@ -62,25 +71,41 @@ export default function Profile() {
       })
     );
   }
+
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (Object.keys(errors).length === 0) {
-      setInputs({
-        name: "",
-        lastName: "",
-        email: "",
-        password: "",
+    dispatch(updateUser(inputs))
+      .then((r) => {
+        console.log(r);
+        toast.success("Datos actualizados");
+
+        setActivateInputs(false);
+
+        if (Object.keys(errors).length === 0) {
+          setInputs({
+            name: "",
+            lastName: "",
+            email: "",
+            password: "",
+          });
+          setErrors({
+            name: "",
+            lastName: "",
+            email: "",
+            password: "",
+          });
+        }
+
+        setTimeout(() => {
+          toast.remove();
+          navigate("/");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error("Ups, creo que hubo un error de servidor");
       });
-      setErrors({
-        name: "",
-        lastName: "",
-        email: "",
-        password: "",
-      });
-      alert("Cambios guardados!");
-      setActivateInputs(false);
-    }
   }
 
   function toogleInputs() {
@@ -93,6 +118,10 @@ export default function Profile() {
           <h2 className="text-black capitalize font-bold text-xl">
             configuración
           </h2>
+
+          <div>
+            <Toaster position="top-center" reverseOrder={false} />
+          </div>
 
           <button className="flex items-center gap-1.5 text-grey capitalize">
             <svg

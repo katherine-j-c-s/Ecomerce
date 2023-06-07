@@ -8,7 +8,7 @@ import Details from "./views/Details/Details";
 import Footer from "./components/Footer/Footer";
 import SignIn from "./views/SignIn/SignIn";
 import SideBarCar from "./components/sideBarCar/SideBarCar";
-import SignUn from "./views/SignUp/SignUp";
+import SignUp from "./views/SignUp/SignUp";
 import Products from "./views/Products/Products";
 import Admin from "./views/Admin/Admin";
 import Profile from "./views/Profile/Profile";
@@ -31,7 +31,7 @@ function App() {
         <Route path="/kids" element={<Products />} />
         <Route path="/alls" element={<Products />} />
         <Route path="/signIn" element={<SignIn />} />
-        <Route path="/signUp" element={<SignUn />} />
+        <Route path="/signUp" element={<SignUp />} />
         <Route path="/product/:id" element={<Details />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />

@@ -1,9 +1,21 @@
+select {
+    background-color: #31B5FF;
+}
+
 #navBackground {
     background-color: transparent;    
 }
 
 .homeImg {
     width: 100%;
-    max-width: 45px;
+    max-width: 75px;
+    height: auto;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+.userProfile {
+    width: 100%;
+    max-width: 50px;
     height: auto;
 }
