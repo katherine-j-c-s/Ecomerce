@@ -44,6 +44,7 @@ const getUserById = async (id) => {
 };
 
 const createUser = async ({
+  googleId,
   mail,
   password,
   first_name,
@@ -65,6 +66,7 @@ const createUser = async ({
   };
 
   const newUser = await User.create({
+    googleId: googleId && googleId,
     mail,
     password: hashedPassword, // Almacena la contraseña encriptada
     first_name,

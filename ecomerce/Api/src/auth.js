@@ -22,13 +22,16 @@ const { User } = require("./db"); // Asegúrate de importar el modelo User corre
 module.exports = function (passport) {
   passport.serializeUser((user, done) => {
     // Almacena la identificación única del usuario en la sesión
-    done(null, user.id);
+    console.log(user.mail);
+
+    done(null, user.mail);
   });
 
-  passport.deserializeUser(async (id, done) => {
+  passport.deserializeUser(async (email, done) => {
+    console.log("mail del usuario", email);
     try {
       // Recupera el objeto de usuario utilizando la identificación almacenada en la sesión
-      const user = await User.findByPk(id);
+      const user = await User.findOne({ where: { mail: email } });
       done(null, user);
     } catch (error) {
       done(error);
@@ -58,7 +61,7 @@ module.exports = function (passport) {
           // Si el usuario no existe, lo creas y lo autenticas
 
           const newUser = {
-            id: profile.id,
+            googleId: profile.id,
             mail: profile.emails[0].value,
             first_name:
               profile.displayName.split(" ")[0] || profile.displayName,
@@ -69,8 +72,8 @@ module.exports = function (passport) {
                 : defaultImage,
           };
 
-          await createUser(newUser);
-          return done(null, newUser);
+          const createdUser = await createUser(newUser);
+          return done(null, createdUser);
         }
       }
     )

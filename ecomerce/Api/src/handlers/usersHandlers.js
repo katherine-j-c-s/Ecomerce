@@ -98,8 +98,7 @@ const googleHandler = async (req, res) => {
       throw new Error("Error during authentication");
     }
 
-    // Devuelve el usuario al cliente como respuesta JSON
-    res.status(200).json(user);
+    res.redirect(`http://localhost:5173`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
