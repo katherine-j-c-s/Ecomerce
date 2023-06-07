@@ -306,7 +306,8 @@ const CreateProduct = ()=>{
                 }
                 dispatch(editProduct(edit))
                 if (inputs.type.length > 1) {
-                    console.log('add one mone');
+                    inputs.type.shift()
+                    dispatch(addProduct(inputs))
                 }
             }else{
                 dispatch(addProduct(inputs))
