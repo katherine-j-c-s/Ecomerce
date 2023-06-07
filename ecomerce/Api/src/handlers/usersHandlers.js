@@ -102,7 +102,7 @@ const googleHandler = async (req, res) => {
       throw new Error("Error during authentication");
     }
 
-    res.redirect(`http://localhost:5173`);
+    res.redirect(`http://localhost:5173/?userId=${user.id}`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
