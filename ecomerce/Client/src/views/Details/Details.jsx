@@ -88,7 +88,7 @@ export default function Details() {
     }, [id, dispatch])
     
     useEffect(() => {
-        if (detail.image[0].url !== undefined) {
+        if (detail?.image[0].url !== undefined) {
             setFixedImage(detail.image[0].url)
         }else{
             setFixedImage(detail.image[0])
