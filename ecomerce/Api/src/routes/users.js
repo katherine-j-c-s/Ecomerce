@@ -33,7 +33,7 @@ usersRouter.get(
   }
 );
 
-usersRouter.use(ensureAuthenticated);
+// usersRouter.use(ensureAuthenticated);
 
 usersRouter.post("/logout", logoutHandler);
 
