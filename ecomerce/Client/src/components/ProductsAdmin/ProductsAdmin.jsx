@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllProducts } from '../../redux/actions'
+import { getAllProducts, productToEdit } from '../../redux/actions'
 import vectorAdd from '../../assets/VectorAdd.png'
 import edit from '../../assets/edit.png'
 import CardsProduct from '../CardsProduct/CardsProduct'
@@ -17,6 +17,10 @@ export default function ProductsAdmin() {
   const navigate = useNavigate()
   const go = (ruta) => {
     navigate(ruta)
+  }
+  const editProduct = (id) => {
+    dispatch(productToEdit(id))
+    go(`/admin?pestaña=editProduct`)
   }
   const deleteProduct = (e) => {
     swal({
@@ -61,8 +65,8 @@ export default function ProductsAdmin() {
             />
             {showEdit.id === product.id ?
               <div className='flex justify-center absolute w-64 md:w-72 h-80 lg:h-72 rounded-lg bg-gray-500 bottom-0'>
-                  <div onClick={() => go(`/admin?pestaña=editProduct`)} className='relative cursor-pointer hover:bg-sky-700 hover:shadow-xl transition-all my-auto mr-6 z-10 w-fit h-fit p-4 bg-sky-500 rounded-full'>
-                      <img id={showEdit.id} className=' h-5  w-5' src={edit} alt="" />
+                  <div onClick={()=> editProduct(showEdit.id)} className='relative cursor-pointer hover:bg-sky-700 hover:shadow-xl transition-all my-auto mr-6 z-10 w-fit h-fit p-4 bg-sky-500 rounded-full'>
+                      <img className=' h-5  w-5' src={edit} alt="" />
                   </div>
                   <div id={showEdit.id} onClick={deleteProduct} className="p-2.5 cursor-pointer my-auto border-bluey hover:bg-sky-200 hover:shadow-xl w-fit h-fit border rounded-full">
                       <svg width="35px" height="35px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">

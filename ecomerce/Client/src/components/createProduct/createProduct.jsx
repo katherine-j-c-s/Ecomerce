@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import swal from 'sweetalert';
 import edit from '../../assets/edit.png'
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addProduct } from '../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addImgToProduct, addProduct, editProduct } from '../../redux/actions';
 import { useState } from 'react';
 import vectorAdd from '../../assets/VectorAdd.png'
 
@@ -39,6 +39,7 @@ const options= [
 const CreateProduct = ()=>{
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const {productToEdit} = useSelector(st=>st)
     const [ready,setReady] = useState(true)
 
     const [addImg, setAddImg] = useState(false)
@@ -72,6 +73,55 @@ const CreateProduct = ()=>{
         categoria:"",
         img:"",
     });
+    useEffect(()=>{
+        if (Object.keys(productToEdit).length > 0) {
+            console.log(productToEdit);
+            let img = []
+            productToEdit.image.map(i=> {
+                if (i.url !== undefined) {
+                    img.push(i.url)
+                }else{
+                    img.push(i)
+                }
+            })
+            let type = [{
+                id:productToEdit.id,
+                color:productToEdit.color,
+                talla:productToEdit.size,
+                cantidad:productToEdit.stock,
+            }]
+            setInputs({
+                nombre: productToEdit.name,
+                desc: productToEdit.description,
+                precio: productToEdit.price,
+                categoria:productToEdit.category,
+                imagenes: img,
+                type:type
+            })
+        }else{
+            setInputs({
+                nombre: "",
+                desc: "",
+                precio: 0,
+                categoria:"",
+                imagenes: [],
+                type:[]
+            });
+              setErrors({
+                nombre: "",
+                desc: "",
+                precio: null,
+                categoria:"",
+                img:"",
+            });
+            setType({
+                id:type.id + 1,
+                color:'',
+                talla:'',
+                cantidad:1,
+            }) 
+        }
+    },[productToEdit])
     function addImage() {
         if (validateImg.ready === true) {
             setImg('')
@@ -82,7 +132,6 @@ const CreateProduct = ()=>{
     }
     function editType(e) {
         let allProps = e.target.id.split(',')
-        console.log(allProps);
         setType({
             id:Number(allProps[0]),
             color:allProps[1],
@@ -95,7 +144,45 @@ const CreateProduct = ()=>{
     function deleteType(e) {
         let id = e.target.id
         let newlist = inputs.type.filter(t=> t.id !== Number(id))
-        setInputs({...inputs, type:newlist})
+        console.log(newlist);
+        swal({
+            title: "Seguro que quieres borrar el detalle?",
+            text: "Una ves borrado no podrás recuperarlo!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                setInputs({...inputs, type:newlist})
+                swal("el detalle fue eliminado correctamente", {
+                icon: "success",
+                });
+            } else {
+                swal("la data permanece!");
+            }
+        });
+    }
+    function deleteImg(e) {
+        let img = e.target.id
+        let newlist = inputs.imagenes.filter(i=> i !== img)
+        swal({
+            title: "Seguro que quieres borrar la imagen?",
+            text: "Una ves borrada no podrás recuperarla!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+        if (willDelete) {
+            setInputs({...inputs, imagenes: newlist})
+            swal("La imagen fue eliminada correctamente", {
+            icon: "success",
+            });
+        } else {
+            swal("la data permanece!");
+        }
+        });
     }
     function validate(inputs) {
         const errors = {};
@@ -201,7 +288,29 @@ const CreateProduct = ()=>{
             setErrors({...errors, img: 'debe agregar imagenes del producto'})
         }
         if (Object.keys(errors).length === 0 && inputs.type.length > 0) {
-            dispatch(addProduct(inputs))
+            if (Object.keys(productToEdit).length > 0) {
+                if (inputs.imagenes.length > productToEdit.image.length) {
+                    let newImgs = inputs.imagenes.slice(productToEdit.image.length, inputs.imagenes.length)
+                    let add = {id:productToEdit.id,image:newImgs}
+                    dispatch(addImgToProduct(add))
+                }
+                let edit = {
+                    id: productToEdit.id,
+                    name: inputs.nombre,
+                    price: inputs.precio,
+                    description: inputs.desc,
+                    stock: inputs.type[0].cantidad,
+                    color: inputs.type[0].color,
+                    category: inputs.categoria,
+                    size:inputs.type[0].talla
+                }
+                dispatch(editProduct(edit))
+                if (inputs.type.length > 1) {
+                    console.log('add one mone');
+                }
+            }else{
+                dispatch(addProduct(inputs))
+            }
             setInputs({
                 nombre: "",
                 desc: "",
@@ -227,11 +336,11 @@ const CreateProduct = ()=>{
     return(
     <div className='relative w-full'>
         <div className="text-black" >
-            <Link className='absolute right-8 top-6 text-cyan-400' to={'/admin?pestaña=productos'}>
+            <Link className={`${Object.keys(productToEdit).length > 0 ? '-top-14' : 'top-6'} absolute right-8 text-cyan-400`} to={'/admin?pestaña=productos'}>
                 <p>Go Back</p>
             </Link>
             <div className='mt-2 w-full'>
-                <h2 className='mt-20 text-xl font-bold mb-10 mx-auto pb-2 w-32 border-b-4 border-cyan-400'>Agregar</h2>
+                <h2 className={`${Object.keys(productToEdit).length > 0 ? 'w-44' : 'w-32'} mt-20 text-xl font-bold mb-10 mx-auto pb-2 border-b-4 border-cyan-400`} >{Object.keys(productToEdit).length > 0 ? 'Editar Producto' : 'Agregar'}</h2>
                 <form className='flex flex-col items-center w-full justify-center' onSubmit={handleSubmit}>
                     <div className='flex w-full justify-center align-middle'>
                         <div className='w-4/5 flex flex-col justify-center align-middle mx-auto'>
@@ -286,7 +395,7 @@ const CreateProduct = ()=>{
                                 <div className='w-full md:w-fit md:ml-4'>
                                     <select className={`${errors.categoria && ready === false ? 'hover:border-red-500 focus:border-red-500 border-red-500 text-red-500 focus:text-red-500' : 'hover:border-cyan-500 focus:border-cyan-500 border-grey text-grey focus:text-slate-800'} bg-transparent border hover:shadow-md focus:outline-none w-full my-5 md:my-0 md:w-fit rounded-md py-2`} onChange={handleChange} name="categoria" defaultValue={'DEFAULT'}>
                                         <option value="DEFAULT" disabled='true'>
-                                            {options[0].title}
+                                            {inputs.categoria !== '' ? inputs.categoria :  options[0].title}
                                         </option>
                                         {options[0].items.map(i=>(
                                             <option value={i}>{i}</option>
@@ -321,8 +430,8 @@ const CreateProduct = ()=>{
                                                         <img onClick={editType} id={`${t.id},${t.color},${t.talla},${t.cantidad}`} className=' h-3.5  w-3.5' src={edit} alt="" />
                                                     </li>
                                                     <li onClick={deleteType}>
-                                                        <button type='reset' id={t.id} className="p-1.5 border-bluey rounded-full"> 
-                                                            <svg width="24px" height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                                                        <button type='reset' className="p-1.5 border-bluey rounded-full"> 
+                                                            <svg width="24px" id={t.id} height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                                                                 <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
                                                             </svg>
                                                         </button>
@@ -401,12 +510,19 @@ const CreateProduct = ()=>{
                                     </div>: null}
                                 </div> 
                             </div>
-                            <div className='flex justify-center md:flex-row flex-col'>
+                            <div className='flex justify-center md:flex-row flex-col flex-wrap'>
                                 {inputs.imagenes.length !== 0 ? 
                                     inputs.imagenes.map(img=>{
                                         return(
-                                            <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
-                                                <img src={img} alt="imagen" />
+                                            <div>
+                                               <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
+                                                    <img src={img} alt="imagen" />
+                                                </div> 
+                                                <div className="mt-2 mx-auto w-fit h-fit hover:bg-sky-300 rounded-full hover:shadow-xl transition-all p-2.5"> 
+                                                    <svg onClick={deleteImg} id={img} width="24px" height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                                                        <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         )
                                     })
@@ -414,7 +530,7 @@ const CreateProduct = ()=>{
                             </div>
                         </div>
                     </div>
-                    <button className='bg-cyan-400 my-12' type="submit">Crear Producto</button>
+                    <button className='bg-cyan-400 my-12' type="submit">{Object.keys(productToEdit).length > 0 ? 'Editar Producto' : 'Crear Producto'}</button>
                 </form>
             </div>
         </div>
