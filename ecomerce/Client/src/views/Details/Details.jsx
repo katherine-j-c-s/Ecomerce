@@ -89,7 +89,7 @@ export default function Details() {
     
     useEffect(() => {
         if (detail?.image[0].url !== undefined) {
-            setFixedImage(detail?.image[0].url)
+            setFixedImage(detail?.image[0]?.url)
         }else{
             setFixedImage(detail?.image[0])
         }
