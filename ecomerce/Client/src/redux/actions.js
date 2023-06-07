@@ -8,6 +8,7 @@ import {
   GET_FILTERS,
   SET_FILTERS,
   EDIT_PRODUCT,
+  DELETE_PRODUCT,
   AGREGAR_FILTRO,
   REMOVER_FILTRO, 
   PRODUCT_TO_EDIT,
@@ -123,7 +124,7 @@ export function logOut() {
   };
 }
 
-////POST PRODUCT////////POST PRODUCT////////POST PRODUCT////////POST PRODUCT////////POST PRODUCT////////POST PRODUCT////////POST PRODUCT////////POST PRODUCT////
+////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////
 
 export const addProduct = (obj) => {
   let products = obj.type.map(t=>{
@@ -151,6 +152,19 @@ export const addProduct = (obj) => {
     }
   };
 }
+export const deleteProductById = (id) => {
+  return async function (dispatch) {
+    try {
+      const Data = await axios.delete(`products/remove_product/${id}`);
+      dispatch({ type: DELETE_PRODUCT });
+    } catch (error) {
+      console.log("delete products error ===>", error);
+    }
+  };
+};
+
+////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////
+
 export const productToEdit = (id) => {
   return async function (dispatch) {
     const Data = await axios.get(`products/get_product/${id}`);
@@ -188,7 +202,7 @@ export const addImgToProduct = (obj) => {
     try { 
       const data = await axios.post(`https://ecomerce-production-8f61.up.railway.app/products/add_image`,obj)
       return dispatch({
-        type: ADD_PRODUCT,
+        type: ADD_IMG,
       });
       //"Imagen añadida correctamente"
     } catch (error) {
@@ -201,7 +215,7 @@ export const removeImgToProduct = (obj) => {
     try { 
       const data = await axios.all(products.map((product)=> axios.delete(`https://ecomerce-production-8f61.up.railway.app/products/remove_image`,product)))
       return dispatch({
-        type: ADD_PRODUCT,
+        type: REMOVE_IMG,
         payload: products,
       });
     } catch (error) {

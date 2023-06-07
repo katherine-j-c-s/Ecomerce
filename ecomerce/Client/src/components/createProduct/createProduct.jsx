@@ -144,45 +144,12 @@ const CreateProduct = ()=>{
     function deleteType(e) {
         let id = e.target.id
         let newlist = inputs.type.filter(t=> t.id !== Number(id))
-        console.log(newlist);
-        swal({
-            title: "Seguro que quieres borrar el detalle?",
-            text: "Una ves borrado no podrás recuperarlo!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-            if (willDelete) {
-                setInputs({...inputs, type:newlist})
-                swal("el detalle fue eliminado correctamente", {
-                icon: "success",
-                });
-            } else {
-                swal("la data permanece!");
-            }
-        });
+        setInputs({...inputs, type:newlist})
     }
     function deleteImg(e) {
         let img = e.target.id
         let newlist = inputs.imagenes.filter(i=> i !== img)
-        swal({
-            title: "Seguro que quieres borrar la imagen?",
-            text: "Una ves borrada no podrás recuperarla!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-        if (willDelete) {
-            setInputs({...inputs, imagenes: newlist})
-            swal("La imagen fue eliminada correctamente", {
-            icon: "success",
-            });
-        } else {
-            swal("la data permanece!");
-        }
-        });
+        setInputs({...inputs, imagenes: newlist})
     }
     function validate(inputs) {
         const errors = {};
@@ -514,6 +481,7 @@ const CreateProduct = ()=>{
                             <div className='flex justify-center md:flex-row flex-col flex-wrap'>
                                 {inputs.imagenes.length !== 0 ? 
                                     inputs.imagenes.map(img=>{
+                                        console.log(img);
                                         return(
                                             <div>
                                                <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
