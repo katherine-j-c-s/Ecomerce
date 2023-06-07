@@ -45,7 +45,8 @@ const signupHandler = async (req, res) => {
 
 const loginHandler = async (req, res) => {
   try {
-    res.status(200).json({ message: "Login exitoso" });
+    const user = req.user;
+    res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -82,6 +83,28 @@ const updateUserHandler = async (req, res) => {
   }
 };
 
+const googleHandler = async (req, res) => {
+  try {
+    let user;
+
+    if (req.user) {
+      // El usuario ya existe en la base de datos y se autenticó correctamente
+      user = req.user;
+    } else if (req.newUser) {
+      // Se creó un nuevo usuario durante la autenticación
+      user = req.newUser;
+    } else {
+      // En caso de que no se establezca el usuario o el nuevo usuario, ocurrió un error
+      throw new Error("Error during authentication");
+    }
+
+    // Devuelve el usuario al cliente como respuesta JSON
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getUserByIdHandler,
   getUsersHandler,
@@ -90,4 +113,5 @@ module.exports = {
   logoutHandler,
   deleteUserHandler,
   updateUserHandler,
+  googleHandler,
 };
