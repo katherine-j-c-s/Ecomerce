@@ -75,7 +75,7 @@ export default function Products() {
 
                     />
                 </div>
-                <div className='w-full lg:w-3/4 h-auto grid grid-cols-1 lg:grid-cols-3 gap-2 items-center flex flex-wrap' >
+                <div className='w-full lg:w-3/4 h-auto grid grid-cols-1 lg:grid-cols-3 gap-2 items-center flex-wrap' >
                     {products.map((product, index) => {
                         let imgAdded = product.image.map(img =>{
                             if(img.url){
