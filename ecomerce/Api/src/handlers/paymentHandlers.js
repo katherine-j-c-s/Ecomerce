@@ -1,7 +1,7 @@
+const mercadopago = require("mercadopago");
 const {
   createOrder,
   success,
-  webhookC,
   failure,
   pending,
 } = require("../controllers/paymentControllers");
@@ -47,13 +47,14 @@ const failureHandler = async (req, res) => {
 };
 
 const webhookHandler = async (req, res) => {
+  const payment = req.query;
+
   try {
-    const pay = req.query;
-    const webhook = await webhookC(pay);
-
-    console.log(req.query);
-
-    res.status(200).json(webhook);
+    if (payment.type === "payment") {
+      const data = await mercadopago.payment.findById(payment["data.id"]);
+      console.log(data);
+    }
+    res.status(204);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -15,10 +15,8 @@ const createOrder = async () => {
       pending: `http://localhost:3001/payment/pending`,
       failure: `http://localhost:3001/payment/failure`,
     },
-    notification_url: "https://8d33-200-123-44-183.sa.ngrok.io/payment/webhook",
+    notification_url: "https://d01e-200-123-44-178.sa.ngrok.io/payment/webhook",
   });
-
-  console.log(result);
 
   return result.body;
 };
@@ -35,15 +33,9 @@ const failure = async () => {
   return "failure";
 };
 
-const webhookC = (pay) => {
-  mercadoPago.payment.findById(pay);
-  return "webhook";
-};
-
 module.exports = {
   createOrder,
   success,
-  webhookC,
   failure,
   pending,
 };
