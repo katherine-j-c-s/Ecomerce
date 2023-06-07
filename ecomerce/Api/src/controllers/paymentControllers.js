@@ -22,9 +22,9 @@ const createOrder = async (carrito) => {
   const result = await mercadoPago.preferences.create({
     items: items,
     back_urls: {
-      success: `http://localhost:3001/payment/success`,
-      pending: `http://localhost:3001/payment/pending`,
-      failure: `http://localhost:3001/payment/failure`,
+      success: `/payment/success`,
+      pending: `/payment/pending`,
+      failure: `/payment/failure`,
     },
     notification_url: "https://d01e-200-123-44-178.sa.ngrok.io/payment/webhook",
   });
@@ -32,7 +32,7 @@ const createOrder = async (carrito) => {
   return result.body;
 };
 
-const success = async () => {
+const success = async (carrito) => {
   return "success";
 };
 

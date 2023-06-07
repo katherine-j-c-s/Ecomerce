@@ -9,7 +9,7 @@ const {
 const createOrderHandler = async (req, res) => {
   try {
     let { carrito } = req.params;
-    const createOrders = await createOrder(id);
+    const createOrders = await createOrder(carrito);
 
     res.status(200).json(createOrders);
   } catch (error) {
@@ -19,7 +19,8 @@ const createOrderHandler = async (req, res) => {
 
 const successHandler = async (req, res) => {
   try {
-    const succesS = await success();
+    let { carrito } = req.params;
+    const succesS = await success(carrito);
 
     res.status(200).json(succesS);
   } catch (error) {
