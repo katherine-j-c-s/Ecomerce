@@ -1,4 +1,4 @@
-const { createProduct, getProducts, getProductByID, deleteProduct, updateProduct } = require("../controllers/productsController");
+const { createProduct, getProducts, getProductByID, deleteProduct, updateProduct, removeImage, addImage } = require("../controllers/productsController");
 
 const getProductsHandler = async (req, res) => {
   try {
@@ -46,8 +46,8 @@ const deleteProductHandler = async (req, res) => {
 const updateProductHandler = async (req, res) => {
   try {
     let { id } = req.params
-    let { name, price, description, image, stock, color, category, size} = req.body
-    let product = await updateProduct(id, name, price, description, image, stock, color, category, size)
+    let { name, price, description, stock, color, category, size} = req.body
+    let product = await updateProduct(id, name, price, description, stock, color, category, size)
     res.status(200).json(product)
     
   } catch (error) {
@@ -55,10 +55,34 @@ const updateProductHandler = async (req, res) => {
   }
 };
 
+const removeImageHandler = async (req, res) => {
+  try {
+    let { id, image } = req.body
+    let product = await removeImage(id, image)
+    res.status(200).json(product)
+
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}
+
+const addImageHandler = async (req, res) => {
+  try {
+    let { id, image } = req.body
+    let product = await addImage(id, image)
+    res.status(200).json(product)
+
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}
+
 module.exports = {
   getProductByIdHandler,
   getProductsHandler,
   createProductHandler,
   deleteProductHandler,
   updateProductHandler,
+  removeImageHandler,
+  addImageHandler,
 };

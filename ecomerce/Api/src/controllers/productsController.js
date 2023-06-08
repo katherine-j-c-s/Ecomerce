@@ -1,5 +1,8 @@
 const { Product, Color, Category, Size } = require("../db");
 const { hard } = require("./mockedData/mockedProducts");
+const cloudinary = require("../cloudinary")
+require("dotenv").config();
+
 
 const convertAllProducts = (res) => {
   let { id, name, price, image, Color, Size, Category } = res;
@@ -43,6 +46,9 @@ const convertSingleProduct = (res) => {
     image,
   });
 };
+
+
+
 
 const getProducts = async () => {
   let allProducts = [];
@@ -94,15 +100,37 @@ const createProduct = async (name, price, description, image, stock, color, cate
       size = id
   }
 
+  let imagesPromises = []
+  let imagesObjects = []
+  if(image.length > 0) {
+    image.forEach(img => {
+      if(img) {
+        imagesPromises.push(
+          cloudinary.uploader
+          .upload(img)
+        )
+      }
+    })
+    if(imagesPromises.length > 0) {
+      await Promise.all(imagesPromises)
+      .then(responses => {
+        return responses.map(res => imagesObjects.push({
+          public_id: res.public_id, 
+          url: res.url,
+        }))
+      })
+    }
+  }
+
   let [product, created] = await Product.findOrCreate({
     where: { name },
     defaults: {
       name,
       price,
       description,
-      image,
       stock,
       available,
+      image: imagesObjects,
       ColorId: color,
       CategoryId: category,
       SizeId: size,
@@ -110,6 +138,16 @@ const createProduct = async (name, price, description, image, stock, color, cate
   });
 
   if (!created) {
+    let deletePromises = []
+    if(imagesObjects.length > 0) {
+      imagesObjects.forEach(obj => {
+        deletePromises.push(
+          cloudinary.uploader
+          .destroy(obj.public_id)
+        )
+      })
+      await Promise.all(deletePromises)
+    }
     throw new Error("Este producto ya existe");
   }
 
@@ -117,15 +155,23 @@ const createProduct = async (name, price, description, image, stock, color, cate
 };
 
 const deleteProduct = async (id) => {
-  let removedProduct = await Product.destroy({
-    where: { id },
-  });
+  let product = await Product.findOne({
+    where: { id }
+  })
+  if(!product) throw new Error('No se encontro el producto')
 
-  if (removedProduct === 1) return "Producto eliminado con exito";
-  if (removedProduct === 0) throw new Error("No se pudo eliminar el producto");
+  if(product.image) {
+    let images = []
+    product.image.map(img => images.push(img.public_id))
+    
+    await Promise.all(images.map(img => cloudinary.uploader.destroy(img)))
+  }
+  await product.destroy()
+
+  return 'Producto eliminado con exito'
 };
 
-const updateProduct = async (id, name, price, description, image, stock, color, category, size) => {
+const updateProduct = async (id, name, price, description, stock, color, category, size) => {
   const product = await Product.findOne({
     where: { id },
     include: { all: true },
@@ -158,7 +204,6 @@ const updateProduct = async (id, name, price, description, image, stock, color, 
   product.price = price || product.price;
   product.description = description || product.description;
   product.stock = stock || product.stock;
-  product.image = image || product.image;
   await product.setColor(color)
   await product.setCategory(category)
   await product.setSize(size)
@@ -167,10 +212,69 @@ const updateProduct = async (id, name, price, description, image, stock, color, 
   return convertSingleProduct(product);
 };
 
+const removeImage = async (id, image) => {
+  let product = await Product.findOne({
+    where: { id }
+  })
+  if(product) {
+    let { result } = await cloudinary.uploader
+    .destroy(image)
+    if(result == 'ok') {
+      let updatedImage = product.image.filter(img => img.public_id != image)
+      product.image = updatedImage
+      await product.save()
+    }else {
+      throw new Error('No se ha encontrado la imagen para eliminar')
+    }
+  }else {
+    throw new Error('Producto no encontrado')
+  }
+
+  return ('Imagen eliminada correctamente')
+}
+
+const addImage = async (id, images) => {
+  let product = await Product.findOne({
+    where: { id }
+  })
+  
+  let imagesPromises = []
+  let imagesObjects = []
+  if(images.length > 0) {
+    images.forEach(img => {
+      if(img) {
+        imagesPromises.push(
+          cloudinary.uploader
+          .upload(img)
+        )
+      }
+    })
+    if(imagesPromises.length > 0) {
+      await Promise.all(imagesPromises)
+      .then(responses => {
+        return responses.map(res => imagesObjects.push({
+          public_id: res.public_id, 
+          url: res.url,
+        }))
+      })
+    }else {
+      throw new Error('Campos vacios')
+    }
+  }else {
+    throw new Error('No hay imagenes para añadir')
+  }
+  product.image = product.image.concat(imagesObjects)
+  await product.save()
+
+  return 'Imagen añadida correctamente'
+}
+
 module.exports = {
   createProduct,
   getProducts,
   getProductByID,
   deleteProduct,
   updateProduct,
+  removeImage,
+  addImage,
 };

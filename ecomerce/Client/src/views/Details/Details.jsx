@@ -88,18 +88,28 @@ export default function Details() {
     }, [id, dispatch])
     
     useEffect(() => {
-        if (detail?.image?.[0]) {
-            setFixedImage(detail.image[0])
+        if (detail?.image[0].url !== undefined) {
+            setFixedImage(detail?.image[0]?.url)
+            console.log(detail)
+        }else{
+            setFixedImage(detail?.image[0])
+            console.log(detail)
         }
     }, [detail])
-    console.log(detail)
+    
   return (
     <div className='h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 sm:mt-20'>
         <div className='w-full h-auto flex flex-col sm:flex-row'>
             <div className='basis-[10%] mx-2 sm:mx-10 flex flex-col gap-y-4 sm:gap-y-6'>
                 {detail?.image?.filter(image => image !== fixedImage ).map((ima, index) => {
+                    let image = null
+                    if (ima.url) {
+                        image = ima.url
+                    }else{
+                        image = ima
+                    }
                     return(
-                        <img onLoad={()=>setLoadedImage(true)} style={{opacity: loadedImage? 1 : 0, transition: 'opacity 0.3s' }} key={index} onClick={()=> handleFixedImage(ima)} className='w- h-32 object-cover cursor-pointer hover:opacity-[.8]' src={ima} alt="imagendeProducto" />
+                        <img onLoad={()=>setLoadedImage(true)} style={{opacity: loadedImage? 1 : 0, transition: 'opacity 0.3s' }} key={index} onClick={()=> handleFixedImage(image)} className='w- h-32 object-cover cursor-pointer hover:opacity-[.8]' src={image} alt="imagendeProducto" />
                     )
                 })}
             </div>
