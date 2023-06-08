@@ -18,14 +18,7 @@ app.use(morgan("dev"));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-    methods: "GET, POST, OPTIONS, PUT, DELETE",
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
-  })
-);
+app.use(cors());
 
 require("./auth")(passport); // Importa y configura la autenticación
 
