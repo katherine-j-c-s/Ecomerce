@@ -9,7 +9,6 @@ import {
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
-  UPDATE_USER,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
 } from "./types";
@@ -127,20 +126,6 @@ const rootReducer = (state = initialState, action) => {
           email: "",
           password: "",
           access: false,
-        },
-      };
-
-    case UPDATE_USER:
-      return {
-        ...state,
-        userData: {
-          ...state.userData.access,
-          id: action.payload.id,
-          image: action.payload.image,
-          name: action.payload.first_name,
-          lastName: action.payload.last_name,
-          email: action.payload.mail,
-          password: action.payload.password,
         },
       };
     case AGREGAR_FILTRO:
