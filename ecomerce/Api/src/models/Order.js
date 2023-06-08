@@ -27,6 +27,7 @@ module.exports = (sequelize) => {
       paymentMethod: {
         type: DataTypes.STRING,
       },
+      products: { type: DataTypes.ARRAY(DataTypes.JSONB) },
       status: {
         type: DataTypes.ENUM([
           "cart",

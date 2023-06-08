@@ -1,5 +1,5 @@
 const mercadoPago = require("mercadopago");
-const { Order, User } = require("../db");
+const { Order, User, Product } = require("../db");
 
 const createOrder = async (carrito) => {
   mercadoPago.configure({
@@ -13,6 +13,7 @@ const createOrder = async (carrito) => {
       unit_price: parseInt(element.price),
       quantity: element.cantidad,
       currency_id: carrito[0].moneda,
+      id: element.id,
     };
   });
 
@@ -27,32 +28,36 @@ const createOrder = async (carrito) => {
     total: carrito[0].total,
     paymentMethod: "Mercado Pago",
     status: "in_process",
+    products: items,
   });
+
+  await Promise.all(
+    items.map(async (item) => {
+      let producto = await Product.findOne({
+        where: {
+          id: item.id,
+        },
+      });
+      console.log("antes --->" + producto.stock);
+      console.log(item.quantity);
+      producto.stock = producto.stock - item.quantity;
+      console.log("despues --->" + producto.stock);
+      await producto.save();
+    })
+  );
 
   const dni = carrito[0].dni;
 
   const result = await mercadoPago.preferences.create({
     items: items,
     back_urls: {
-      success: `http://localhost:3001/payment/success/`,
+      success: `http://localhost:3001/payment/success/${dni}`,
       failure: `http://localhost:3001/payment/failure/${dni}`,
     },
     notification_url: "https://d01e-200-123-44-178.sa.ngrok.io/payment/webhook",
   });
 
   return result.body.init_point;
-};
-
-const success = async (carrito) => {
-  const usuario = await User.findOne({
-    where: {
-      dni: dni,
-      status: "in_process",
-    },
-  });
-  orden.destroy();
-
-  return dni;
 };
 
 const failure = async (dni) => {
@@ -62,13 +67,43 @@ const failure = async (dni) => {
       status: "in_process",
     },
   });
+
+  await Promise.all(
+    orden.products.map(async (item) => {
+      let producto = await Product.findOne({
+        where: {
+          id: item.id,
+        },
+      });
+      console.log("antes --->" + producto.stock);
+      console.log(item.quantity);
+
+      producto.stock = producto.stock + item.quantity;
+
+      console.log("despues --->" + producto.stock);
+      await producto.save();
+    })
+  );
+
   orden.destroy();
 
   return dni;
 };
 
+const success = async (dni) => {
+  const orden = await Order.findOne({
+    where: {
+      dni: dni,
+      status: "in_process",
+    },
+  });
+
+  orden.status = "fullfilled";
+  await orden.save();
+};
+
 module.exports = {
   createOrder,
-  success,
   failure,
+  success,
 };

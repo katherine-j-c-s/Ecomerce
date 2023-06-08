@@ -12,7 +12,7 @@ const paymentRouter = Router();
 
 paymentRouter.post("/create-order", createOrderHandler);
 
-paymentRouter.get("/success", successHandler);
+paymentRouter.get("/success/:dni", successHandler);
 
 paymentRouter.get("/failure/:dni", failureHandler);
 
