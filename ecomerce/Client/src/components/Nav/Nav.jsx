@@ -1,18 +1,20 @@
 import styles from "../Nav/Nav.module.css";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import homeLogo from "../../assets/HomeImage.png";
+import homeLogo from "../../assets/ecomerceLogo.png";
 import { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { logOut } from "../../redux/actions";
+import { Cart, LogOut } from "iconoir-react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Nav() {
   const location = useLocation();
   const actualRoute = location.pathname;
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
 
-  const access = useSelector((state) => state.access);
+  const { image, access } = useSelector((state) => state.userData);
 
   const dispatch = useDispatch();
 
@@ -23,14 +25,36 @@ export default function Nav() {
   };
 
   function signOut() {
-    dispatch(logOut());
-    navigate("/");
+    toast((t) => (
+      <span>
+        ¿Seguro de cerrar sesión?
+        <button
+          className="hover:bg-bluey hover:text-white"
+          onClick={() => {
+            dispatch(logOut());
+            navigate("/");
+            toast.dismiss(t.id);
+          }}
+        >
+          Cerrar sesión
+        </button>
+      </span>
+    ));
   }
 
   return (
     <nav id={styles.navBackground}>
+      <div>
+        <Toaster />
+      </div>
       <div className="hidden md:block">
-        <ul className="flex flex-wrap items-center justify-between p-4">
+        <ul
+          className={
+            actualRoute === "/"
+              ? "flex flex-wrap items-center justify-between p-4"
+              : "flex flex-wrap items-center justify-between p-4 shadow"
+          }
+        >
           <li>
             <article className="flex items-center justify-center p-3 gap-5">
               <Link to="/">
@@ -68,18 +92,37 @@ export default function Nav() {
           </li>
 
           <li>
-            <article className="flex items-center jusfify-center gap-5">
+            <article className="flex items-center jusfify-center gap-2">
               {access ? (
                 <>
-                  <button>Carrito</button>
+                  <button className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300">
+                    <Cart color={actualRoute === "/" ? "#FFFFFF" : "#000000"} />
+                  </button>
 
-                  <Link to="/profile">
-                    <button onClick={() => navigate("/profile")}>
-                      Perfil
-                    </button>
-                  </Link>
+                  <button
+                    onClick={() => navigate("/profile")}
+                    className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                  >
+                    <img
+                      src={image}
+                      alt="profile picture logo"
+                      className={styles.userProfile}
+                    />
+                  </button>
 
-                  <button onClick={signOut}>Logout</button>
+                  <button
+                    onClick={signOut}
+                    className={
+                      actualRoute === "/"
+                        ? "flex items-center gap-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                        : "flex items-center gap-2 text-black transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                    }
+                  >
+                    <LogOut
+                      color={actualRoute === "/" ? "#FFFFFF" : "#000000"}
+                    />
+                    Cerrar sesión
+                  </button>
                 </>
               ) : (
                 <>
@@ -109,6 +152,7 @@ export default function Nav() {
           </li>
         </ul>
       </div>
+
       <div className="block md:hidden">
         <div className="flex flex-row justify-around items-center fixed w-full h-24 bg-white z-20 shadow-blue-500/50">
           <Link to="/">
@@ -118,6 +162,11 @@ export default function Nav() {
               className={styles.homeImg}
             />
           </Link>
+
+          <button className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300">
+            <Cart color="#000000" />
+          </button>
+
           <div className="text-teal-400 cursor-pointer" onClick={toggleSideBar}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -135,6 +184,7 @@ export default function Nav() {
             </svg>
           </div>
         </div>
+
         <div
           className={`w-screen h-screen bg-black/[.8] fixed z-20 top-0 ${
             sideBarIsOpen ? "block" : "hidden"
@@ -159,7 +209,8 @@ export default function Nav() {
               />
             </svg>
           </div>
-          <div className="h-full w-full flex flex-col justify-center align-center gap-y-5">
+
+          <div className="h-full w-full flex flex-col justify-center items-center gap-y-5">
             <Link className="text-white" to="/women" onClick={toggleSideBar}>
               Women
             </Link>
@@ -172,29 +223,54 @@ export default function Nav() {
             <Link className="text-white" to="/alls" onClick={toggleSideBar}>
               Alls
             </Link>
-            <Link
-              to="/signIn"
-              onClick={toggleSideBar}
-              className={
-                actualRoute !== ""
-                  ? "text-teal-400 hover:text-white "
-                  : "text-white hover:text-white"
-              }
-            >
-              <button className="hover:bg-bluey">Inicia sesión</button>
-            </Link>
 
-            <Link
-              to="/signUp"
-              onClick={toggleSideBar}
-              className={
-                actualRoute !== ""
-                  ? "text-teal-400 hover:text-white"
-                  : "text-white hover:text-white"
-              }
-            >
-              <button className="hover:bg-bluey">Regístrate</button>
-            </Link>
+            {access ? (
+              <>
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                >
+                  <img
+                    src={image}
+                    alt="profile picture logo"
+                    className={styles.userProfile}
+                  />
+                </button>
+
+                <button
+                  onClick={signOut}
+                  className='flex items-center gap-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"'
+                >
+                  <LogOut color="#FFFFFF" />
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/signIn"
+                  onClick={toggleSideBar}
+                  className={
+                    actualRoute !== ""
+                      ? "text-teal-400 hover:text-white "
+                      : "text-white hover:text-white"
+                  }
+                >
+                  <button className="hover:bg-bluey">Inicia sesión</button>
+                </Link>
+                <Link
+                  to="/signUp"
+                  onClick={toggleSideBar}
+                  className={
+                    actualRoute !== ""
+                      ? "text-teal-400 hover:text-white"
+                      : "text-white hover:text-white"
+                  }
+                >
+                  <button className="hover:bg-bluey">Regístrate</button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
