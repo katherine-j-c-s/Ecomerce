@@ -78,10 +78,14 @@ const CreateProduct = ()=>{
             console.log(productToEdit);
             let img = []
             productToEdit.image.map(i=> {
-                if (i.url !== undefined) {
-                    img.push(i.url)
+                let images = i.split('"')
+                if (images[7] !== undefined && images[7].length > 2) {
+                    img.push(images[7])
+                }else if(images[7].length === 2){
+                    let imga = images[8].slice(0,images[8].length -1)
+                    img.push(imga)
                 }else{
-                    img.push(i)
+                    img.push(images[1])
                 }
             })
             let type = [{
@@ -91,6 +95,7 @@ const CreateProduct = ()=>{
                 cantidad:productToEdit.stock,
             }]
             setInputs({
+                ...inputs,
                 nombre: productToEdit.name,
                 desc: productToEdit.description,
                 precio: productToEdit.price,
@@ -98,6 +103,7 @@ const CreateProduct = ()=>{
                 imagenes: img,
                 type:type
             })
+            console.log(inputs);
         }else{
             setInputs({
                 nombre: "",
@@ -318,7 +324,7 @@ const CreateProduct = ()=>{
                                     <input
                                         className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.nombre  && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="nombre"
-                                        value={inputs.nombre}
+                                        value={inputs?.nombre}
                                         onChange={handleChange}
                                         placeholder="Zapatillas Nike"
                                     ></input>
@@ -331,7 +337,7 @@ const CreateProduct = ()=>{
                                     <input
                                         className={`placeholder-slate-400 focus:outline-none hover:shadow-md my-2 border bg-transparent rounded-md w-full md:w-fit p-2 pl-10 text-grey ${errors.precio && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="precio"
-                                        value={inputs.precio}
+                                        value={inputs?.precio}
                                         onChange={handleChange}
                                         placeholder="$599"
                                     ></input>
@@ -346,7 +352,7 @@ const CreateProduct = ()=>{
                                     <textarea
                                         className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.desc && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="desc"
-                                        value={inputs.desc}
+                                        value={inputs?.desc}
                                         onChange={handleChange}
                                         placeholder="loren input black..."
                                     ></textarea>
@@ -363,7 +369,7 @@ const CreateProduct = ()=>{
                                 <div className='w-full md:w-fit md:ml-4'>
                                     <select className={`${errors.categoria && ready === false ? 'hover:border-red-500 focus:border-red-500 border-red-500 text-red-500 focus:text-red-500' : 'hover:border-cyan-500 focus:border-cyan-500 border-grey text-grey focus:text-slate-800'} bg-transparent border hover:shadow-md focus:outline-none w-full my-5 md:my-0 md:w-fit rounded-md py-2`} onChange={handleChange} name="categoria" defaultValue={'DEFAULT'}>
                                         <option value="DEFAULT" disabled='true'>
-                                            {inputs.categoria !== '' ? inputs.categoria :  options[0].title}
+                                            {inputs?.categoria !== '' ? inputs?.categoria :  options[0].title}
                                         </option>
                                         {options[0].items.map(i=>(
                                             <option value={i}>{i}</option>
@@ -375,7 +381,7 @@ const CreateProduct = ()=>{
                                 </div>
                             </div>  
                             <div className='w-full flex flex-col align-middle mt-2 justify-start'>
-                                {inputs.type.map(t=>{
+                                {inputs?.type.map(t=>{
                                     console.log();
                                     let color = options[2].items.find(c=> c.name === t.color)
                                     return(
@@ -416,7 +422,7 @@ const CreateProduct = ()=>{
                                                 <p className='text-cyan-400 bottom-9 md:bottom-6 left-0 h-fit w-20 z-10 absolute bg-slate-300'>Cantidad</p>
                                                 <div className='flex justify-center border rounded-lg border-slate-400'>
                                                     <p id='menos' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 transition-all' onClick={handleCantidad}>-</p>
-                                                    <p className='mt-1 text-xl'>{type.cantidad}</p>
+                                                    <p className='mt-1 text-xl'>{type?.cantidad}</p>
                                                     <p id='mas' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 transition-all' onClick={handleCantidad}>+</p>
                                                     <div onClick={handleType} className='h-full w-full pt-1 px-4 bg-cyan-400 text-slate-800 hover:text-black hover:font-bold transition-all rounded-r-lg'>
                                                         <p>Listo!</p>
@@ -468,7 +474,7 @@ const CreateProduct = ()=>{
                                         <input
                                             className='placeholder-slate-400 hover:border-cyan-500 hover:shadow-md focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey'
                                             name="img"
-                                            value={img.url}
+                                            value={img?.url}
                                             onChange={handleimagenes}
                                             placeholder="url"
                                         ></input>
@@ -479,8 +485,8 @@ const CreateProduct = ()=>{
                                 </div> 
                             </div>
                             <div className='flex justify-center md:flex-row flex-col flex-wrap'>
-                                {inputs.imagenes.length !== 0 ? 
-                                    inputs.imagenes.map(img=>{
+                                {inputs?.imagenes ? 
+                                    inputs?.imagenes.map(img=>{
                                         console.log(img);
                                         return(
                                             <div>

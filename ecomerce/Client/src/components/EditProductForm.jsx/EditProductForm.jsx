@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProductById, clearProductDetail } from '../../redux/actions'
-import CreateProduct from '../createProduct/createProduct'
+import CreateProduct from '../CreateProduct/createProduct'
 
 export default function EditProductForm() {
   const {productToEdit}  = useSelector(state => state)

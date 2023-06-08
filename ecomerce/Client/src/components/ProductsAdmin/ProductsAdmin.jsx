@@ -52,11 +52,18 @@ export default function ProductsAdmin() {
       </Link>
       {products.map((product, index) => {
         let imagenes = product.image.map(i=>{
-          if (i.url !== undefined) {
-            return i.url
-          }else{
-            return i
+          let img = i.split('"')
+          console.log(img[1]);
+          if(img[7] !== undefined){
+            return img[7]
+          }else {
+            return img[1]
           }
+          // if (i.url !== undefined) {
+          //   return i.url
+          // }else{
+          //   return i
+          // }
         })
         return(
           <div onMouseEnter={()=>setShowEdit({id:product.id,show:true})} onMouseLeave={()=>setShowEdit({id:null,show:false})} key={index} className='flex justify-center mx-4 relative'>

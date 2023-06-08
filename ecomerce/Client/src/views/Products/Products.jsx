@@ -78,8 +78,11 @@ export default function Products() {
                 <div className='w-full lg:w-3/4 h-auto grid grid-cols-1 lg:grid-cols-3 gap-2 items-center flex-wrap' >
                     {products.map((product, index) => {
                         let imgAdded = product.image.map(img =>{
-                            if(img.url){
-                                return img.url
+                            let imgs = img.split('"')
+                            if(imgs[7] !== undefined){
+                                return imgs[7]
+                            }else {
+                                return imgs[1]
                             }
                         })
                         return(
