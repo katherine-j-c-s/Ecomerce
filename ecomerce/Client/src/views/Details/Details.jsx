@@ -90,11 +90,13 @@ export default function Details() {
     useEffect(() => {
         if (detail?.image[0].url !== undefined) {
             setFixedImage(detail?.image[0]?.url)
+            console.log(detail)
         }else{
             setFixedImage(detail?.image[0])
+            console.log(detail)
         }
     }, [detail])
-    console.log(detail)
+    
   return (
     <div className='h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 sm:mt-20'>
         <div className='w-full h-auto flex flex-col sm:flex-row'>
