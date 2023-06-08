@@ -4,6 +4,7 @@ module.exports = (sequelize) => {
   sequelize.define(
     "Order",
     {
+      dni: { type: DataTypes.INTEGER },
       city: {
         type: DataTypes.STRING,
       },
@@ -35,6 +36,12 @@ module.exports = (sequelize) => {
           "rejected",
         ]),
         defaultValue: "cart",
+        allowNull: false,
+      },
+      id: {
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         allowNull: false,
       },
     },

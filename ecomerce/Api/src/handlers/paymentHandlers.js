@@ -3,12 +3,14 @@ const {
   createOrder,
   success,
   failure,
-  pending,
 } = require("../controllers/paymentControllers");
 
 const createOrderHandler = async (req, res) => {
   try {
-    let { carrito } = req.params;
+    let car = await req.body;
+    let carrito = [];
+    carrito.push(car);
+    console.log(carrito);
     const createOrders = await createOrder(carrito);
 
     res.status(200).json(createOrders);
@@ -19,10 +21,9 @@ const createOrderHandler = async (req, res) => {
 
 const successHandler = async (req, res) => {
   try {
-    let { carrito } = req.params;
-    const succesS = await success(carrito);
-
-    res.status(200).json(succesS);
+    const { dni } = req.params;
+    await success(dni);
+    res.redirect("https://sportwear.vercel.app/");
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -30,9 +31,7 @@ const successHandler = async (req, res) => {
 
 const pendingHandler = async (req, res) => {
   try {
-    const pendinG = await pending();
-
-    res.status(200).json(pendinG);
+    res.send("ahi va");
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -40,9 +39,10 @@ const pendingHandler = async (req, res) => {
 
 const failureHandler = async (req, res) => {
   try {
-    const failurE = await failure();
+    const { dni } = req.params;
+    await failure(dni);
 
-    res.status(200).json(failurE);
+    res.redirect("https://sportwear.vercel.app/");
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

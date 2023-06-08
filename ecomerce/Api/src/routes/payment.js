@@ -14,7 +14,7 @@ paymentRouter.post("/create-order", createOrderHandler);
 
 paymentRouter.get("/success", successHandler);
 
-paymentRouter.get("/failure", failureHandler);
+paymentRouter.get("/failure/:dni", failureHandler);
 
 paymentRouter.get("/pending", pendingHandler);
 
