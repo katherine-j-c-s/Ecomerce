@@ -1,52 +1,59 @@
 import {
-  GET_ALL_PRODUCTS,
-  FILTER_PRODUCTS,
-  AGREGAR_FILTRO,
-  REMOVER_FILTRO,
-  GET_FILTERS,
-  SET_FILTERS,  
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
+  ADD_IMG,
+  REMOVE_IMG,
+  ADD_PRODUCT,
+  GET_FILTERS,
+  SET_FILTERS,
+  EDIT_PRODUCT,
+  DELETE_PRODUCT,
+  AGREGAR_FILTRO,
+  REMOVER_FILTRO, 
+  PRODUCT_TO_EDIT,
+  FILTER_PRODUCTS, 
+  GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
-  ADD_PRODUCT,
+  CLEAR_PRODUCT_TO_EDIT,
 } from "./types";
 
 import axios from "axios";
 
 axios.defaults.baseURL = "https://ecomerce-production-8f61.up.railway.app/";
 
+////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////
 
-export const signIn = (user) => {
+export const getAllProducts = () => {
+  return async  function(dispatch){
+    let Data = await axios.get("/products/get_products")
+    const Products = Data.data
+
+    //Leemos filtros desde local storage
+    const filtrosAlmacenados = localStorage.getItem('filtrosLocal')
+    let filtros = []
+    if(filtrosAlmacenados){
+      filtros = JSON.parse(filtrosAlmacenados)
+    }
+    dispatch({type: GET_ALL_PRODUCTS, payload: Products})
+    //Si hay filtros almacenados, despachamos una accion
+    if(filtros.length > 0){
+      dispatch({type: SET_FILTERS, payload: filtros})
+    }
+  }
+}
+export const getProductById = (id) => {
   return async function (dispatch) {
-    let { data } = await axios.post(
-      "https://ecomerce-production-8f61.up.railway.app/users/login",
-      user
-    );
-
-    return dispatch({ type: SIGN_IN, payload: data });
+    const Data = await axios.get(`products/get_product/${id}`);
+    const producto = Data.data;
+    dispatch({ type: GET_PRODUCT_BY_ID, payload: producto });
   };
 };
 
-export function signUp(user) {
-  return async function (dispatch) {
-    let { data } = await axios.post(
-      "https://ecomerce-production-8f61.up.railway.app/users/signup",
-      user
-    );
+export const clearProductDetail = () => ({ type: CLEAR_PRODUCT_DETAIL  });
 
-    return dispatch({ type: SIGN_UP, payload: data });
-  };
-}
-
-export function logOut() {
-  return async function (dispatch) {
-    axios.post("https://ecomerce-production-8f61.up.railway.app/users/logout");
-
-    return dispatch({ type: LOG_OUT });
-  };
-}
+////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////
 
 export const loadFiltersFromLocalStorage = () => {
   return function (dispatch) {
@@ -58,37 +65,9 @@ export const loadFiltersFromLocalStorage = () => {
     }
   };
 };
-
-export const getAllProducts = () => {
-  return async  function(dispatch){
-      let Data = await axios.get("/products")
-      const Products = Data.data
-
-      //Leemos filtros desde local storage
-      const filtrosAlmacenados = localStorage.getItem('filtrosLocal')
-      let filtros = []
-      if(filtrosAlmacenados){
-        filtros = JSON.parse(filtrosAlmacenados)
-      }
-      dispatch({type: GET_ALL_PRODUCTS, payload: Products})
-      //Si hay filtros almacenados, despachamos una accion
-      if(filtros.length > 0){
-        dispatch({type: SET_FILTERS, payload: filtros})
-      }
-  }
-}
-export const getProductById = (id) => {
-  return async function (dispatch) {
-    const Data = await axios.get(`/products/${id}`);
-    const producto = Data.data;
-    dispatch({ type: GET_PRODUCT_BY_ID, payload: producto });
-  };
-};
-
 export const filterProducts = () => {
   return { type: FILTER_PRODUCTS };
 };
-
 export const agregarFiltro = (filtro) => {
   return (dispatch, getState) => {
     dispatch({ type: AGREGAR_FILTRO, payload: filtro });
@@ -97,7 +76,6 @@ export const agregarFiltro = (filtro) => {
     localStorage.setItem('filtrosLocal', JSON.stringify(filtros));
   };
 }
-
 export const removerFiltro = (filtro) => {
   return (dispatch, getState) => {
     dispatch({ type: REMOVER_FILTRO, payload: filtro });
@@ -106,7 +84,6 @@ export const removerFiltro = (filtro) => {
     localStorage.setItem('filtrosLocal', JSON.stringify(filtros));
   };
 }
-
 export const getFilters = (filtro) => {
   return async function(dispatch){
     const Data = await axios.get(`/${filtro}`)
@@ -116,8 +93,39 @@ export const getFilters = (filtro) => {
 
   }
 }
-export const clearProductDetail = () => ({ type: CLEAR_PRODUCT_DETAIL  });
-  
+
+////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////
+
+export const signIn = (user) => {
+  return async function (dispatch) {
+    let { data } = await axios.post(
+      "https://ecomerce-production-8f61.up.railway.app/users/login",
+      user
+    );
+
+    return dispatch({ type: SIGN_IN, payload: data });
+  };
+};
+export function signUp(user) {
+  return async function (dispatch) {
+    let { data } = await axios.post(
+      "https://ecomerce-production-8f61.up.railway.app/users/signup",
+      user
+    );
+
+    return dispatch({ type: SIGN_UP, payload: data });
+  };
+}
+export function logOut() {
+  return async function (dispatch) {
+    axios.post("https://ecomerce-production-8f61.up.railway.app/users/logout");
+
+    return dispatch({ type: LOG_OUT });
+  };
+}
+
+////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////
+
 export const addProduct = (obj) => {
   let products = obj.type.map(t=>{
     let prodct = {
@@ -134,7 +142,7 @@ export const addProduct = (obj) => {
   })
   return async function (dispatch) {
     try { 
-      const data = await axios.all(products.map((product)=> axios.post(`https://ecomerce-production-8f61.up.railway.app/products`,product)))
+      const data = await axios.all(products.map((product)=> axios.post(`https://ecomerce-production-8f61.up.railway.app/products/create_product`,product)))
       return dispatch({
         type: ADD_PRODUCT,
         payload: products,
@@ -144,3 +152,74 @@ export const addProduct = (obj) => {
     }
   };
 }
+export const deleteProductById = (id) => {
+  return async function (dispatch) {
+    try {
+      const Data = await axios.delete(`products/remove_product/${id}`);
+      dispatch({ type: DELETE_PRODUCT });
+    } catch (error) {
+      console.log("delete products error ===>", error);
+    }
+  };
+};
+
+////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////////EDIT PRODUCT////
+
+export const productToEdit = (id) => {
+  return async function (dispatch) {
+    const Data = await axios.get(`products/get_product/${id}`);
+    const producto = Data.data;
+    dispatch({ type: PRODUCT_TO_EDIT, payload: producto });
+  };
+};
+export const clearProductToEdit = () => {
+  return { type: CLEAR_PRODUCT_TO_EDIT };
+};
+export const editProduct = (obj) => {
+  let edit = {
+    name: obj.name,
+    price: Number(obj.price),
+    description: obj.description,
+    stock: obj.stock,
+    color: obj.color,
+    category: obj.category,
+    size: obj.size
+  }
+  console.log(edit);
+  console.log(obj.id);
+  return async function (dispatch) {
+    try {
+      const data = await axios.patch(`https://ecomerce-production-8f61.up.railway.app/products/update_product/${obj.id}`,edit);
+      dispatch({ type: EDIT_PRODUCT});
+    } catch (error) {
+      console.log('edit product error --->',error);
+    }
+    
+  };
+};
+export const addImgToProduct = (obj) => {
+  return async function (dispatch) {
+    try { 
+      const data = await axios.post(`https://ecomerce-production-8f61.up.railway.app/products/add_image`,obj)
+      return dispatch({
+        type: ADD_IMG,
+      });
+      //"Imagen añadida correctamente"
+    } catch (error) {
+      console.log("add img products error ===>", error);
+    }
+  };
+};
+export const removeImgToProduct = (obj) => {
+  return async function (dispatch) {
+    try { 
+      const data = await axios.all(products.map((product)=> axios.delete(`https://ecomerce-production-8f61.up.railway.app/products/remove_image`,product)))
+      return dispatch({
+        type: REMOVE_IMG,
+        payload: products,
+      });
+    } catch (error) {
+      console.log("delete img products error ===>", error);
+    }
+  };
+};

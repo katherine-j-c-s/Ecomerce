@@ -88,18 +88,38 @@ export default function Details() {
     }, [id, dispatch])
     
     useEffect(() => {
-        if (detail?.image?.[0]) {
-            setFixedImage(detail.image[0])
+        let image = detail.image[0].split('"')
+        console.log(image);
+        if (image[7] !== undefined) {
+            setFixedImage(image[7])
+            console.log(fixedImage)
+        }else{
+            setFixedImage(image[1])
+            console.log(fixedImage)
         }
     }, [detail])
     console.log(detail)
+    console.log(fixedImage);
   return (
     <div className='h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 sm:mt-20'>
         <div className='w-full h-auto flex flex-col sm:flex-row'>
             <div className='basis-[10%] mx-2 sm:mx-10 flex flex-col gap-y-4 sm:gap-y-6'>
                 {detail?.image?.filter(image => image !== fixedImage ).map((ima, index) => {
+                    let img = ima.split('"')
+                    let image = null
+                    if (img[7] !== undefined && img[7].length > 2) {
+                        image = img[7]
+                        console.log(image);
+                    }else if(img[7].length === 2){
+                        let imga = img[8].slice(0,img[8].length -1)
+                        image = imga
+                        console.log(image);
+                    }else{
+                        image = img[1]
+                        console.log(image);
+                    }
                     return(
-                        <img onLoad={()=>setLoadedImage(true)} style={{opacity: loadedImage? 1 : 0, transition: 'opacity 0.3s' }} key={index} onClick={()=> handleFixedImage(ima)} className='w- h-32 object-cover cursor-pointer hover:opacity-[.8]' src={ima} alt="imagendeProducto" />
+                        <img onLoad={()=>setLoadedImage(true)} style={{opacity: loadedImage? 1 : 0, transition: 'opacity 0.3s' }} key={index} onClick={()=> handleFixedImage(image)} className='w- h-32 object-cover cursor-pointer hover:opacity-[.8]' src={image} alt="imagendeProducto" />
                     )
                 })}
             </div>

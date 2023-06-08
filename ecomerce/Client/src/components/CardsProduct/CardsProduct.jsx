@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 export default function CardsProduct({ image, price, name, sideBarMenu, seeDetails }) {
   const [hover, setHover] = useState(false);
-
+  const location = useLocation()
   const handleMouseEnter = () => {
     setHover(true);
   }
@@ -13,14 +14,13 @@ export default function CardsProduct({ image, price, name, sideBarMenu, seeDetai
   }
 
   return (
-    <div className="cursor-pointer" onClick={seeDetails} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div className="cursor-pointer" onClick={location.pathname === '/admin' ? null : seeDetails} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="flex w-64 md:w-72 h-80 lg:h-72 rounded-lg bg-white flex-col relative shadow hover:shadow-xl hover:opacity-[.6] mt-10 overflow-hidden">
         <img
           className={`select-none absolute object-cover h-full w-full left-1/2 transform ${hover ? '-translate-x-1/2 scale-110' : '-translate-x-1/2'} transition-all duration-200 ease-in-out`}
           src={image}
           alt={name}
         />
-
         {sideBarMenu === true ? (
           <article className={`flex flex-row absolute bottom-2 left-1/2 transform -translate-x-1/2 mb-10 space-x-8 w-full justify-center ${hover ? 'text-white' : 'text-bluey'} transition-all duration-200 ease-in-out bg-black bg-opacity-50 p-2 rounded`}>
             <p className="text-2xl font-bold capitalize truncate overflow-hidden">

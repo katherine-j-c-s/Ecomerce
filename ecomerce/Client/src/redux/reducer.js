@@ -11,6 +11,8 @@ import {
   LOG_OUT,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
+  CLEAR_PRODUCT_TO_EDIT,
+  PRODUCT_TO_EDIT,
 } from "./types";
 
 const initialState = {
@@ -18,12 +20,12 @@ const initialState = {
   created: [],
   productsFiltered: [],
   productDetail: [],
+  productToEdit: {},
   filtros: [],
   access: false,
   sizes: [],
   categories: [],
   colors: [],
-  
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -35,6 +37,10 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         created: listCreated,
       }
+    case PRODUCT_TO_EDIT:
+      return { ...state, productToEdit: action.payload };
+    case CLEAR_PRODUCT_TO_EDIT:
+      return {...state, productToEdit: {}}
     case GET_ALL_PRODUCTS:
       return { ...state, products: action.payload};
     case GET_PRODUCT_BY_ID:
