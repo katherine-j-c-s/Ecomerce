@@ -85,8 +85,6 @@ const failure = async (dni) => {
     })
   );
 
-  orden.destroy();
-
   return dni;
 };
 
@@ -94,7 +92,7 @@ const success = async (dni) => {
   const orden = await Order.findOne({
     where: {
       dni: dni,
-      status: "in_process",
+      status: "in_process" || "rejected",
     },
   });
 
