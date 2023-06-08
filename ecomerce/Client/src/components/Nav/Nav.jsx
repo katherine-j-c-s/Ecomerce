@@ -2,10 +2,10 @@ import styles from "../Nav/Nav.module.css";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import homeLogo from "../../assets/ecomerceLogo.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { logOut } from "../../redux/actions";
+import { logOut, getUserId } from "../../redux/actions";
 import { Cart, LogOut } from "iconoir-react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -19,6 +19,12 @@ export default function Nav() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("userId");
+    dispatch(getUserId(userId));
+  }, []);
 
   const toggleSideBar = () => {
     setSideBarIsOpen(!sideBarIsOpen);
@@ -104,7 +110,7 @@ export default function Nav() {
                     className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                   >
                     <img
-                      src={image}
+                      src={image.url || image}
                       alt="profile picture logo"
                       className={styles.userProfile}
                     />
@@ -231,7 +237,7 @@ export default function Nav() {
                   className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                 >
                   <img
-                    src={image}
+                    src={image.url}
                     alt="profile picture logo"
                     className={styles.userProfile}
                   />

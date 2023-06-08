@@ -9,6 +9,7 @@ import {
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
+  USER_BY_ID,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
 } from "./types";
@@ -88,25 +89,27 @@ const rootReducer = (state = initialState, action) => {
       };
     }
     case SIGN_IN:
+      const imageObj = JSON.parse(action.payload.image);
       return {
         ...state,
         userData: {
-          id: "",
-          image: "",
-          name: "",
-          lastName: "",
-          email: "",
-          password: "",
+          id: action.payload.id,
+          image: imageObj,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
           access: true,
         },
       };
 
     case SIGN_UP:
+      const imageObj2 = JSON.parse(action.payload.image);
       return {
         ...state,
         userData: {
           id: action.payload.id,
-          image: action.payload.image,
+          image: imageObj2,
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
@@ -126,6 +129,20 @@ const rootReducer = (state = initialState, action) => {
           email: "",
           password: "",
           access: false,
+        },
+      };
+
+    case USER_BY_ID:
+      return {
+        ...state,
+        userData: {
+          id: action.payload.id,
+          image: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: "",
+          access: true,
         },
       };
     case AGREGAR_FILTRO:

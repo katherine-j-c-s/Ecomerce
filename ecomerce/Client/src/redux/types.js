@@ -22,3 +22,4 @@ export const RESTAR_PRODUCT = "RESTAR_PRODUCT";
 export const SIGN_IN = "SIGN_IN";
 export const SIGN_UP = "SIGN_UP";
 export const LOG_OUT = "LOG_OUT";
+export const USER_BY_ID = "USER_BY_ID";

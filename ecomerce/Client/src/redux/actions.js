@@ -8,6 +8,7 @@ import {
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
+  USER_BY_ID,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
   ADD_PRODUCT,
@@ -44,6 +45,16 @@ export function logOut() {
     axios.post("https://ecomerce-production-8f61.up.railway.app/users/logout");
 
     return dispatch({ type: LOG_OUT });
+  };
+}
+
+export function getUserId(id) {
+  return async function (dispatch) {
+    let { data } = await axios(
+      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
+    );
+
+    return dispatch({ type: USER_BY_ID, payload: data });
   };
 }
 

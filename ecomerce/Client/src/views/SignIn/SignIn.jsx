@@ -97,6 +97,24 @@ export default function SignIn() {
             <Toaster />
           </div>
 
+          <div className="flex items-center justify-center">
+            <button
+              className="px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-bluey hover:border-slate-400 hover:text-white hover:shadow transition duration-150"
+              onClick={() =>
+                (window.location.href =
+                  "https://ecomerce-production-8f61.up.railway.app/users/google")
+              }
+            >
+              <img
+                className="w-6 h-6"
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                loading="lazy"
+                alt="google logo"
+              />
+              <span>Login with Google</span>
+            </button>
+          </div>
+
           <form
             className="flex flex-col items-center justify-center"
             onSubmit={handleSubmit}
