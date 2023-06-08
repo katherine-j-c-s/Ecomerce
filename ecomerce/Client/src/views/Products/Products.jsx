@@ -75,15 +75,20 @@ export default function Products() {
 
                     />
                 </div>
-                <div className='w-full lg:w-3/4 h-auto grid grid-cols-1 lg:grid-cols-3 gap-2 items-center flex flex-wrap' >
+                <div className='w-full lg:w-3/4 h-auto grid grid-cols-1 lg:grid-cols-3 gap-2 items-center flex-wrap' >
                     {products.map((product, index) => {
+                        let imgAdded = product.image.map(img =>{
+                            if(img.url){
+                                return img.url
+                            }
+                        })
                         return(
                             <div key={index} className='flex justify-center'>
                                 <CardsProduct 
                                     key={product.id}
                                     name={product.name} 
                                     price={product.price} 
-                                    image={product.image?.[0]} 
+                                    image={imgAdded[0] !== undefined ? imgAdded[0] : product.image?.[0]} 
                                     seeDetails={() => go(`/product/${product.id}`)}  
                                 />
                             </div>
