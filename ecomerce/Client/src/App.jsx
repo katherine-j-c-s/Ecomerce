@@ -1,6 +1,7 @@
 import "./App.css";
 
 import { Routes, Route, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 import ViewHome from "./views/Home/ViewHome";
 import Nav from "./components/Nav/Nav";
@@ -16,9 +17,11 @@ import Profile from "./views/Profile/Profile";
 function App() {
   const location = useLocation();
 
+  const { enable } = useSelector((state) => state.sideBarCar);
+
   return (
     <>
-      {/* <SideBarCar /> */}
+      {enable ? <SideBarCar /> : null}
       {location.pathname === "/signIn" ||
       location.pathname === "/signUp" ||
       location.pathname === "/admin" ? null : (
