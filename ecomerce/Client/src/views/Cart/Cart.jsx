@@ -15,7 +15,7 @@ export default function Cart() {
     const [payForm, setPayForm] = useState({
         first_name:'',
         last_name: '',
-        dni: '',
+        dni: 0,
         address: '',
         phone: '',
         postal: '',
@@ -28,7 +28,7 @@ export default function Cart() {
     const [errors, setErrors] = useState({
         first_name:'',
         last_name: '',
-        dni: '',
+        dni: 0,
         phone: '',
         postal: '',
         address: '',
@@ -65,7 +65,7 @@ export default function Cart() {
             newErrors.last_name = "Mínimo 3 caracteres";
         }
         
-        if (!form.dni || form.dni.length !== 8) {
+        if (!form.dni ) {
             newErrors.dni = "El DNI debe tener 8 caracteres";
         }
         
