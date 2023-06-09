@@ -38,10 +38,9 @@ const createOrder = async (carrito) => {
           id: item.id,
         },
       });
-      console.log("antes --->" + producto.stock);
-      console.log(item.quantity);
+
       producto.stock = producto.stock - item.quantity;
-      console.log("despues --->" + producto.stock);
+
       await producto.save();
     })
   );
@@ -51,10 +50,11 @@ const createOrder = async (carrito) => {
   const result = await mercadoPago.preferences.create({
     items: items,
     back_urls: {
-      success: `http://localhost:3001/payment/success/${dni}`,
-      failure: `http://localhost:3001/payment/failure/${dni}`,
+      success: `https://ecomerce-production-8f61.up.railway.app/payment/success/${dni}`,
+      failure: `https://ecomerce-production-8f61.up.railway.app/payment/failure/${dni}`,
     },
-    notification_url: "https://d01e-200-123-44-178.sa.ngrok.io/payment/webhook",
+    notification_url:
+      "https://ecomerce-production-8f61.up.railway.app/payment/webhook",
   });
 
   return result.body.init_point;
@@ -75,12 +75,7 @@ const failure = async (dni) => {
           id: item.id,
         },
       });
-      console.log("antes --->" + producto.stock);
-      console.log(item.quantity);
-
       producto.stock = producto.stock + item.quantity;
-
-      console.log("despues --->" + producto.stock);
       await producto.save();
     })
   );
@@ -92,12 +87,16 @@ const success = async (dni) => {
   const orden = await Order.findOne({
     where: {
       dni: dni,
-      status: "in_process" || "rejected",
+      status: {
+        [Op.or]: ["in_process", "rejected"],
+      },
     },
   });
 
-  orden.status = "fullfilled";
-  await orden.save();
+  if (orden) {
+    orden.status = "fullfilled";
+    await orden.save();
+  }
 };
 
 module.exports = {
