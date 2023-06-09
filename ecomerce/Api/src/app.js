@@ -24,6 +24,7 @@ app.use(
       "http://localhost:5173",
       "https://sportwear.vercel.app",
       "http://localhost:3001",
+      "https://ecomerce-production-8f61.up.railway.app",
     ],
 
     credentials: true,

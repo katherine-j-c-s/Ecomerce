@@ -51,10 +51,11 @@ const createOrder = async (carrito) => {
   const result = await mercadoPago.preferences.create({
     items: items,
     back_urls: {
-      success: `http://localhost:3001/payment/success/${dni}`,
-      failure: `http://localhost:3001/payment/failure/${dni}`,
+      success: `https://ecomerce-production-8f61.up.railway.app/success/${dni}`,
+      failure: `https://ecomerce-production-8f61.up.railway.app/payment/failure/${dni}`,
     },
-    notification_url: "https://d01e-200-123-44-178.sa.ngrok.io/payment/webhook",
+    notification_url:
+      "https://ecomerce-production-8f61.up.railway.app/payment/webhook",
   });
 
   return result.body.init_point;
