@@ -149,6 +149,7 @@ export const addProduct = (obj) => {
     };
     return prodct;
   });
+  console.log(products);
   return async function (dispatch) {
     try {
       const data = await axios.all(
@@ -164,7 +165,7 @@ export const addProduct = (obj) => {
         payload: products,
       });
     } catch (error) {
-      console.log("add products error ===>", error);
+      console.error("add products error ===>", error);
     }
   };
 }
