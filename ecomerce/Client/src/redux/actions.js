@@ -4,6 +4,7 @@ import {
   LOG_OUT,
   ADD_IMG,
   REMOVE_IMG,
+  USER_BY_ID,
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
@@ -73,26 +74,25 @@ export const agregarFiltro = (filtro) => {
     dispatch({ type: AGREGAR_FILTRO, payload: filtro });
 
     const { filtros } = getState();
-    localStorage.setItem('filtrosLocal', JSON.stringify(filtros));
+    localStorage.setItem("filtrosLocal", JSON.stringify(filtros));
   };
-}
+};
 export const removerFiltro = (filtro) => {
   return (dispatch, getState) => {
     dispatch({ type: REMOVER_FILTRO, payload: filtro });
 
     const { filtros } = getState();
-    localStorage.setItem('filtrosLocal', JSON.stringify(filtros));
+    localStorage.setItem("filtrosLocal", JSON.stringify(filtros));
   };
-}
-export const getFilters = (filtro) => {
-  return async function(dispatch){
-    const Data = await axios.get(`/${filtro}`)
-    const FilterData = Data.data
-    dispatch({type: GET_FILTERS, payload: [`${filtro}` ,FilterData]})
-   
+};
 
-  }
-}
+export const getFilters = (filtro) => {
+  return async function (dispatch) {
+    const Data = await axios.get(`/${filtro}`);
+    const FilterData = Data.data;
+    dispatch({ type: GET_FILTERS, payload: [`${filtro}`, FilterData] });
+  };
+};
 
 ////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////////SIGN IN & UP////
 
@@ -123,11 +123,20 @@ export function logOut() {
     return dispatch({ type: LOG_OUT });
   };
 }
+export function getUserId(id) {
+  return async function (dispatch) {
+    let { data } = await axios(
+      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
+    );
+
+    return dispatch({ type: USER_BY_ID, payload: data });
+  };
+}
 
 ////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////
 
 export const addProduct = (obj) => {
-  let products = obj.type.map(t=>{
+  let products = obj.type.map((t) => {
     let prodct = {
       name: obj.nombre,
       price: Number(obj.precio),
@@ -136,13 +145,20 @@ export const addProduct = (obj) => {
       stock: Number(t.cantidad),
       color: t.color,
       category: obj.categoria,
-      size: t.talla
-    }
-    return prodct
-  })
+      size: t.talla,
+    };
+    return prodct;
+  });
   return async function (dispatch) {
-    try { 
-      const data = await axios.all(products.map((product)=> axios.post(`https://ecomerce-production-8f61.up.railway.app/products/create_product`,product)))
+    try {
+      const data = await axios.all(
+        products.map((product) =>
+          axios.post(
+            `https://ecomerce-production-8f61.up.railway.app/products/create_product`,
+            product
+          )
+        )
+      );
       return dispatch({
         type: ADD_PRODUCT,
         payload: products,

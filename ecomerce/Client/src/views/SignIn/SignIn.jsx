@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { signIn } from "../../redux/actions";
+import toast, { Toaster } from "react-hot-toast";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
@@ -54,6 +55,23 @@ export default function SignIn() {
   }
   function handleSubmit(e) {
     e.preventDefault();
+
+    dispatch(signIn({ mail: inputs.email, password: inputs.password }))
+      .then((r) => {
+        console.log(r);
+        toast.success("Bievenido de vuelta!", { duration: 2000 });
+
+        setTimeout(() => {
+          toast.remove();
+          navigate("/");
+        }, 3000);
+      })
+      .catch((err) => {
+        err.message === "Network Error"
+          ? toast.error("Ups, creo que hubo un error de servidor")
+          : toast.error("Este usuario no existe");
+      });
+
     if (Object.keys(errors).length === 0) {
       setInputs({
         email: "",
@@ -63,10 +81,6 @@ export default function SignIn() {
         email: "",
         password: "",
       });
-
-      dispatch(signIn({ mail: inputs.email, password: inputs.password }));
-
-      navigate("/");
     }
   }
   return (
@@ -75,8 +89,32 @@ export default function SignIn() {
         <Link to={"/"}>
           <p className="text-white relative top-4 left-10 w-fit">Go Back</p>
         </Link>
+
         <div className="mt-20">
           <h2 className="mb-16 font-bold text-3xl">Sign In</h2>
+
+          <div>
+            <Toaster />
+          </div>
+
+          <div className="flex items-center justify-center">
+            <button
+              className="px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-bluey hover:border-slate-400 hover:text-white hover:shadow transition duration-150"
+              onClick={() =>
+                (window.location.href =
+                  "https://ecomerce-production-8f61.up.railway.app/users/google")
+              }
+            >
+              <img
+                className="w-6 h-6"
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                loading="lazy"
+                alt="google logo"
+              />
+              <span>Login with Google</span>
+            </button>
+          </div>
+
           <form
             className="flex flex-col items-center justify-center"
             onSubmit={handleSubmit}

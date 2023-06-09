@@ -30,7 +30,10 @@ export const CLEAR_PRODUCT_TO_EDIT = "CLEAR_PRODUCT_TO_EDIT"
 //SIDEBAR CLIENT 
 export const SHOW_SIDEBAR = "SHOW_SIDEBAR";
 
-//SING IN AND UP 
+//SING IN, UP AND OUT
 export const SIGN_IN = "SIGN_IN";
-export const SIGN_UP = "SIGN_IN";
+export const SIGN_UP = "SIGN_UP";
 export const LOG_OUT = "LOG_OUT";
+
+//USER DETAIL
+export const USER_BY_ID = "USER_BY_ID";
