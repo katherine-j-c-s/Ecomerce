@@ -1,24 +1,32 @@
 import CardsProduct from "../CardsProduct/CardsProduct";
 import styles from "../sideBarCar/SideBarCar.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const products = [
-  {
-    id: 1,
-    name: "Zapatillas",
-    price: 1000,
-    image:
-      "https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..",
-  },
-  {
-    id: 2,
-    name: "Zapatillas",
-    price: 1000,
-    image:
-      "https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..",
-  },
-];
+import {
+  addQuantityProduct,
+  deleteQuantityProduct,
+  disableCart,
+} from "../../redux/actions";
 
 export default function SideBarCar() {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const { products } = useSelector((state) => state.sideBarCar);
+
+  const { total } = useSelector((state) => state.sideBarCar);
+
+  const { access } = useSelector((state) => state.userData);
+
+  function handleBuy() {
+    if (access === false) {
+      navigate("/signIn");
+      dispatch(disableCart());
+    }
+  }
+
   return (
     <aside className={styles.sideMenu}>
       <ul className="p-4 flex items-center justify-between ">
@@ -41,28 +49,30 @@ export default function SideBarCar() {
                 strokeLinejoin="round"
               ></path>
             </svg>
-            <p className="text-black font-bold">2</p>
+            <p className="text-black font-bold">{products.length}</p>
           </article>
         </li>
 
         <li>
-          <svg
-            width="24px"
-            height="24px"
-            strokeWidth="1.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            color="#000000"
-          >
-            <path
-              d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243"
-              stroke="#000000"
+          <button onClick={() => dispatch(disableCart())}>
+            <svg
+              width="24px"
+              height="24px"
               strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-          </svg>
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              color="#000000"
+            >
+              <path
+                d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243"
+                stroke="#000000"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+            </svg>
+          </button>
         </li>
       </ul>
 
@@ -85,14 +95,17 @@ export default function SideBarCar() {
                   {product.name}
                 </h2>
                 <p className="text-gray-600 lg:text-center">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  {product.description}
                 </p>
 
                 <p className="text-gray-600 font-bold uppercase text-lg">xl</p>
 
                 <ul className="flex flex-wrap items-center jusfity-center gap-4">
                   <li>
-                    <button className="p-2 bg-bluey rounded-full">
+                    <button
+                      className="p-2 bg-bluey rounded-full"
+                      onClick={() => dispatch(addQuantityProduct(i))}
+                    >
                       <svg
                         width="24px"
                         height="24px"
@@ -114,11 +127,16 @@ export default function SideBarCar() {
                   </li>
 
                   <li>
-                    <p className="text-gray-600 font-bold text-lg">2</p>
+                    <p className="text-gray-600 font-bold text-lg">
+                      {product.quantity}
+                    </p>
                   </li>
 
                   <li>
-                    <button className="p-2 bg-gray-300 rounded-full">
+                    <button
+                      className="p-2 bg-gray-300 rounded-full"
+                      onClick={() => dispatch(deleteQuantityProduct(i))}
+                    >
                       <svg
                         width="24px"
                         height="24px"
@@ -143,8 +161,11 @@ export default function SideBarCar() {
             </article>
           );
         })}
-        <button className="px-8 rounded-sm bg-bluey capitalize lg:relative left-40">
-          comprar $50.000
+        <button
+          className="px-8 rounded-sm bg-bluey capitalize lg:relative left-40"
+          onClick={handleBuy}
+        >
+          comprar ${total}
         </button>
       </section>
     </aside>

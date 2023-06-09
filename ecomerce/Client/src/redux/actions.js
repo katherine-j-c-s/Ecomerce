@@ -1,4 +1,9 @@
 import {
+  SHOW_SIDEBAR,
+  DISABLE_CART,
+  ADD_PRODUCT_CART,
+  ADD_QUANTITY,
+  DELETE_QUANTITY,
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
@@ -11,9 +16,9 @@ import {
   EDIT_PRODUCT,
   DELETE_PRODUCT,
   AGREGAR_FILTRO,
-  REMOVER_FILTRO, 
+  REMOVER_FILTRO,
   PRODUCT_TO_EDIT,
-  FILTER_PRODUCTS, 
+  FILTER_PRODUCTS,
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
@@ -27,23 +32,23 @@ axios.defaults.baseURL = "https://ecomerce-production-8f61.up.railway.app/";
 ////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////////PRODUCTS////
 
 export const getAllProducts = () => {
-  return async  function(dispatch){
-    let Data = await axios.get("/products/get_products")
-    const Products = Data.data
+  return async function (dispatch) {
+    let Data = await axios.get("/products/get_products");
+    const Products = Data.data;
 
     //Leemos filtros desde local storage
-    const filtrosAlmacenados = localStorage.getItem('filtrosLocal')
-    let filtros = []
-    if(filtrosAlmacenados){
-      filtros = JSON.parse(filtrosAlmacenados)
+    const filtrosAlmacenados = localStorage.getItem("filtrosLocal");
+    let filtros = [];
+    if (filtrosAlmacenados) {
+      filtros = JSON.parse(filtrosAlmacenados);
     }
-    dispatch({type: GET_ALL_PRODUCTS, payload: Products})
+    dispatch({ type: GET_ALL_PRODUCTS, payload: Products });
     //Si hay filtros almacenados, despachamos una accion
-    if(filtros.length > 0){
-      dispatch({type: SET_FILTERS, payload: filtros})
+    if (filtros.length > 0) {
+      dispatch({ type: SET_FILTERS, payload: filtros });
     }
-  }
-}
+  };
+};
 export const getProductById = (id) => {
   return async function (dispatch) {
     const Data = await axios.get(`products/get_product/${id}`);
@@ -52,7 +57,7 @@ export const getProductById = (id) => {
   };
 };
 
-export const clearProductDetail = () => ({ type: CLEAR_PRODUCT_DETAIL  });
+export const clearProductDetail = () => ({ type: CLEAR_PRODUCT_DETAIL });
 
 ////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////////FILTERS////
 
@@ -133,6 +138,31 @@ export function getUserId(id) {
   };
 }
 
+////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////
+
+export function showCart() {
+  return { type: SHOW_SIDEBAR };
+}
+
+export function disableCart() {
+  return { type: DISABLE_CART };
+}
+
+export function addProductCart(product) {
+  return {
+    type: ADD_PRODUCT_CART,
+    payload: product,
+  };
+}
+
+export function addQuantityProduct(id) {
+  return { type: ADD_QUANTITY, payload: id };
+}
+
+export function deleteQuantityProduct(id) {
+  return { type: DELETE_QUANTITY, payload: id };
+}
+
 ////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////////POST_DETELE_PRODUCT////
 
 export const addProduct = (obj) => {
@@ -168,7 +198,7 @@ export const addProduct = (obj) => {
       console.error("add products error ===>", error);
     }
   };
-}
+};
 export const deleteProductById = (id) => {
   return async function (dispatch) {
     try {
@@ -200,24 +230,29 @@ export const editProduct = (obj) => {
     stock: obj.stock,
     color: obj.color,
     category: obj.category,
-    size: obj.size
-  }
+    size: obj.size,
+  };
   console.log(edit);
   console.log(obj.id);
   return async function (dispatch) {
     try {
-      const data = await axios.patch(`https://ecomerce-production-8f61.up.railway.app/products/update_product/${obj.id}`,edit);
-      dispatch({ type: EDIT_PRODUCT});
+      const data = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/products/update_product/${obj.id}`,
+        edit
+      );
+      dispatch({ type: EDIT_PRODUCT });
     } catch (error) {
-      console.log('edit product error --->',error);
+      console.log("edit product error --->", error);
     }
-    
   };
 };
 export const addImgToProduct = (obj) => {
   return async function (dispatch) {
-    try { 
-      const data = await axios.post(`https://ecomerce-production-8f61.up.railway.app/products/add_image`,obj)
+    try {
+      const data = await axios.post(
+        `https://ecomerce-production-8f61.up.railway.app/products/add_image`,
+        obj
+      );
       return dispatch({
         type: ADD_IMG,
       });
@@ -229,10 +264,13 @@ export const addImgToProduct = (obj) => {
 };
 export const removeImgToProduct = (obj) => {
   return async function (dispatch) {
-    try { 
-      const data = await axios.delete(`https://ecomerce-production-8f61.up.railway.app/products/remove_image`,obj)
+    try {
+      const data = await axios.delete(
+        `https://ecomerce-production-8f61.up.railway.app/products/remove_image`,
+        obj
+      );
       return dispatch({
-        type: REMOVE_IMG
+        type: REMOVE_IMG,
       });
     } catch (error) {
       console.log("delete img products error ===>", error);
