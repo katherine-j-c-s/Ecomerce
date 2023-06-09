@@ -24,6 +24,10 @@ export default function SideBarCar() {
     if (access === false) {
       navigate("/signIn");
       dispatch(disableCart());
+    } else{
+      navigate("/cart")
+      dispatch(disableCart());
+
     }
   }
 

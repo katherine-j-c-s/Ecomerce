@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function Inputs({title,value , inputName, inputPlaceholder, titleWidth, handleChange, errors}) {
+
   return (
-    <div className="flex flex-col justify-center w-full relative mb-6">
+    <div className={errors[inputName]?.length > 0 ? 'flex flex-col justify-center w-full relative md:mb-6 mb-10' : 'flex flex-col justify-center w-full relative md:mb-6 mb-6'}>
         <label className={`absolute w-${titleWidth} bg-white h-fit bottom-10 left-8 text-cyan-400`}>
             {title}{" "}
         </label>
@@ -15,5 +16,6 @@ export default function Inputs({title,value , inputName, inputPlaceholder, title
         ></input>
         <span className={errors[inputName]?.length > 0 ? 'flex flex-block text-red-600 text-xs left-2 -bottom-4 absolute' : 'flex flex-none'}>{errors[inputName]}</span>
     </div>
+
   )
 }
