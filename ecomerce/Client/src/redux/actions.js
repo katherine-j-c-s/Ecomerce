@@ -227,6 +227,7 @@ export const addImgToProduct = (obj) => {
   };
 };
 export const removeImgToProduct = (obj) => {
+  console.log(obj);
   return async function (dispatch) {
     try { 
       const data = await axios.delete(`https://ecomerce-production-8f61.up.railway.app/products/remove_image`,obj)
