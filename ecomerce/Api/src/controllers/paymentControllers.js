@@ -38,10 +38,9 @@ const createOrder = async (carrito) => {
           id: item.id,
         },
       });
-      console.log("antes --->" + producto.stock);
-      console.log(item.quantity);
+
       producto.stock = producto.stock - item.quantity;
-      console.log("despues --->" + producto.stock);
+
       await producto.save();
     })
   );
