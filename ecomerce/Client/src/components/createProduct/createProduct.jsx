@@ -3,7 +3,7 @@ import swal from 'sweetalert';
 import edit from '../../assets/edit.png'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addImgToProduct, addProduct, editProduct } from '../../redux/actions';
+import { addImgToProduct, addProduct, editProduct, removeImgToProduct } from '../../redux/actions';
 import { useState } from 'react';
 import vectorAdd from '../../assets/VectorAdd.png'
 
@@ -52,6 +52,7 @@ const CreateProduct = ()=>{
     const [talla,setTalla] = useState('')
     
     const [img, setImg] = useState('')
+    const [imgToRemove, setImgToRemove]= useState([])
     const [type, setType] = useState({
         id:0,
         color:'',
@@ -77,29 +78,25 @@ const CreateProduct = ()=>{
         if (Object.keys(productToEdit).length > 0) {
             console.log(productToEdit);
             let img = []
-            productToEdit.image.map(i=> {
-                let images = i.split('"')
-                if (images[7] !== undefined && images[7].length > 2) {
-                    img.push(images[7])
-                }else if(images[7].length === 2){
-                    let imga = images[8].slice(0,images[8].length -1)
-                    img.push(imga)
+            productToEdit?.image.map(i=> {
+                if (i.url !== undefined ) {
+                    img.push(i.url)
                 }else{
-                    img.push(images[1])
+                    img.push(i)
                 }
             })
+            console.log(img);
             let type = [{
-                id:productToEdit.id,
-                color:productToEdit.color,
-                talla:productToEdit.size,
-                cantidad:productToEdit.stock,
+                id:productToEdit?.id,
+                color:productToEdit?.color,
+                talla:productToEdit?.size,
+                cantidad:productToEdit?.stock,
             }]
             setInputs({
-                ...inputs,
-                nombre: productToEdit.name,
-                desc: productToEdit.description,
-                precio: productToEdit.price,
-                categoria:productToEdit.category,
+                nombre: productToEdit?.name,
+                desc: productToEdit?.description,
+                precio: productToEdit?.price,
+                categoria:productToEdit?.category,
                 imagenes: img,
                 type:type
             })
@@ -154,6 +151,8 @@ const CreateProduct = ()=>{
     }
     function deleteImg(e) {
         let img = e.target.id
+        let remove = inputs.imagenes.find(i=> i === img)
+        imgToRemove.push(remove)
         let newlist = inputs.imagenes.filter(i=> i !== img)
         setInputs({...inputs, imagenes: newlist})
     }
@@ -266,6 +265,14 @@ const CreateProduct = ()=>{
                     let newImgs = inputs.imagenes.slice(productToEdit.image.length, inputs.imagenes.length)
                     let add = {id:productToEdit.id,image:newImgs}
                     dispatch(addImgToProduct(add))
+                }else if (inputs.imagenes.length < productToEdit.image.length) {
+                    imgToRemove.map(i=> {
+                        let remove = {
+                            id: Number(productToEdit.id),
+                            image: i
+                        }
+                        dispatch(removeImgToProduct(remove))
+                    })
                 }
                 let edit = {
                     id: productToEdit.id,
@@ -328,6 +335,7 @@ const CreateProduct = ()=>{
                                         onChange={handleChange}
                                         placeholder="Zapatillas Nike"
                                     ></input>
+                                    {console.log(inputs)}
                                     {ready === false ?
                                         <p className='text-red-500 relative bottom-0 md:bottom-2'>{errors.nombre}</p>
                                     :null}
@@ -490,14 +498,14 @@ const CreateProduct = ()=>{
                                         console.log(img);
                                         return(
                                             <div>
-                                               <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
-                                                    <img src={img} alt="imagen" />
-                                                </div> 
-                                                <div className="mt-2 mx-auto w-fit h-fit hover:bg-sky-300 rounded-full hover:shadow-xl transition-all p-2.5"> 
+                                                <div className="mt-2 relative z-10 mx-auto w-fit h-fit hover:bg-sky-300 rounded-full hover:shadow-xl transition-all p-2.5"> 
                                                     <svg onClick={deleteImg} id={img} width="24px" height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                                                         <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
                                                     </svg>
                                                 </div>
+                                               <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
+                                                    <img src={img} alt="imagen" />
+                                                </div> 
                                             </div>
                                         )
                                     })

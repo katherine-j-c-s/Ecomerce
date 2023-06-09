@@ -49,7 +49,7 @@ export default function Products() {
                         options={{
                             title: 'Categoría',
                             name: 'category',
-                            items: categories.map(item => item.name)
+                            items: categories?.map(item => item.name)
                         }}
                         isOpen={false}
                         filtros={filtros}
@@ -59,7 +59,7 @@ export default function Products() {
                         options={{
                             title: 'Tallas',
                             name: 'size', 
-                            items: sizes.map(item => item.size)
+                            items: sizes?.map(item => item.size)
                         }}
                         filtros={filtros}
                         isOpen={false}
@@ -68,7 +68,7 @@ export default function Products() {
                         options={{
                             title: 'Color',
                             name: 'color',
-                            items: colors.map(item => item.color)
+                            items: colors?.map(item => item.color)
                         }}
                         isOpen={false}
                         filtros={filtros}
@@ -76,13 +76,12 @@ export default function Products() {
                     />
                 </div>
                 <div className='w-full lg:w-3/4 h-auto grid grid-cols-1 lg:grid-cols-3 gap-2 items-center flex-wrap' >
-                    {products.map((product, index) => {
+                    {products?.map((product, index) => {
                         let imgAdded = product.image.map(img =>{
-                            let imgs = img.split('"')
-                            if(imgs[7] !== undefined){
-                                return imgs[7]
+                            if(img.url !== undefined){
+                                return img.url
                             }else {
-                                return imgs[1]
+                                return img
                             }
                         })
                         return(

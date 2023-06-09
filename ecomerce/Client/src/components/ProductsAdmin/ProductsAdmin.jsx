@@ -50,14 +50,13 @@ export default function ProductsAdmin() {
           <p className='mt-2'>Agregar</p>
         </div>
       </Link>
-      {products.map((product, index) => {
+      {products?.map((product, index) => {
         let imagenes = product.image.map(i=>{
-          let img = i.split('"')
-          console.log(img[1]);
-          if(img[7] !== undefined){
-            return img[7]
+          console.log(i);
+          if(i.url !== undefined){
+            return i.url
           }else {
-            return img[1]
+            return i
           }
           // if (i.url !== undefined) {
           //   return i.url

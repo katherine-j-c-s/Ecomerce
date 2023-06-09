@@ -213,10 +213,9 @@ export const addImgToProduct = (obj) => {
 export const removeImgToProduct = (obj) => {
   return async function (dispatch) {
     try { 
-      const data = await axios.all(products.map((product)=> axios.delete(`https://ecomerce-production-8f61.up.railway.app/products/remove_image`,product)))
+      const data = await axios.delete(`https://ecomerce-production-8f61.up.railway.app/products/remove_image`,obj)
       return dispatch({
-        type: REMOVE_IMG,
-        payload: products,
+        type: REMOVE_IMG
       });
     } catch (error) {
       console.log("delete img products error ===>", error);
