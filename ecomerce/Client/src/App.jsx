@@ -50,6 +50,7 @@ function App() {
       {/* <SideBarCar /> */}
       {location.pathname === "/signIn" ||
       location.pathname === "/signUp" ||
+      location.pathname === "/cart" ||
       location.pathname === "/admin" ? null : (
         <Nav />
       )}
@@ -70,6 +71,7 @@ function App() {
       {location.pathname === "/signIn" ||
       location.pathname === "/signUp" ||
       location.pathname === "/profile" ||
+      location.pathname === "/cart" ||
       location.pathname === "/admin" ? null : (
         <Footer />
       )}
