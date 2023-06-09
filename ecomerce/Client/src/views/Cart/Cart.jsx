@@ -3,9 +3,10 @@ import Inputs from '../../components/Inputs/Inputs'
 import CartProducts from '../../components/CartProducts/CartProducts'
 import axios from 'axios'
 import Flags from '../../components/Flags/Flags'
+import {useSelector} from 'react-redux'
 export default function Cart() {
     
-
+    const productsCart = useSelector(state => state.sideBarCar)
     const [saveInfo, setSaveInfo] = useState(false)
 
     const [isOpen, setIsOpen] = useState(false)
@@ -18,7 +19,6 @@ export default function Cart() {
         address: '',
         phone: '',
         postal: '',
-        total: 100,
         locality: '',
         currency_id: '',
         
@@ -32,7 +32,6 @@ export default function Cart() {
         phone: '',
         postal: '',
         address: '',
-        total: 100,
         locality: '',
         currency_id: '',
     })
@@ -94,28 +93,16 @@ export default function Cart() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const arraytest = {...payForm, products: [
-            {
-                id: 9,
-                name:'Zapatillas',
-                price: '500',
-                quantity: 10,
-
-            }
-        ], }
-        console.log(arraytest)
+        const arraytest = {...payForm, products: productsCart.products, total: productsCart.total }
+        console.log("array a enviar",arraytest)
         axios.post('/payment/create-order', arraytest)
         .then(res => console.log(res))
-        alert('all good')
     }
     
     useEffect(() => {
         const savedPayForm = localStorage.getItem('payForm');
         if (savedPayForm) {
             const parsedSavedPayForm = JSON.parse(savedPayForm);
-            if (parsedSavedPayForm.total < 10000) {
-                parsedSavedPayForm.total = 10000;
-            }
             setPayForm(parsedSavedPayForm);
             validate(parsedSavedPayForm);
             setSaveInfo(true);
@@ -123,13 +110,14 @@ export default function Cart() {
     }, []);
 
     useEffect(() => {
-        console.log(payForm)
         if (saveInfo) {
-            localStorage.setItem('payForm', JSON.stringify(payForm));
+            const payFormWithTotal = { ...payForm, total: productsCart.total, products: productsCart.products };
+            localStorage.setItem('payForm', JSON.stringify(payFormWithTotal));
         } else {
             localStorage.removeItem('payForm');
         }
-    }, [saveInfo, payForm]);
+    }, [saveInfo, payForm, productsCart.total]);
+    
       
     return (
         <div className='w-screen h-screen flex flex-row'>
@@ -184,53 +172,35 @@ export default function Cart() {
                     </svg>
                 </div>
                 <div className='h-2/3 w-full overflow-y-auto'>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
+                    {productsCart.products.map((product, index) =>{
+                        return(
+                            <CartProducts key={index} image={product.image} price={product.price} quantity={product.quantity} name={product.name}/>
+                        )
+                    })}
                 </div>
                 <div className='h-[1px] w-full bg-[#8D8D8D] my-6 opacity-70'></div>
                 <div className='h-1/3 w-full flex flex-col text-[#8D8D8D]'>
                     <div className='w-full flex flex-row justify-between items-center'>
-                        <span>Subtotal</span>
-                        <span><strong>$120.000</strong></span>
-                    </div>
-                    <div className='w-full flex flex-row justify-between items-center'>
-                        <span>Envío</span>
-                        <span>$120.000</span>
-                    </div>
-                    <div className='w-full flex flex-row justify-between items-center'>
                         <span><strong>total</strong></span>
-                        <span><strong>$120.000</strong></span>
+                        <span><strong>${productsCart.total}</strong></span>
                     </div>
                 </div>
             </div>}
             {<div className='hidden md:block md:w-1/2 w-full h-screen flex flex-col bg-[#F7F7F7] md:pt-32 pt-20 md:px-20 px-10 fixed right-0 z-50'>
                 <div className='h-2/3 w-full overflow-y-auto'>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
-                    <CartProducts/>
+                    {productsCart.products.map((product, index) =>{
+                        return(
+                            <CartProducts key={index} image={product.image} price={product.price} quantity={product.quantity} name={product.name}/>
+                        )
+                    })}
                 </div>
                 <div className='h-[1px] w-full bg-[#8D8D8D] my-6 opacity-70'></div>
                 <div className='h-1/3 w-full flex flex-col text-[#8D8D8D]'>
-                    <div className='w-full flex flex-row justify-between items-center'>
-                        <span>Subtotal</span>
-                        <span><strong>$120.000</strong></span>
-                    </div>
-                    <div className='w-full flex flex-row justify-between items-center'>
-                        <span>Envío</span>
-                        <span>$120.000</span>
-                    </div>
+                    
+                    
                     <div className='w-full flex flex-row justify-between items-center'>
                         <span><strong>total</strong></span>
-                        <span><strong>$120.000</strong></span>
+                        <span><strong>${productsCart.total}</strong></span>
                     </div>
                 </div>
             </div>}
