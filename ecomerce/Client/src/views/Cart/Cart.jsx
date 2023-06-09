@@ -127,7 +127,7 @@ export default function Cart() {
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" className='w-2 mr-2'>
                             <path fill="currentColor" d="M34.52 239.03L228.87 44.677c9.373-9.373 24.57-9.373 33.941 0l22.667 22.667c9.356 9.357 9.375 24.522.04 33.901l-154.02 154.02 154.02 154.021c9.335 9.379 9.316 24.544-.04 33.901l-22.667 22.667c-9.373 9.373-24.569 9.373-33.941 0L34.52 272.97c-9.373-9.373-9.373-24.569 0-33.94z"/>
                         </svg>
-                        ${payForm.total}
+                        ${productsCart.total}
                     </button>
                 </div>
                 <h1 className='mb-12 mt-6 text-[#8D8D8D] text-3xl'>Información de <strong>envío</strong></h1>
