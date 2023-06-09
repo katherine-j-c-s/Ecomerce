@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProductById, clearProductDetail } from '../../redux/actions'
+import { getProductById, clearProductDetail, productToEdit } from '../../redux/actions'
 
 export default function Details() {
     const dispatch = useDispatch()
@@ -77,7 +77,6 @@ export default function Details() {
     const handleFixedImage = (url) => {
         setFixedImage(url)
     }
-
    
     useEffect(() => {
         dispatch(getProductById(id))
@@ -88,15 +87,15 @@ export default function Details() {
     }, [id, dispatch])
     
     useEffect(() => {
-        let image = detail.image[0].split('"')
+        let image = detail?.image[0]
         console.log(image);
-        if (image[7] !== undefined) {
-            setFixedImage(image[7])
+        if (image.url !== undefined) {
+            setFixedImage(image.url)
             console.log(fixedImage)
         }else{
-            setFixedImage(image[1])
+            setFixedImage(image)
             console.log(fixedImage)
-        }
+        } 
     }, [detail])
     console.log(detail)
     console.log(fixedImage);
@@ -104,19 +103,12 @@ export default function Details() {
     <div className='h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 sm:mt-20'>
         <div className='w-full h-auto flex flex-col sm:flex-row'>
             <div className='basis-[10%] mx-2 sm:mx-10 flex flex-col gap-y-4 sm:gap-y-6'>
-                {detail?.image?.filter(image => image !== fixedImage ).map((ima, index) => {
-                    let img = ima.split('"')
+                {detail?.image.filter(image => image !== fixedImage ).map((ima, index) => {
                     let image = null
-                    if (img[7] !== undefined && img[7].length > 2) {
-                        image = img[7]
-                        console.log(image);
-                    }else if(img[7].length === 2){
-                        let imga = img[8].slice(0,img[8].length -1)
-                        image = imga
-                        console.log(image);
+                    if (ima.url !== undefined) {
+                        image = ima.url
                     }else{
-                        image = img[1]
-                        console.log(image);
+                        image = ima
                     }
                     return(
                         <img onLoad={()=>setLoadedImage(true)} style={{opacity: loadedImage? 1 : 0, transition: 'opacity 0.3s' }} key={index} onClick={()=> handleFixedImage(image)} className='w- h-32 object-cover cursor-pointer hover:opacity-[.8]' src={image} alt="imagendeProducto" />
