@@ -7,12 +7,12 @@ const createOrder = async (carrito) => {
       "TEST-1606124246394165-053111-e5d16fb912668406a6c0f58b0b732c64-1387424624",
   });
 
-  let items = carrito[0].productos.map((element) => {
+  let items = carrito[0].products.map((element) => {
     return {
       title: element.name,
       unit_price: parseInt(element.price),
-      quantity: element.cantidad,
-      currency_id: carrito[0].moneda,
+      quantity: element.quantity,
+      currency_id: carrito[0].currency_id,
       id: element.id,
     };
   });
@@ -21,9 +21,9 @@ const createOrder = async (carrito) => {
 
   await Order.create({
     dni: carrito[0].dni,
-    city: carrito[0].ciudad,
-    address: carrito[0].direccion,
-    phone: carrito[0].numero,
+    city: carrito[0].locality,
+    address: carrito[0].address,
+    phone: carrito[0].phone,
     postal: carrito[0].postal,
     total: carrito[0].total,
     paymentMethod: "Mercado Pago",
@@ -85,8 +85,6 @@ const failure = async (dni) => {
     })
   );
 
-  orden.destroy();
-
   return dni;
 };
 
@@ -94,7 +92,7 @@ const success = async (dni) => {
   const orden = await Order.findOne({
     where: {
       dni: dni,
-      status: "in_process",
+      status: "in_process" || "rejected",
     },
   });
 
