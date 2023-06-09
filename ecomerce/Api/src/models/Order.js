@@ -4,6 +4,7 @@ module.exports = (sequelize) => {
   sequelize.define(
     "Order",
     {
+      dni: { type: DataTypes.INTEGER },
       city: {
         type: DataTypes.STRING,
       },
@@ -26,6 +27,7 @@ module.exports = (sequelize) => {
       paymentMethod: {
         type: DataTypes.STRING,
       },
+      products: { type: DataTypes.ARRAY(DataTypes.JSONB) },
       status: {
         type: DataTypes.ENUM([
           "cart",
@@ -35,6 +37,12 @@ module.exports = (sequelize) => {
           "rejected",
         ]),
         defaultValue: "cart",
+        allowNull: false,
+      },
+      id: {
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         allowNull: false,
       },
     },
