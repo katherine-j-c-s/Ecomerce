@@ -13,6 +13,7 @@ import SignUp from "./views/SignUp/SignUp";
 import Products from "./views/Products/Products";
 import Admin from "./views/Admin/Admin";
 import Profile from "./views/Profile/Profile";
+import Cart from "./views/Cart/Cart";
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,8 @@ function App() {
         <Route path="/product/:id" element={<Details />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/cart" element={<Cart/>} />
+
       </Routes>
       {location.pathname === "/signIn" ||
       location.pathname === "/signUp" ||
