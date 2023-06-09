@@ -9,7 +9,8 @@ const createOrderHandler = async (req, res) => {
   try {
     let car = await req.body;
     let carrito = [];
-    carrito.push(JSON.parse(car));
+    let carri = JSON.parse(car);
+    carrito.push(carri);
     console.log(carrito);
     const createOrders = await createOrder(carrito);
 
