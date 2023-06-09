@@ -1,42 +1,90 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllProducts, productToEdit, deleteProductById } from '../../redux/actions'
 import vectorAdd from '../../assets/VectorAdd.png'
+import edit from '../../assets/edit.png'
 import CardsProduct from '../CardsProduct/CardsProduct'
-const products = [
-  {id:1,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-  {id:2,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-  {id:3,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-  {id:4,name: 'Zapatillas nike negras', price: 1000, image:'https://firebasestorage.googleapis.com/v0/b/app-keepers.appspot.com/o/image-PhotoRoom%207.png?alt=media&token=6ea0c1a8-4f4f-454d-8a01-8358012f4f63&_gl=1*1wkznzv*_ga*MTMyNjgzMDA1LjE2ODAyMzYxMDA.*_ga_CW55HF8NVT*MTY4NTQyNTY3NC4zLjEuMTY4NTQyNTc2My4wLjAuMA..'},
-]
 
 export default function ProductsAdmin() {
+  const dispatch = useDispatch()
+  const {products} = useSelector(state=> state)
+  const [showEdit,setShowEdit] = useState({id:null,show:false})
+  useEffect(()=>{
+    dispatch(getAllProducts())
+  },[])
   const navigate = useNavigate()
-    const go = (ruta) => {
-        navigate(ruta)
-    }
-    const seeDetailsHandler = () => {
-        alert('Shoop')
-    }
+  const go = (ruta) => {
+    navigate(ruta)
+  }
+  const editProduct = (id) => {
+    dispatch(productToEdit(id))
+    go(`/admin?pestaña=editProduct`)
+  }
+  const deleteProduct = (e) => {
+    let id = Number(e.target.id)
+    swal({
+      title: "Estas seguro que quieres borrarlo?",
+      text: "Una ves borrado no podrás recuperar el producto!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        dispatch(deleteProductById(id))
+        swal("El producto se elimino correctamente", {
+          icon: "success",
+        });
+      } else {
+        swal("Your imaginary file is safe!");
+      }
+    });
+  }
   return (
-    <div className='text-black flex flex-wrap'>
+    <div className='text-black flex flex-wrap mt-6 md:mt-0'>
       <Link to={'/admin?pestaña=formProducts'} className=' mx-4 mt-10 w-64 md:w-72 h-72 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
         <div className='flex h-full justify-center align-center flex-col'>
           <img className='w-8 h-8 mx-auto' src={vectorAdd} alt="vector" />
           <p className='mt-2'>Agregar</p>
         </div>
       </Link>
-      {products.map((product, index) => {
+      {products?.map((product, index) => {
+        let imagenes = product.image.map(i=>{
+          console.log(i);
+          if(i.url !== undefined){
+            return i.url
+          }else {
+            return i
+          }
+          // if (i.url !== undefined) {
+          //   return i.url
+          // }else{
+          //   return i
+          // }
+        })
         return(
-          <div className='mx-4'>
+          <div onMouseEnter={()=>setShowEdit({id:product.id,show:true})} onMouseLeave={()=>setShowEdit({id:null,show:false})} key={index} className='flex justify-center mx-4 relative'>
             <CardsProduct 
-                key={product.id}
-                name={product.name} 
-                price={product.price} 
-                image={product.image} 
-                addToCart={seeDetailsHandler} 
-                seeDetails={() => go(`/product/${product.id}`)}  
+              key={product.id}
+              name={product.name} 
+              price={product.price} 
+              image={imagenes[0]} 
+              seeDetails={() => go(`/product/${product.id}`)}  
             />
+            {showEdit.id === product.id ?
+              <div className='flex justify-center absolute w-64 md:w-72 h-80 lg:h-72 rounded-lg bg-gray-500 bottom-0'>
+                  <div onClick={()=> editProduct(showEdit.id)} className='relative cursor-pointer hover:bg-sky-700 hover:shadow-xl transition-all my-auto mr-6 z-10 w-fit h-fit p-4 bg-sky-500 rounded-full'>
+                      <img className=' h-5  w-5' src={edit} alt="" />
+                  </div>
+                  <div onClick={deleteProduct} className="p-2.5 cursor-pointer my-auto border-bluey hover:bg-sky-200 hover:shadow-xl w-fit h-fit border rounded-full">
+                      <svg id={showEdit.id} width="35px" height="35px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                          <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
+                      </svg>
+                  </div>
+              </div>
+            : null}
           </div>
         )
       })}
