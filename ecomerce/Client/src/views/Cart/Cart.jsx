@@ -95,9 +95,17 @@ export default function Cart() {
         e.preventDefault()
         const arraytest = {...payForm, products: productsCart.products, total: productsCart.total }
         console.log("array a enviar",arraytest)
-        axios.post('/payment/create-order', arraytest)
+        axios.post('/payment/create-order', JSON.stringify(arraytest), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         .then(res => console.log(res))
+        .catch(err => {
+            console.log(err.response);  // Esto imprimirá la respuesta del error.
+        });
     }
+    
     
     useEffect(() => {
         const savedPayForm = localStorage.getItem('payForm');
