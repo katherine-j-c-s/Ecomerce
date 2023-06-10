@@ -65,7 +65,7 @@ export default function Cart() {
             newErrors.last_name = "Mínimo 3 caracteres";
         }
         
-        if (!form.dni ) {
+        if (!form.dni || form.dni < 0 ) {
             newErrors.dni = "El DNI debe tener 8 caracteres";
         }
         
@@ -93,8 +93,8 @@ export default function Cart() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const arraytest = {...payForm, products: productsCart.products, total: productsCart.total }
-        console.log("array a enviar",arraytest)
+        const arraytest = {...payForm, products: productsCart.products, total: productsCart.total}
+        console.log("array a enviar",JSON.stringify(arraytest))
         axios.post('/payment/create-order', JSON.stringify(arraytest), {
             headers: {
                 'Content-Type': 'application/json'
@@ -119,7 +119,7 @@ export default function Cart() {
 
     useEffect(() => {
         if (saveInfo) {
-            const payFormWithTotal = { ...payForm, total: productsCart.total, products: productsCart.products };
+            const payFormWithTotal = { ...payForm, total: productsCart.total, products: productsCart.products, dni: Number(payForm.dni) };
             localStorage.setItem('payForm', JSON.stringify(payFormWithTotal));
         } else {
             localStorage.removeItem('payForm');
@@ -144,7 +144,7 @@ export default function Cart() {
                     <Inputs title="Apellidos" value={payForm.last_name} titleWidth="20" inputName="last_name" inputPlaceholder="Pascal Rodriguez"  handleChange={handleChange} errors={errors}/>
                 </div>
                 <div className='flex md:flex-row flex-col w-full'>
-                    <Inputs title="DNI"       value={payForm.dni} titleWidth="16" inputName="dni"       inputPlaceholder="00000000"         handleChange={handleChange} errors={errors}/>
+                    <Inputs title="DNI"       value={payForm.dni} titleWidth="16" inputName="dni"  type="number"     inputPlaceholder="00000000"         handleChange={handleChange} errors={errors}/>
                     <Inputs title="Celular"   value={payForm.phone} titleWidth="20" inputName="phone"     inputPlaceholder="999999999"    handleChange={handleChange} errors={errors}/>
                 </div>
                 <Inputs title="Dirección" value={payForm.address} titleWidth="24" inputName="address"  inputPlaceholder="Dirección 1234 - Piso 1 - Depto. A"    handleChange={handleChange} errors={errors}/>
