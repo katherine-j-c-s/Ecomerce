@@ -4,7 +4,6 @@ import { useState } from "react";
 import { signUp } from "../../redux/actions";
 import { useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
@@ -101,7 +100,7 @@ export default function SignUp() {
       last_name: inputs.apellido,
       address: inputs.address,
       image:
-        inputs?.image ||
+        inputs.image ||
         "https://publicdomainvectors.org/photos/abstract-user-flat-3.png",
       role: "client",
     };
