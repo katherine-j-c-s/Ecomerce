@@ -7,6 +7,7 @@ import CardUserAdmin from '../../components/CardUserAdmin/CardUserAdmin'
 import EditProductForm from '../../components/EditProductForm.jsx/EditProductForm'
 import { useDispatch  } from 'react-redux'
 import { clearProductToEdit } from '../../redux/actions'
+import UserDetailAdmin from '../../components/UserDetailAdmin/UserDetailAdmin'
 
 export default function Admin() {
   let { search } = useLocation();
@@ -22,6 +23,7 @@ export default function Admin() {
       <SidebarAdmin />
       {query === "dashboard" ? <h2 className="text-black">{query}</h2> : null}
       {query === "usuarios" ? <CardUserAdmin/> : null}
+      {query === "usuarioDetail" ? <UserDetailAdmin/> : null}
       {query === "estadisticas" ? (<h2 className="text-black">{query}</h2>) : null}
       {query === "envios" ? <h2 className="text-black">{query}</h2> : null}
       {query === "productos" ? <ProductsAdmin/> : null}

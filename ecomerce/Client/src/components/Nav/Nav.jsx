@@ -14,7 +14,11 @@ export default function Nav() {
   const actualRoute = location.pathname;
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
 
-  const { image, access } = useSelector((state) => state.userData);
+  const { image } = useSelector((state) => state.userData);
+
+  const userInfo = localStorage.getItem("userData");
+
+  const { imageLocal, access } = JSON.parse(userInfo);
 
   const dispatch = useDispatch();
 
@@ -23,7 +27,9 @@ export default function Nav() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("userId");
-    dispatch(getUserId(userId));
+    if (userId) {
+      dispatch(getUserId(userId));
+    }
   }, []);
 
   const toggleSideBar = () => {
@@ -39,7 +45,7 @@ export default function Nav() {
           onClick={() => {
             dispatch(logOut());
             navigate("/");
-            toast.dismiss(t.id);
+            toast.remove(t.id);
           }}
         >
           Cerrar sesión
@@ -113,7 +119,7 @@ export default function Nav() {
                     className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                   >
                     <img
-                      src={image.url || image}
+                      src={image.url || image || imageLocal.url || imageLocal}
                       alt="profile picture logo"
                       className={styles.userProfile}
                     />
@@ -240,7 +246,7 @@ export default function Nav() {
                   className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                 >
                   <img
-                    src={image.url}
+                    src={image.url || image || imageLocal.url || imageLocal}
                     alt="profile picture logo"
                     className={styles.userProfile}
                   />

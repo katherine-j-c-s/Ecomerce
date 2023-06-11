@@ -8,12 +8,14 @@ import {
   SIGN_UP,
   LOG_OUT,
   ADD_IMG,
+  USER_ADMIN,
   REMOVE_IMG,
   USER_BY_ID,
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
   EDIT_PRODUCT,
+  GET_ALL_USERS,
   DELETE_PRODUCT,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
@@ -128,6 +130,7 @@ export function logOut() {
     return dispatch({ type: LOG_OUT });
   };
 }
+////USERS////////USERS////////USERS////////USERS////////USERS////////USERS////////USERS////////USERS////////USERS////////USERS////
 export function getUserId(id) {
   return async function (dispatch) {
     let { data } = await axios(
@@ -137,7 +140,20 @@ export function getUserId(id) {
     return dispatch({ type: USER_BY_ID, payload: data });
   };
 }
-
+export function getAllUsers() {
+  return async function (dispatch) {
+    let { data } = await axios(
+      'https://ecomerce-production-8f61.up.railway.app/users'
+    );
+    return dispatch({ type: GET_ALL_USERS, payload: data });
+  };
+}
+export function userAdmin(user) {
+  return {
+    type: USER_ADMIN,
+    payload: user,
+  };
+}
 ////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////
 
 export function showCart() {
@@ -263,6 +279,7 @@ export const addImgToProduct = (obj) => {
   };
 };
 export const removeImgToProduct = (obj) => {
+  console.log(obj);
   return async function (dispatch) {
     try {
       const data = await axios.delete(

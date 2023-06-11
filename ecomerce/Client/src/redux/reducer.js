@@ -1,9 +1,4 @@
 import {
-  SHOW_SIDEBAR,
-  DISABLE_CART,
-  ADD_PRODUCT_CART,
-  ADD_QUANTITY,
-  DELETE_QUANTITY,
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
@@ -11,14 +6,21 @@ import {
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
+  SHOW_SIDEBAR,
+  DISABLE_CART,
+  ADD_QUANTITY,
+  GET_ALL_USERS,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
   PRODUCT_TO_EDIT,
+  DELETE_QUANTITY,
   FILTER_PRODUCTS,
+  ADD_PRODUCT_CART,
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  USER_ADMIN,
 } from "./types";
 
 const initialState = {
@@ -35,9 +37,9 @@ const initialState = {
     lastName: "",
     email: "",
     password: "",
-    access: false,
   },
-
+  allUsers: [],
+  user:{},
   sideBarCar: {
     enable: false,
     products: [ ],
@@ -107,12 +109,19 @@ const rootReducer = (state = initialState, action) => {
       };
     }
     case SIGN_IN:
-      const imageObj = JSON.parse(action.payload.image);
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          access: true,
+        })
+      );
       return {
         ...state,
         userData: {
           id: action.payload.id,
-          image: imageObj,
+          image: action.payload.image,
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
@@ -122,12 +131,19 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case SIGN_UP:
-      const imageObj2 = JSON.parse(action.payload.image);
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          access: true,
+        })
+      );
       return {
         ...state,
         userData: {
           id: action.payload.id,
-          image: imageObj2,
+          image: action.payload.image,
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
@@ -137,6 +153,10 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case LOG_OUT:
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({ id: "", imageLocal: "", access: false })
+      );
       return {
         ...state,
         userData: {
@@ -146,11 +166,18 @@ const rootReducer = (state = initialState, action) => {
           lastName: "",
           email: "",
           password: "",
-          access: false,
         },
       };
 
     case USER_BY_ID:
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          access: true,
+        })
+      );
       return {
         ...state,
         userData: {
@@ -160,10 +187,17 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: "",
-          access: true,
         },
       };
-
+    case GET_ALL_USERS:
+      return {
+        ...state, allUsers: action.payload
+      }
+    case USER_ADMIN:
+      console.log(action.payload);
+      return{
+        ...state, user: action.payload
+      }
     case SHOW_SIDEBAR:
       return {
         ...state,
