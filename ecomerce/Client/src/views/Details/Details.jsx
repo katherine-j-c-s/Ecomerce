@@ -79,7 +79,6 @@ export default function Details() {
       hex: "#00FFFF",
     },
   ];
-
   const handleFixedImage = (url) => {
     setFixedImage(url);
   };
@@ -98,6 +97,7 @@ export default function Details() {
   }
 
   useEffect(() => {
+    
     dispatch(getProductById(id));
     return () => {
       dispatch(clearProductDetail());
@@ -106,23 +106,19 @@ export default function Details() {
   }, [id, dispatch]);
 
   useEffect(() => {
-    let image = detail?.image[0];
+    let image = detail?.image?.[0];
     console.log(image);
-    if (image.url !== undefined) {
+    if (image?.url !== undefined) {
       setFixedImage(image.url);
-      console.log(fixedImage);
     } else {
       setFixedImage(image);
-      console.log(fixedImage);
     }
   }, [detail]);
-  console.log(detail);
-  console.log(fixedImage);
   return (
     <div className="h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 sm:mt-20">
       <div className="w-full h-auto flex flex-col sm:flex-row">
         <div className="basis-[10%] mx-2 sm:mx-10 flex flex-col gap-y-4 sm:gap-y-6">
-          {detail?.image
+          {detail?.image && detail.image
             .filter((image) => image !== fixedImage)
             .map((ima, index) => {
               let image = null;
