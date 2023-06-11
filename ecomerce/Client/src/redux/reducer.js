@@ -39,10 +39,10 @@ const initialState = {
     password: "",
   },
   allUsers: [],
-  user:{},
+  user: {},
   sideBarCar: {
     enable: false,
-    products: [ ],
+    products: [],
     total: 0,
   },
   sizes: [],
@@ -191,13 +191,15 @@ const rootReducer = (state = initialState, action) => {
       };
     case GET_ALL_USERS:
       return {
-        ...state, allUsers: action.payload
-      }
+        ...state,
+        allUsers: action.payload,
+      };
     case USER_ADMIN:
       console.log(action.payload);
-      return{
-        ...state, user: action.payload
-      }
+      return {
+        ...state,
+        user: action.payload,
+      };
     case SHOW_SIDEBAR:
       return {
         ...state,
