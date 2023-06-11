@@ -58,7 +58,7 @@ export default function SignIn() {
 
     dispatch(signIn({ mail: inputs.email, password: inputs.password }))
       .then((user) => {
-        toast.success(`¡Bienvenidxs ${user.payload.first_name}!`, {
+        toast.success(`¡Bienvenidos ${user.payload.first_name}!`, {
           duration: 2000,
         });
 
