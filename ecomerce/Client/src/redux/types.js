@@ -39,5 +39,7 @@ export const SIGN_IN = "SIGN_IN";
 export const SIGN_UP = "SIGN_UP";
 export const LOG_OUT = "LOG_OUT";
 
-//USER DETAIL
+//USERS
+export const GET_ALL_USERS = "GET_ALL_USERS";
+export const USER_ADMIN = "USER_ADMIN";
 export const USER_BY_ID = "USER_BY_ID";

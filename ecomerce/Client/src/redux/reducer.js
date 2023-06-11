@@ -1,9 +1,4 @@
 import {
-  SHOW_SIDEBAR,
-  DISABLE_CART,
-  ADD_PRODUCT_CART,
-  ADD_QUANTITY,
-  DELETE_QUANTITY,
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
@@ -11,14 +6,21 @@ import {
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
+  SHOW_SIDEBAR,
+  DISABLE_CART,
+  ADD_QUANTITY,
+  GET_ALL_USERS,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
   PRODUCT_TO_EDIT,
+  DELETE_QUANTITY,
   FILTER_PRODUCTS,
+  ADD_PRODUCT_CART,
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  USER_ADMIN,
 } from "./types";
 
 const initialState = {
@@ -37,7 +39,8 @@ const initialState = {
     password: "",
     access: false,
   },
-
+  allUsers: [],
+  user:{},
   sideBarCar: {
     enable: true,
     products: [
@@ -180,7 +183,15 @@ const rootReducer = (state = initialState, action) => {
           access: true,
         },
       };
-
+    case GET_ALL_USERS:
+      return {
+        ...state, allUsers: action.payload
+      }
+    case USER_ADMIN:
+      console.log(action.payload);
+      return{
+        ...state, user: action.payload
+      }
     case SHOW_SIDEBAR:
       return {
         ...state,
