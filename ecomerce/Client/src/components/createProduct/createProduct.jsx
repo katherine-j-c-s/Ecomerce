@@ -267,9 +267,13 @@ const CreateProduct = ()=>{
                     dispatch(addImgToProduct(add))
                 }else if (inputs.imagenes.length < productToEdit.image.length) {
                     imgToRemove.map(i=> {
+                        console.log(i);
+                        let image = i.split('/')
+                        let send = image[image.length - 1].slice(0, image[image.length - 1].length - 4)
+                        console.log(send);
                         let remove = {
                             id: Number(productToEdit.id),
-                            image: i
+                            image: send
                         }
                         dispatch(removeImgToProduct(remove))
                     })
