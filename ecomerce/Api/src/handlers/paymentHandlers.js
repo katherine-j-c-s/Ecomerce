@@ -14,7 +14,7 @@ const createOrderHandler = async (req, res) => {
     console.log(carrito);
     const createOrders = await createOrder(carrito);
 
-    res.redirect(createOrders);
+    res.status(200).json(createOrders);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
