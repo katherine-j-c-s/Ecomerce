@@ -51,7 +51,7 @@ const createOrder = async (carrito) => {
   const result = await mercadoPago.preferences.create({
     items: items,
     back_urls: {
-      success: `https://ecomerce-production-8f61.up.railway.app/success/${dni}`,
+      success: `https://ecomerce-production-8f61.up.railway.app/payment/success/${dni}`,
       failure: `https://ecomerce-production-8f61.up.railway.app/payment/failure/${dni}`,
     },
     notification_url:
