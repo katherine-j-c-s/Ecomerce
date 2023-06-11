@@ -35,7 +35,6 @@ const initialState = {
     lastName: "",
     email: "",
     password: "",
-    access: false,
   },
 
   sideBarCar: {
@@ -124,12 +123,19 @@ const rootReducer = (state = initialState, action) => {
       };
     }
     case SIGN_IN:
-      const imageObj = JSON.parse(action.payload.image);
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          access: true,
+        })
+      );
       return {
         ...state,
         userData: {
           id: action.payload.id,
-          image: imageObj,
+          image: action.payload.image,
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
@@ -139,12 +145,19 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case SIGN_UP:
-      const imageObj2 = JSON.parse(action.payload.image);
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          access: true,
+        })
+      );
       return {
         ...state,
         userData: {
           id: action.payload.id,
-          image: imageObj2,
+          image: action.payload.image,
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
@@ -154,6 +167,10 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case LOG_OUT:
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({ id: "", imageLocal: "", access: false })
+      );
       return {
         ...state,
         userData: {
@@ -163,11 +180,18 @@ const rootReducer = (state = initialState, action) => {
           lastName: "",
           email: "",
           password: "",
-          access: false,
         },
       };
 
     case USER_BY_ID:
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          access: true,
+        })
+      );
       return {
         ...state,
         userData: {
@@ -177,7 +201,6 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: "",
-          access: true,
         },
       };
 
