@@ -18,20 +18,21 @@ app.use(morgan("dev"));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 
-
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "https://sportwear.vercel.app",
       "http://localhost:3001",
+      "https://ecomerce-production-8f61.up.railway.app",
+      "https://sportwear.vercel.app/cart",
     ],
-
 
     credentials: true,
     methods: "GET, POST, OPTIONS, PUT, DELETE",
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
-  }));
+  })
+);
 
 require("./auth")(passport); // Importa y configura la autenticación
 

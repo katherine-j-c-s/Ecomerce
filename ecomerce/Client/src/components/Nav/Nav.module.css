@@ -1,9 +1,9 @@
-#navBackground {
-    background-color: transparent;    
+select {
+    background-color: #31B5FF;
 }
 
-.homeImg {
+.userProfile {
     width: 100%;
-    max-width: 45px;
+    max-width: 50px;
     height: auto;
 }
