@@ -39,7 +39,7 @@ const initialState = {
   },
 
   sideBarCar: {
-    enable: true,
+    enable: false,
     products: [
       {
         id: 1,
@@ -197,7 +197,7 @@ const rootReducer = (state = initialState, action) => {
       const newPriceA =
         parseInt(action.payload.price) * action.payload.quantity;
 
-      const newTotalA = state.sideBarCar.total + newPrice;
+      const newTotalA = state.sideBarCar.total + newPriceA;
 
       return {
         ...state,
