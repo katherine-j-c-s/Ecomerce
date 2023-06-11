@@ -88,13 +88,13 @@ const success = async (dni) => {
     where: {
       dni: dni,
       status: {
-        [Op.or]: ["in_process", "rejected"],
+        [Op.or]: ["in_process", "rejected"], // Corregido para usar el operador de "o" lógico
       },
     },
   });
 
   if (orden) {
-    orden.status = "fullfilled";
+    orden.status = "fulfilled"; // Corregido para tener una ortografía correcta
     await orden.save();
   }
 };
