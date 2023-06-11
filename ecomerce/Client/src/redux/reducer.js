@@ -40,24 +40,7 @@ const initialState = {
 
   sideBarCar: {
     enable: false,
-    products: [
-      {
-        id: 1,
-        name: "Adicolor Heritage Now Flared",
-        price: "100",
-        image:
-          "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2e596edc44884006a9cbaef3011a34de_9366/Pantalon_Adicolor_Heritage_Now_Flared_Rojo_IB2020_HM1.jpg",
-        quantity: 1,
-      },
-      {
-        id: 2,
-        name: "Adicolor Heritage Now Flared",
-        price: "100",
-        image:
-          "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2e596edc44884006a9cbaef3011a34de_9366/Pantalon_Adicolor_Heritage_Now_Flared_Rojo_IB2020_HM1.jpg",
-        quantity: 1,
-      },
-    ],
+    products: [ ],
     total: 0,
   },
   sizes: [],

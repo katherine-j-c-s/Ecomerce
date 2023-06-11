@@ -106,7 +106,7 @@ export default function Cart() {
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => console.log(res))
+        .then(res => window.open(res.data))
         .catch(err => {
             console.log(err.response);  // Esto imprimirá la respuesta del error.
         });
