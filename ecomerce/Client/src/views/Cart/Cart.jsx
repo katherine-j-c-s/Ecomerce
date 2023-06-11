@@ -4,14 +4,20 @@ import CartProducts from '../../components/CartProducts/CartProducts'
 import axios from 'axios'
 import Flags from '../../components/Flags/Flags'
 import {useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 export default function Cart() {
     
+    const navigate = useNavigate()
+
     const productsCart = useSelector(state => state.sideBarCar)
     const [saveInfo, setSaveInfo] = useState(false)
 
     const [isOpen, setIsOpen] = useState(false)
     const toggleIsOpen = () => setIsOpen(prevState => !prevState)
     
+    const goback = () => {
+        navigate('/alls')
+    }
     const [payForm, setPayForm] = useState({
         first_name:'',
         last_name: '',
@@ -65,7 +71,7 @@ export default function Cart() {
             newErrors.last_name = "Mínimo 3 caracteres";
         }
         
-        if (!form.dni ) {
+        if (!form.dni || form.dni < 0 ) {
             newErrors.dni = "El DNI debe tener 8 caracteres";
         }
         
@@ -93,11 +99,19 @@ export default function Cart() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const arraytest = {...payForm, products: productsCart.products, total: productsCart.total }
-        console.log("array a enviar",arraytest)
-        axios.post('/payment/create-order', arraytest)
-        .then(res => console.log(res))
+        const arraytest = {...payForm, products: productsCart.products, total: productsCart.total}
+        console.log("array a enviar",JSON.stringify(arraytest))
+        axios.post('/payment/create-order', JSON.stringify(arraytest), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => window.open(res.data))
+        .catch(err => {
+            console.log(err.response);  // Esto imprimirá la respuesta del error.
+        });
     }
+    
     
     useEffect(() => {
         const savedPayForm = localStorage.getItem('payForm');
@@ -111,7 +125,7 @@ export default function Cart() {
 
     useEffect(() => {
         if (saveInfo) {
-            const payFormWithTotal = { ...payForm, total: productsCart.total, products: productsCart.products };
+            const payFormWithTotal = { ...payForm, total: productsCart.total, products: productsCart.products, dni: Number(payForm.dni) };
             localStorage.setItem('payForm', JSON.stringify(payFormWithTotal));
         } else {
             localStorage.removeItem('payForm');
@@ -130,13 +144,18 @@ export default function Cart() {
                         ${productsCart.total}
                     </button>
                 </div>
+                <div className='flex flex-row w-full justify=start items-center mb-10 text-cyan-600 cursor-pointer' onClick={()=> goback()}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                    </svg>
+                </div>
                 <h1 className='mb-12 mt-6 text-[#8D8D8D] text-3xl'>Información de <strong>envío</strong></h1>
                 <div className='flex md:flex-row flex-col w-full'>
                     <Inputs title="Nombres"   value={payForm.first_name} titleWidth="20" inputName="first_name"     inputPlaceholder="Jean Piere"        handleChange={handleChange} errors={errors} />
                     <Inputs title="Apellidos" value={payForm.last_name} titleWidth="20" inputName="last_name" inputPlaceholder="Pascal Rodriguez"  handleChange={handleChange} errors={errors}/>
                 </div>
                 <div className='flex md:flex-row flex-col w-full'>
-                    <Inputs title="DNI"       value={payForm.dni} titleWidth="16" inputName="dni"       inputPlaceholder="00000000"         handleChange={handleChange} errors={errors}/>
+                    <Inputs title="DNI"       value={payForm.dni} titleWidth="16" inputName="dni"  type="number"     inputPlaceholder="00000000"         handleChange={handleChange} errors={errors}/>
                     <Inputs title="Celular"   value={payForm.phone} titleWidth="20" inputName="phone"     inputPlaceholder="999999999"    handleChange={handleChange} errors={errors}/>
                 </div>
                 <Inputs title="Dirección" value={payForm.address} titleWidth="24" inputName="address"  inputPlaceholder="Dirección 1234 - Piso 1 - Depto. A"    handleChange={handleChange} errors={errors}/>

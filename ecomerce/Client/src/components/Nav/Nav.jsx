@@ -5,7 +5,7 @@ import homeLogo from "../../assets/Logo_Marca_Personal_Minimalista_Elegante_y_Or
 import { useState, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { logOut, getUserId } from "../../redux/actions";
+import { logOut, getUserId, showCart } from "../../redux/actions";
 import { Cart, LogOut } from "iconoir-react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -67,7 +67,7 @@ export default function Nav() {
                 <img
                   src={homeLogo}
                   alt="home route image"
-                  className='md:h-20 md:w-20 h-10 w-10 absolute md:left-0 -left-10 -top-8'
+                  className="md:h-20 md:w-20 h-10 w-10 absolute md:left-0 -left-10 -top-8"
                 />
               </Link>
               <Link
@@ -101,7 +101,10 @@ export default function Nav() {
             <article className="flex items-center jusfify-center gap-2">
               {access ? (
                 <>
-                  <button className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300">
+                  <button
+                    className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                    onClick={() => dispatch(showCart())}
+                  >
                     <Cart color={actualRoute === "/" ? "#FFFFFF" : "#000000"} />
                   </button>
 

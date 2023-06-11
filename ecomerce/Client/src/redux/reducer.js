@@ -39,25 +39,8 @@ const initialState = {
   },
 
   sideBarCar: {
-    enable: true,
-    products: [
-      {
-        id: 1,
-        name: "Adicolor Heritage Now Flared",
-        price: "61999",
-        image:
-          "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2e596edc44884006a9cbaef3011a34de_9366/Pantalon_Adicolor_Heritage_Now_Flared_Rojo_IB2020_HM1.jpg",
-        quantity: 1,
-      },
-      {
-        id: 2,
-        name: "Adicolor Heritage Now Flared",
-        price: "61999",
-        image:
-          "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2e596edc44884006a9cbaef3011a34de_9366/Pantalon_Adicolor_Heritage_Now_Flared_Rojo_IB2020_HM1.jpg",
-        quantity: 1,
-      },
-    ],
+    enable: false,
+    products: [ ],
     total: 0,
   },
   sizes: [],
@@ -197,7 +180,7 @@ const rootReducer = (state = initialState, action) => {
       const newPriceA =
         parseInt(action.payload.price) * action.payload.quantity;
 
-      const newTotalA = state.sideBarCar.total + newPrice;
+      const newTotalA = state.sideBarCar.total + newPriceA;
 
       return {
         ...state,
