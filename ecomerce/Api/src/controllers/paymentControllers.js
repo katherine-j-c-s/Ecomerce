@@ -38,10 +38,9 @@ const createOrder = async (carrito) => {
           id: item.id,
         },
       });
-      console.log("antes --->" + producto.stock);
-      console.log(item.quantity);
+
       producto.stock = producto.stock - item.quantity;
-      console.log("despues --->" + producto.stock);
+
       await producto.save();
     })
   );
@@ -76,12 +75,7 @@ const failure = async (dni) => {
           id: item.id,
         },
       });
-      console.log("antes --->" + producto.stock);
-      console.log(item.quantity);
-
       producto.stock = producto.stock + item.quantity;
-
-      console.log("despues --->" + producto.stock);
       await producto.save();
     })
   );
@@ -93,12 +87,16 @@ const success = async (dni) => {
   const orden = await Order.findOne({
     where: {
       dni: dni,
-      status: "in_process" || "rejected",
+      status: {
+        [Op.or]: ["in_process", "rejected"],
+      },
     },
   });
 
-  orden.status = "fullfilled";
-  await orden.save();
+  if (orden) {
+    orden.status = "fullfilled";
+    await orden.save();
+  }
 };
 
 module.exports = {
