@@ -94,7 +94,7 @@ const success = async (dni) => {
   });
 
   if (orden) {
-    orden.status = "fulfilled"; // Corregido para tener una ortografía correcta
+    orden.status = "fullfilled"; // Corregido para tener una ortografía correcta
     await orden.save();
   }
 };
