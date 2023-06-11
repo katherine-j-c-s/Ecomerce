@@ -20,7 +20,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 
 app.use(
   cors({
-    origin: ["*"],
+    origin: "*",
 
     credentials: true,
     methods: "GET, POST, OPTIONS, PUT, DELETE",
