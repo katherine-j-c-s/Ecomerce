@@ -18,11 +18,10 @@ productsRouter.delete("/remove_product/:id", deleteProductHandler);
 
 productsRouter.post("/create_product", createProductHandler);
 
-productsRouter.delete("/remove_image", removeImageHandler)
+productsRouter.delete("/remove_image", removeImageHandler);
 
-productsRouter.post("/add_image", addImageHandler)
+productsRouter.post("/add_image", addImageHandler);
 
 productsRouter.patch("/update_product/:id", updateProductHandler);
-
 
 module.exports = productsRouter;
