@@ -1,5 +1,6 @@
 const mercadoPago = require("mercadopago");
 const { Order, User, Product } = require("../db");
+const { Op } = require("sequelize");
 
 const createOrder = async (carrito) => {
   mercadoPago.configure({
