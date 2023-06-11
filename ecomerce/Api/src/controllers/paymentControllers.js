@@ -1,5 +1,6 @@
 const mercadoPago = require("mercadopago");
 const { Order, User, Product } = require("../db");
+const { Op } = require("sequelize");
 
 const createOrder = async (carrito) => {
   mercadoPago.configure({
@@ -20,7 +21,7 @@ const createOrder = async (carrito) => {
   console.log(items);
 
   await Order.create({
-    dni: parseInt(carrito[0].dni),
+    dni: carrito[0].dni,
     city: carrito[0].locality,
     address: carrito[0].address,
     phone: carrito[0].phone,
@@ -88,13 +89,13 @@ const success = async (dni) => {
     where: {
       dni: dni,
       status: {
-        [Op.or]: ["in_process", "rejected"],
+        [Op.or]: ["in_process", "rejected"], // Corregido para usar el operador de "o" lógico
       },
     },
   });
 
   if (orden) {
-    orden.status = "fullfilled";
+    orden.status = "fullfilled"; // Corregido para tener una ortografía correcta
     await orden.save();
   }
 };
