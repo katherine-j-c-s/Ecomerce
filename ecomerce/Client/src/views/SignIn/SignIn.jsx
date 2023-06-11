@@ -57,9 +57,10 @@ export default function SignIn() {
     e.preventDefault();
 
     dispatch(signIn({ mail: inputs.email, password: inputs.password }))
-      .then((r) => {
-        console.log(r);
-        toast.success("Bievenido de vuelta!", { duration: 2000 });
+      .then((user) => {
+        toast.success(`¡Bienvenidxs ${user.payload.first_name}!`, {
+          duration: 2000,
+        });
 
         setTimeout(() => {
           toast.remove();
