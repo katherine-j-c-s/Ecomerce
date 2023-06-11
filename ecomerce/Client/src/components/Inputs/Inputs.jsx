@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function Inputs({title,value , inputName, inputPlaceholder, titleWidth, handleChange, errors}) {
+export default function Inputs({title,value , inputName, inputPlaceholder, titleWidth, handleChange, errors, type}) {
 
   return (
     <div className={errors[inputName]?.length > 0 ? 'flex flex-col justify-center w-full relative md:mb-6 mb-10' : 'flex flex-col justify-center w-full relative md:mb-6 mb-6'}>
@@ -13,6 +13,7 @@ export default function Inputs({title,value , inputName, inputPlaceholder, title
             placeholder={inputPlaceholder}
             onChange={handleChange}
             value={value}
+            type={type ? type : "text" }
         ></input>
         <span className={errors[inputName]?.length > 0 ? 'flex flex-block text-red-600 text-xs left-2 -bottom-4 absolute' : 'flex flex-none'}>{errors[inputName]}</span>
     </div>

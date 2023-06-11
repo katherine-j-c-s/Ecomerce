@@ -13,12 +13,12 @@ export default function CountrySelect({onSelect, errors}) {
 
   const countryOptions = [
     { value: 'ARS', codigoPais:'+54' , label: 'Argentina', flag: argentinaIcon },
-    { value: 'BRL', codigoPais:'+55' , label: 'Brazil',    flag: brazilIcon },
+    /*{ value: 'BRL', codigoPais:'+55' , label: 'Brazil',    flag: brazilIcon },
     { value: 'CLP', codigoPais:'+56' , label: 'Chile',     flag: chileIcon },
     { value: 'MXN', codigoPais:'+52' , label: 'Mexico',    flag: mexicoIcon },
     { value: 'COP', codigoPais:'+57' , label: 'Colombia',  flag: colombiaIcon },
     { value: 'PEN', codigoPais:'+51' , label: 'Peru',      flag: peruIcon },
-    { value: 'UYU', codigoPais:'+598' , label: 'Uruguay',   flag: uruguayIcon },
+    { value: 'UYU', codigoPais:'+598' , label: 'Uruguay',   flag: uruguayIcon },*/
   ];
 
   const handleCountryChange = (option) => {
