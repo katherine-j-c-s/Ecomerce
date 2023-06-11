@@ -20,7 +20,7 @@ const createOrder = async (carrito) => {
   console.log(items);
 
   await Order.create({
-    dni: parseInt(carrito[0].dni),
+    dni: carrito[0].dni,
     city: carrito[0].locality,
     address: carrito[0].address,
     phone: carrito[0].phone,
