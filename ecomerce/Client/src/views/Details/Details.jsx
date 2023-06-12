@@ -93,6 +93,7 @@ export default function Details() {
       description: detail.description,
       quantity: 1,
     };
+    console.log(newProduct)
     dispatch(addProductCart(newProduct));
     dispatch(showCart());
   }
