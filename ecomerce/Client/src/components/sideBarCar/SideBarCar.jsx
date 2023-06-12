@@ -82,6 +82,12 @@ export default function SideBarCar() {
 
       <section className="m-5 p-8 flex flex-wrap items-center justify-center gap-16">
         {products.map((product, i) => {
+          let image = []
+          if (product.image.url === undefined) {
+            image.push(product.image)
+          }else{
+            image.push(product.image.url)
+          }
           return (
             <article
               key={i}
@@ -89,7 +95,7 @@ export default function SideBarCar() {
             >
               <CardsProduct
                 name={product.name}
-                image={product.image}
+                image={image[0]}
                 price={product.price}
                 sideBarMenu={true}
               />
