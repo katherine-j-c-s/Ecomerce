@@ -89,11 +89,10 @@ export default function Details() {
       id: detail.id,
       name: detail.name,
       price: detail.price,
-      image: detail.image[0],
+      image: detail.image?.url ? detail.image.url : (Array.isArray(detail.image) ? detail.image[0] : detail.image),
       description: detail.description,
       quantity: 1,
     };
-
     dispatch(addProductCart(newProduct));
     dispatch(showCart());
   }

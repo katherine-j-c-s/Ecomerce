@@ -5,6 +5,7 @@ export default function CartProducts({image, price, name, quantity}) {
     <div className='flex flex-row h-24 w-full justify-between my-4'>
         <div className='md:w-24 w-14 md:h-24 h-14 rounded bg-white relative'>
             <img className='object-cover w-full h-full ' src={image} alt={name} />
+            <span>{image}</span>
             <div className='w-7 h-7 rounded-full bg-cyan-500 absolute -top-4 -right-4'>
                 <span className='text-white text-xs'>{quantity}</span>
             </div>
