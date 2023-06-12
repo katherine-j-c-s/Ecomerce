@@ -20,7 +20,13 @@ const createOrder = async (carrito) => {
 
   console.log(items);
 
-  await UserOrder.create({
+  const user = await User.findOne({
+    where: {
+      email: carrito[0].mail,
+    },
+  });
+
+  const order = await UserOrder.create({
     email: carrito[0].mail,
     dni: carrito[0].dni,
     city: carrito[0].locality,
@@ -32,6 +38,9 @@ const createOrder = async (carrito) => {
     status: "in_process",
     products: items,
   });
+
+  // Establecer la relación entre la orden y el usuario
+  await order.setUser(user);
 
   await Promise.all(
     items.map(async (item) => {

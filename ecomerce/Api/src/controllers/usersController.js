@@ -22,18 +22,7 @@ const getUsersByName = async (name) => {
     where: {
       first_name: { [Op.iLike]: `%${name}%` },
     },
-    include: [
-      {
-        model: UserOrder,
-        where: {
-          email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
-          ),
-          status: "fullfilled",
-        },
-      },
-      { model: Comment },
-    ],
+    include: [{ model: UserOrder }, { model: Comment }],
   });
 
   if (users.length === 0) {
@@ -48,12 +37,6 @@ const getUserById = async (id) => {
     include: [
       {
         model: UserOrder,
-        where: {
-          email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."mail" = "UserOrder"."email")`
-          ),
-          status: "fullfilled",
-        },
       },
       { model: Comment },
     ],
