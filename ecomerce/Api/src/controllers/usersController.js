@@ -7,7 +7,18 @@ const Sequelize = require("sequelize");
 
 const getUsers = async () => {
   const users = await User.findAll({
-    include: [{ model: Comment }],
+    include: [
+      {
+        model: UserOrder,
+        where: {
+          email: Sequelize.literal(
+            `(SELECT mail FROM "Users" WHERE "Users"."mail" = "UserOrders"."email")`
+          ),
+          status: "fullfilled",
+        },
+      },
+      { model: Comment },
+    ],
   });
 
   if (users.length === 0) {
@@ -22,12 +33,19 @@ const getUsersByName = async (name) => {
     where: {
       first_name: { [Op.iLike]: `%${name}%` },
     },
-    include: [{ model: Comment }],
+    include: [
+      {
+        model: UserOrder,
+        where: {
+          email: Sequelize.literal(
+            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
+          ),
+          status: "fullfilled",
+        },
+      },
+      { model: Comment },
+    ],
   });
-
-  const ordenes = await UserOrder.findAll().map(
-    (orden) => orden.email === user.mail
-  );
 
   if (users.length === 0) {
     throw new Error("No se encontraron usuarios con ese nombre.");
@@ -38,14 +56,22 @@ const getUsersByName = async (name) => {
 
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
-    include: [{ model: Comment }],
+    include: [
+      {
+        model: UserOrder,
+        where: {
+          email: Sequelize.literal(
+            `(SELECT email FROM "Users" WHERE "Users"."mail" = "UserOrder"."email")`
+          ),
+          status: "fullfilled",
+        },
+      },
+      { model: Comment },
+    ],
   });
 
-  const ordenes = await UserOrder.findAll();
-  const filtrado = ordenes.filter((orden) => orden.email === user[0].mail);
-
   if (user) {
-    return user.concat(filtrado);
+    return user;
   } else {
     throw new Error("Usuario no encontrado");
   }
