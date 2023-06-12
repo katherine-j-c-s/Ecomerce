@@ -89,7 +89,7 @@ export default function SideBarCar() {
             >
               <CardsProduct
                 name={product.name}
-                image={product.image.url}
+                image={product.url}
                 price={product.price}
                 sideBarMenu={true}
               />
