@@ -8,6 +8,7 @@ const {
   updateProductHandler,
   removeImageHandler,
   addImageHandler,
+  testHandler,
 } = require("../handlers/productsHandlers");
 
 productsRouter.get("/get_products", getProductsHandler);
@@ -23,5 +24,8 @@ productsRouter.patch("/remove_image", removeImageHandler)
 productsRouter.post("/add_image", addImageHandler);
 
 productsRouter.patch("/update_product/:id", updateProductHandler);
+
+productsRouter.get("/test", testHandler)
+
 
 module.exports = productsRouter;
