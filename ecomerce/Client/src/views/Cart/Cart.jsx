@@ -20,6 +20,7 @@ export default function Cart() {
     }
     const [payForm, setPayForm] = useState({
         first_name:'',
+        mail: '',
         last_name: '',
         dni: 0,
         address: '',
@@ -34,6 +35,7 @@ export default function Cart() {
     const [errors, setErrors] = useState({
         first_name:'',
         last_name: '',
+        mail: '',
         dni: 0,
         phone: '',
         postal: '',
@@ -64,8 +66,13 @@ export default function Cart() {
 
     const validate = useCallback(form => {
         let  newErrors = {}
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if(!form.first_name || form.first_name.length < 3){
             newErrors.first_name = "Mínimo 3 carácteres"
+        }
+        if(!regexEmail.test(form.mail)){
+            newErrors.mail = "Ingresa un correo válido"
         }
         if (!form.last_name || form.last_name.length < 3) {
             newErrors.last_name = "Mínimo 3 caracteres";
@@ -158,6 +165,7 @@ export default function Cart() {
                     <Inputs title="DNI"       value={payForm.dni} titleWidth="16" inputName="dni"  type="number"     inputPlaceholder="00000000"         handleChange={handleChange} errors={errors}/>
                     <Inputs title="Celular"   value={payForm.phone} titleWidth="20" inputName="phone"     inputPlaceholder="999999999"    handleChange={handleChange} errors={errors}/>
                 </div>
+                <Inputs title="Correo" value={payForm.mail} titleWidth="20" inputName="mail"  inputPlaceholder="correo@gmail.com"    handleChange={handleChange} errors={errors}/>
                 <Inputs title="Dirección" value={payForm.address} titleWidth="24" inputName="address"  inputPlaceholder="Dirección 1234 - Piso 1 - Depto. A"    handleChange={handleChange} errors={errors}/>
                 <div className='flex md:flex-row flex-col w-full'>
                     <Inputs title="Cod. Postal" value={payForm.postal} titleWidth="24" inputName="postal"   inputPlaceholder="1234"        handleChange={handleChange} errors={errors} />
