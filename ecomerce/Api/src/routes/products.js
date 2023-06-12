@@ -18,7 +18,7 @@ productsRouter.delete("/remove_product/:id", deleteProductHandler);
 
 productsRouter.post("/create_product", createProductHandler);
 
-productsRouter.delete("/remove_image", removeImageHandler);
+productsRouter.patch("/remove_image", removeImageHandler)
 
 productsRouter.post("/add_image", addImageHandler);
 
