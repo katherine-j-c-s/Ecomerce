@@ -3,7 +3,6 @@ const { Op } = require("sequelize");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const cloudinary = require("../cloudinary");
-const Sequelize = require("sequelize");
 
 const getUsers = async () => {
   const users = await User.findAll({
@@ -34,12 +33,7 @@ const getUsersByName = async (name) => {
 
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
-    include: [
-      {
-        model: UserOrder,
-      },
-      { model: Comment },
-    ],
+    include: [{ model: UserOrder }, { model: Comment }],
   });
 
   if (user) {
