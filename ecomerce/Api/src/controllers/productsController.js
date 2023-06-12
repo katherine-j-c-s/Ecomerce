@@ -1,6 +1,8 @@
 const { Product, Color, Category, Size } = require("../db");
 const { hard } = require("./mockedData/mockedProducts");
 const cloudinary = require("../cloudinary")
+const sendEmail = require("../nodemailer");
+const UserOrder = require("../models/UserOrder");
 require("dotenv").config();
 
 
@@ -272,6 +274,17 @@ const addImage = async (id, images) => {
   return 'Imagen añadida correctamente'
 }
 
+const testController = async () => {
+  message = {
+    from: 'grupo_pf_supergenial@test.com',
+    to: 'sovod47310@ozatvn.com',
+    subject: 'Test001',
+    text: 'This is a test 001 from PF project'
+  }
+  let emailSended = await sendEmail(message)
+  return emailSended
+}
+
 module.exports = {
   createProduct,
   getProducts,
@@ -280,4 +293,5 @@ module.exports = {
   updateProduct,
   removeImage,
   addImage,
+  testController,
 };
