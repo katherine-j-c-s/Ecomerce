@@ -200,8 +200,14 @@ export default function Cart() {
                 </div>
                 <div className='h-2/3 w-full overflow-y-auto'>
                     {productsCart.products.map((product, index) =>{
+                        let image = []
+                        if (product.image.url === undefined) {
+                          image.push(product.image)
+                        }else{
+                          image.push(product.image.url)
+                        }
                         return(
-                            <CartProducts key={index} image={product.image} price={product.price} quantity={product.quantity} name={product.name}/>
+                            <CartProducts key={index} image={image} price={product.price} quantity={product.quantity} name={product.name}/>
                         )
                     })}
                 </div>
