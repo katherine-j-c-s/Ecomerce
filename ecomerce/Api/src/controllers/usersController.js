@@ -12,7 +12,7 @@ const getUsers = async () => {
         model: UserOrder,
         where: {
           email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
+            `(SELECT email FROM "Users" WHERE "Users"."email" = "UserOrder"."email")`
           ),
           status: "fullfilled",
         },
