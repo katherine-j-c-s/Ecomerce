@@ -7,12 +7,7 @@ const Sequelize = require("sequelize");
 
 const getUsers = async () => {
   const users = await User.findAll({
-    include: [
-      {
-        model: UserOrder,
-      },
-      { model: Comment },
-    ],
+    include: [{ model: UserOrder }, { model: Comment }],
   });
 
   if (users.length === 0) {
