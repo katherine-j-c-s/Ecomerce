@@ -261,7 +261,7 @@ const CreateProduct = ()=>{
             setReady(false)
             setErrors({...errors, img: 'debe agregar imagenes del producto'})
         }
-        if (Object.keys(errors).length === 0 && inputs.type.length > 0) {
+        if (Object.keys(errors).length === 0 || Object.values(errors)[0] === '' && inputs.type.length > 0) {
             if (Object.keys(productToEdit).length > 0) {
                 if (inputs.imagenes.length > productToEdit.image.length) {
                     let newImgs = inputs.imagenes.slice(productToEdit.image.length, inputs.imagenes.length)
