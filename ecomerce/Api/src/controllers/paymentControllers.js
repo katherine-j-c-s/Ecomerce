@@ -117,7 +117,7 @@ const success = async (dni) => {
       from: 'grupo_pf_supergenial@test.com',
       to: userEmail,
       subject: 'Compra de productos',
-      text: `La compra de ${orden.products} se ha realizado con exito!`
+      text: `La compra se ha realizado con exito!`
     })
   }
 };
