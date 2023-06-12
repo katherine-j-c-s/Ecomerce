@@ -7,17 +7,7 @@ const Sequelize = require("sequelize");
 
 const getUsers = async () => {
   const users = await User.findAll({
-    include: [
-      {
-        model: UserOrder,
-        where: {
-          email: Sequelize.literal(
-            `(SELECT mail FROM "Users" WHERE "Users"."mail" = "UserOrders"."email")`
-          ),
-        },
-      },
-      { model: Comment },
-    ],
+    include: [{ model: UserOrder }, { model: Comment }],
   });
 
   if (users.length === 0) {
@@ -32,18 +22,13 @@ const getUsersByName = async (name) => {
     where: {
       first_name: { [Op.iLike]: `%${name}%` },
     },
-    include: [
-      {
-        model: UserOrder,
-        where: {
-          email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
-          ),
-          status: "fullfilled",
-        },
-      },
-      { model: Comment },
-    ],
+    include: [{ model: Comment }],
+  });
+
+  await UserOrder.findAll({
+    where: {
+      email: { [Op.iLike]: users.map((user) => user.mail) },
+    },
   });
 
   if (users.length === 0) {
