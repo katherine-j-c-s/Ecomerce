@@ -1,74 +1,153 @@
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {Link} from 'react-router-dom'
+import { getProductById } from '../../redux/actions';
 
 export default function UserDetailAdmin() {
   let {user} = useSelector(st=>st)
-  useEffect(()=>{
-    console.log(user);
-  })
+
+  let [showProducts,setShowProducts] = useState({id:null,show:false})
+
+  const detalleDeCompra = (order) => {
+    setShowProducts({id:order.id, show:true})
+  }
   return (
-    <div className='w-screen mt-20 relative'>
+    <div className='w-screen mt-20 h-full md:h-screen relative'>
       <Link to={"/admin?pestaña=usuarios"}>
         <p className='text-sky-400 absolute cursor-pointer -top-14 right-10'>Volver</p>
       </Link>
-      <div className='w-8/12 mx-auto h-fit flex justify-center'>
-        <div className='w-2/4 h-fit'>
-          <div className='flex w-fit my-3 mx-auto'>
+      <div className='w-full md:w-8/12 mx-auto h-fit flex md:flex-row flex-col-reverse justify-center'>
+        <div className='md:w-2/4 w-full h-fit'>
+          <div className='flex justify-center flex-wrap w-full md:w-fit my-3 mx-auto'>
             <p className=' text-sky-300 font-bold'>Nº :</p>
-            <p className='font-bold text-slate-500 ml-3'>{user.id}</p>
+            <p className='font-bold text-slate-500 md:ml-3'>{user.id}</p>
           </div>
-          <div className='flex w-fit my-3 mx-auto'>
+          <div className='flex justify-center flex-wrap w-full md:w-fit my-3 mx-auto'>
             <p className=' text-sky-300 font-bold'>Nombre :</p>
-            <p className='font-mono text-slate-500 ml-3'>{user.first_name}</p>
+            <p className='font-mono text-slate-500 md:ml-3'>{user.first_name}</p>
           </div>
-          <div className='flex w-fit my-3 mx-auto'>
+          <div className='flex justify-center flex-wrap w-full md:w-fit my-3 mx-auto'>
             <p className=' text-sky-300 font-bold'>Apellido :</p>
-            <p className='font-mono text-slate-500 ml-3'>{user.last_name}</p>
+            <p className='font-mono text-slate-500 md:ml-3'>{user.last_name}</p>
           </div>
-          <div className='flex w-fit my-3 mx-auto'>
+          <div className='flex justify-center flex-wrap w-full md:w-fit my-3 mx-auto'>
             <p className=' text-sky-300 font-bold'>Mail :</p>
-            <p className='font-mono text-slate-500 ml-3'>{user.mail}</p>
+            <p className='font-mono text-slate-500 md:ml-3'>{user.mail}</p>
           </div>
-          <div className='flex w-fit my-3 mx-auto'>
+          <div className='flex justify-center flex-wrap w-full md:w-fit my-3 mx-auto'>
             <p className=' text-sky-300 font-bold'>Direccion :</p>
-            <p className='font-mono text-slate-500 ml-3'>{user.address}</p>
+            <p className='font-mono text-slate-500 md:ml-3'>{user.address}</p>
           </div>
-          <div className='flex w-fit my-3 mx-auto'>
+          <div className='flex justify-center flex-wrap w-full md:w-fit my-3 mx-auto'>
             <p className=' text-sky-300 font-bold'>Estado :</p>
-            <p className='font-mono text-slate-500 ml-3'>{user.status}</p>
+            <p className='font-mono text-slate-500 md:ml-3'>{user.status}</p>
           </div>
         </div>
-        <div className='w-2/4'>
+        <div className='md:w-2/4 w-full mb-10 md:mb-0'>
           <div>
-            <img className=' w-56  h-56 rounded-full' src={user.image.url} alt="img" />
+            <img className=' w-56 mx-auto h-56 rounded-full' src={user.image.url} alt="img" />
           </div>
         </div>
       </div>
-      <div className='w-2/5 mx-auto'>
+      <div className='w-10/12 md:w-2/5 mx-auto'>
         <p className='text-sky-400 font-bold my-3'>Orders</p>
         {user.UserOrders.length > 0 ?
-          (<div className='bg-white rounded-md'> 
-            <p className='text-slate-500 py-2'>Si ha comprado</p>
-          </div>)
+          user.UserOrders.map((o,i)=>{
+            return(
+              <div>
+                {showProducts.id === o.id ?
+                  <div className='bg-neutral-900 w-full h-fit md:h-screen absolute -top-20 right-0' key={o.id}> 
+                    <div onClick={()=>setShowProducts({id:null,show:false})} className={`flex absolute z-30 text-white font-bold top-6 md:top-12 md:right-20 right-6 cursor-pointer hover:shadow-2xl shadow-slate-400 hover:text-teal-400`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                    </div>
+                    <div className='text-black flex flex-col w-10/12 rounded-xl mt-16 md:mt-24 mx-auto bg-white shadow-xl shadow-zinc-500'>
+                      <p className='mt-16 text-sky-500 font-bold'>Nº {i+1}</p>
+                      <div className='flex flex-wrap mt-6 md:mt-0 justify-center'>
+                        <div className='md:mt-10 w-fit md:mr-20'>
+                          <div className='flex md:flex-row flex-col md:w-fit my-3'>
+                            <p className=' text-sky-500 font-bold'>Email :</p>
+                            <p className='font-mono text-slate-500 md:ml-3'>{o.email}</p>
+                          </div>
+                          <div className='flex md:flex-row flex-col md:w-fit my-3'>
+                            <p className=' text-sky-500 font-bold'>Ciudad :</p>
+                            <p className='font-mono text-slate-500 md:ml-3'>{o.city}</p>
+                          </div>
+                          <div className='flex md:flex-row flex-col md:w-fit my-3'>
+                            <p className=' text-sky-500 font-bold'>Telefono :</p>
+                            <p className='font-mono text-slate-500 md:ml-3'>{o.phone}</p>
+                          </div>
+                        </div>
+                        <div className='md:mt-10 w-fit'>
+                          <div className='flex md:flex-row flex-col md:w-fit my-3'>
+                            <p className=' text-sky-500 font-bold'>DNI :</p>
+                            <p className='font-mono text-slate-500 md:ml-3'>{o.dni}</p>
+                          </div>
+                          <div className='flex md:flex-row flex-col md:w-fit my-3'>
+                            <p className=' text-sky-500 font-bold'>Direccion :</p>
+                            <p className='font-mono text-slate-500 md:ml-3'>{o.address}</p>
+                          </div>
+                          <div className='flex md:flex-row flex-col md:w-fit my-3'>
+                            <p className=' text-sky-500 font-bold'>Postal :</p>
+                            <p className='font-mono text-slate-500 md:ml-3'>{o.postal}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className='flex w-fit my-3 mx-auto'>
+                          <p className=' text-sky-500 font-bold'>Total :</p>
+                          <p className='font-mono text-slate-500 ml-3'>{o.total}</p>
+                        </div>
+                        <p className=' text-sky-600 font-bold text-2xl'>{o.paymentMethod}</p>
+                      </div>
+                      <div className='flex flex-wrap mb-10'>
+                        {o.products.map(p=>{
+                          console.log(p);
+                          return(
+                            <div key={p.id} className='flex flex-col py-6 px-2 w-60 rounded-xl transition-all hover:bg-slate-500 hover:shadow-xl bg-slate-400 my-3 mx-auto relative'>
+                              <p className='w-fit ml-4 -mt-4 font-mono text-gray-50 absolute'>{p.currency_id}</p>
+                              <p className=' text-sky-500 font-bold'>Nombre :</p>
+                              <p className='font-mono text-slate-900 ml-3'>{p.title}</p>
+                              <p className=' text-sky-500 font-bold'>Cantidad :</p>
+                              <p className='font-mono text-slate-900 ml-3'>{p.quantity}</p>
+                              <p className=' text-sky-500 font-bold'>Precio Unico :</p>
+                              <p className='font-mono text-slate-900 ml-3'>{p.unit_price}</p>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                : null}
+                {showProducts.id !== o.id ?
+                  <div key={o.id} onClick={()=>detalleDeCompra(o)} className='bg-white rounded-md mb-5 cursor-pointer hover:shadow-lg flex justify-between'> 
+                    <p className='text-slate-500 py-2 ml-10'>{o.products.length} productos</p>
+                    <p className='text-sky-400 py-2 mr-10 font-bold'>{o.status}</p>
+                  </div>
+                : null}
+              </div>
+              
+            )
+          })
         : 
           (<div className='bg-white rounded-md'> 
             <p className='text-slate-500 py-2'>Ninguno</p>
           </div>)
         }
       </div>
-      <div className='w-3/5 mx-auto'>
+      <div className='w-full md:w-3/5 mx-auto mb-10'>
         <p className='text-sky-400 font-bold my-3'>Comments</p>
         {user.Comments.length > 0 ?
           (<div className='bg-white rounded-md'> 
             <p className='text-slate-500 py-2'>Si ha comprado</p>
           </div>)
         : 
-          (<div className='flex justify-between'>
-            <div className='bg-white w-5/12 rounded-lg'> 
+          (<div className='flex md:flex-row flex-col justify-center md:justify-between'>
+            <div className='bg-white w-10/12 mx-auto md:w-5/12 rounded-lg'> 
               <p className='text-slate-500 py-12'>...</p>
             </div>
-            <div className='bg-white w-5/12 rounded-lg'> 
+            <div className='bg-white w-10/12 mx-auto md:mt-0 mt-3 md:w-5/12 rounded-lg'> 
               <p className='text-slate-500 py-12'>...</p>
             </div>
           </div>
