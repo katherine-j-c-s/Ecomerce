@@ -10,17 +10,17 @@ const getUsers = async () => {
     include: [{ model: Comment }],
   });
 
-  const ordenes = await UserOrder.findAll({
-    where: {
-      email: { [Op.iLike]: users.map((user) => user.mail) },
-    },
-  });
+  // const ordenes = await UserOrder.findAll({
+  //   where: {
+  //     email: { [Op.iLike]: users.map((user) => user.mail) },
+  //   },
+  // });
 
   if (users.length === 0) {
     throw new Error("No se encontraron usuarios.");
   }
 
-  return users.concat(ordenes);
+  return users;
 };
 
 const getUsersByName = async (name) => {
