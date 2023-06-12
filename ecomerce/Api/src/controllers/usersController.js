@@ -45,7 +45,7 @@ const getUserById = async (id) => {
   const filtrado = ordenes.filter((orden) => orden.email === user[0].mail);
 
   if (user) {
-    return user.concat(ordenes);
+    return user.concat(filtrado);
   } else {
     throw new Error("Usuario no encontrado");
   }
