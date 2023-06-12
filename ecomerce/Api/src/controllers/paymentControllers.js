@@ -22,7 +22,7 @@ const createOrder = async (carrito) => {
 
   const user = await User.findOne({
     where: {
-      email: carrito[0].mail,
+      mail: carrito[0].mail,
     },
   });
 
