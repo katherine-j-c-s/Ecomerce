@@ -47,7 +47,7 @@ export default function UserDetailAdmin() {
       </div>
       <div className='w-2/5 mx-auto'>
         <p className='text-sky-400 font-bold my-3'>Orders</p>
-        {user.Orders.length > 0 ?
+        {user.UserOrder.length > 0 ?
           (<div className='bg-white rounded-md'> 
             <p className='text-slate-500 py-2'>Si ha comprado</p>
           </div>)
