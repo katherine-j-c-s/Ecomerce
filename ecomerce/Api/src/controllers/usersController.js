@@ -7,7 +7,18 @@ const Sequelize = require("sequelize");
 
 const getUsers = async () => {
   const users = await User.findAll({
-    include: [{ model: Order }, { model: Comment }],
+    include: [
+      {
+        model: Order,
+        where: {
+          email: Sequelize.literal(
+            `(SELECT email FROM "Users" WHERE "Users"."id" = "Order"."UserId")`
+          ),
+          status: "fulfilled",
+        },
+      },
+      { model: Comment },
+    ],
   });
 
   if (users.length === 0) {
