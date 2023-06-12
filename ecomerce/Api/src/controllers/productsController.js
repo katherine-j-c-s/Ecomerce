@@ -81,23 +81,26 @@ const createProduct = async (name, price, description, image, stock, color, cate
   let available;
   if (stock === 0 || stock === null) available = false;
 
+  let ColorId 
+  let CategoryId
+  let SizeId
   if(color) {
       let { id } = await Color.findOne({
         where: { color }
       })
-      color = id
+      ColorId = id
   }
   if(category) {
       let { id } = await Category.findOne({
         where: { name: category }
       })
-      category = id
+      CategoryId = id
   }
   if(size) {
       let { id } = await Size.findOne({
         where: { size }
       })
-      size = id
+      SizeId = id
   }
 
   let imagesPromises = []
@@ -123,7 +126,7 @@ const createProduct = async (name, price, description, image, stock, color, cate
   }
 
   let [product, created] = await Product.findOrCreate({
-    where: { name },
+    where: { name, ColorId, SizeId, CategoryId },
     defaults: {
       name,
       price,
@@ -131,9 +134,9 @@ const createProduct = async (name, price, description, image, stock, color, cate
       stock,
       available,
       image: imagesObjects,
-      ColorId: color,
-      CategoryId: category,
-      SizeId: size,
+      ColorId,
+      CategoryId,
+      SizeId,
     },
   });
 
