@@ -1,4 +1,4 @@
-const { User, Order, Comment } = require("../db");
+const { User, UserOrder, Comment } = require("../db");
 const { Op } = require("sequelize");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
@@ -9,10 +9,10 @@ const getUsers = async () => {
   const users = await User.findAll({
     include: [
       {
-        model: Order,
+        model: UserOrder,
         where: {
           email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."id" = "Order"."UserId")`
+            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
           ),
           status: "fullfilled",
         },
@@ -35,10 +35,10 @@ const getUsersByName = async (name) => {
     },
     include: [
       {
-        model: Order,
+        model: UserOrder,
         where: {
           email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."id" = "Order"."UserId")`
+            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
           ),
           status: "fullfilled",
         },
@@ -58,10 +58,10 @@ const getUserById = async (id) => {
   const user = await User.findByPk(id, {
     include: [
       {
-        model: Order,
+        model: UserOrder,
         where: {
           email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."id" = "Order"."UserId")`
+            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
           ),
           status: "fullfilled",
         },
