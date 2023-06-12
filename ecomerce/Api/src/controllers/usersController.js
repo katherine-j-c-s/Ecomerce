@@ -46,22 +46,17 @@ const getUsersByName = async (name) => {
 
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
-    include: [
-      {
-        model: UserOrder,
-        where: {
-          email: Sequelize.literal(
-            `(SELECT email FROM "Users" WHERE "Users"."id" = "UserOrder"."UserId")`
-          ),
-          status: "fullfilled",
-        },
-      },
-      { model: Comment },
-    ],
+    include: [{ model: Comment }],
+  });
+
+  const ordenes = await UserOrder.findAll({
+    where: {
+      email: { [Op.iLike]: users.map((user) => user.mail) },
+    },
   });
 
   if (user) {
-    return user;
+    return user.concat(ordenes);
   } else {
     throw new Error("Usuario no encontrado");
   }
