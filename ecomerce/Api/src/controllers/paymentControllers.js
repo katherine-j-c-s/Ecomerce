@@ -21,6 +21,7 @@ const createOrder = async (carrito) => {
   console.log(items);
 
   await Order.create({
+    email: carrito[0].email,
     dni: carrito[0].dni,
     city: carrito[0].locality,
     address: carrito[0].address,

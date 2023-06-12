@@ -4,6 +4,9 @@ module.exports = (sequelize) => {
   sequelize.define(
     "Order",
     {
+      email: {
+        type: DataTypes.STRING,
+      },
       dni: { type: DataTypes.INTEGER },
       city: {
         type: DataTypes.STRING,
