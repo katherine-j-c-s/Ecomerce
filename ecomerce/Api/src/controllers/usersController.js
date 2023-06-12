@@ -7,14 +7,20 @@ const Sequelize = require("sequelize");
 
 const getUsers = async () => {
   const users = await User.findAll({
-    include: [{ model: UserOrder }, { model: Comment }],
+    include: [{ model: Comment }],
+  });
+
+  const ordenes = await UserOrder.findAll({
+    where: {
+      email: { [Op.iLike]: users.map((user) => user.mail) },
+    },
   });
 
   if (users.length === 0) {
     throw new Error("No se encontraron usuarios.");
   }
 
-  return users;
+  return users.concat(ordenes);
 };
 
 const getUsersByName = async (name) => {
