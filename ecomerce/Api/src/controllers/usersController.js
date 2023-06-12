@@ -14,7 +14,7 @@ const getUsers = async () => {
           email: Sequelize.literal(
             `(SELECT email FROM "Users" WHERE "Users"."id" = "Order"."UserId")`
           ),
-          status: "fulfilled",
+          status: "fullfilled",
         },
       },
       { model: Comment },
@@ -40,7 +40,7 @@ const getUsersByName = async (name) => {
           email: Sequelize.literal(
             `(SELECT email FROM "Users" WHERE "Users"."id" = "Order"."UserId")`
           ),
-          status: "fulfilled",
+          status: "fullfilled",
         },
       },
       { model: Comment },
@@ -63,7 +63,7 @@ const getUserById = async (id) => {
           email: Sequelize.literal(
             `(SELECT email FROM "Users" WHERE "Users"."id" = "Order"."UserId")`
           ),
-          status: "fulfilled",
+          status: "fullfilled",
         },
       },
       { model: Comment },
