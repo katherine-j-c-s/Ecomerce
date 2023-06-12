@@ -152,9 +152,11 @@ const CreateProduct = ()=>{
     function deleteImg(e) {
         let img = e.target.id
         let remove = inputs.imagenes.find(i=> i === img)
-        imgToRemove.push(remove)
-        let newlist = inputs.imagenes.filter(i=> i !== img)
-        setInputs({...inputs, imagenes: newlist})
+        if (remove !== undefined) {
+            imgToRemove.push(remove)
+            let newlist = inputs.imagenes.filter(i=> i !== img)
+            setInputs({...inputs, imagenes: newlist})
+        }
     }
     function validate(inputs) {
         const errors = {};
@@ -267,17 +269,17 @@ const CreateProduct = ()=>{
                     dispatch(addImgToProduct(add))
                 }else if (inputs.imagenes.length < productToEdit.image.length) {
                     imgToRemove.map(i=> {
-                        console.log(i);
                         let image = i.split('/')
                         let send = image[image.length - 1].slice(0, image[image.length - 1].length - 4)
-                        console.log(send);
                         let remove = {
                             id: Number(productToEdit.id),
                             image: send
                         }
                         dispatch(removeImgToProduct(remove))
                     })
+                    console.log(imgToRemove);
                 }
+                console.log(inputs.imagenes.length > productToEdit.image.length);
                 let edit = {
                     id: productToEdit.id,
                     name: inputs.nombre,
@@ -289,8 +291,10 @@ const CreateProduct = ()=>{
                     size:inputs.type[0].talla
                 }
                 dispatch(editProduct(edit))
+                console.log(edit);
                 if (inputs.type.length > 1) {
                     inputs.type.shift()
+                    console.log(inputs);
                     dispatch(addProduct(inputs))
                 }
             }else{
