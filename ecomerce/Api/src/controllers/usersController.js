@@ -41,7 +41,7 @@ const getUserById = async (id) => {
     include: [{ model: Comment }],
   });
 
-  const ordenes = await UserOrder.findAll().map(
+  const ordenes = await UserOrder.findAll().filter(
     (orden) => orden.email === user.mail
   );
 
