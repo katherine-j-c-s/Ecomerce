@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import swal from 'sweetalert';
+import edit from '../../assets/edit.png'
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addProduct } from '../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addImgToProduct, addProduct, editProduct, removeImgToProduct } from '../../redux/actions';
 import { useState } from 'react';
 import vectorAdd from '../../assets/VectorAdd.png'
 
@@ -37,6 +39,7 @@ const options= [
 const CreateProduct = ()=>{
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const {productToEdit} = useSelector(st=>st)
     const [ready,setReady] = useState(true)
 
     const [addImg, setAddImg] = useState(false)
@@ -49,6 +52,7 @@ const CreateProduct = ()=>{
     const [talla,setTalla] = useState('')
     
     const [img, setImg] = useState('')
+    const [imgToRemove, setImgToRemove]= useState([])
     const [type, setType] = useState({
         id:0,
         color:'',
@@ -70,6 +74,57 @@ const CreateProduct = ()=>{
         categoria:"",
         img:"",
     });
+    useEffect(()=>{
+        if (Object.keys(productToEdit).length > 0) {
+            console.log(productToEdit);
+            let img = []
+            productToEdit?.image.map(i=> {
+                if (i.url !== undefined ) {
+                    img.push(i.url)
+                }else{
+                    img.push(i)
+                }
+            })
+            console.log(img);
+            let type = [{
+                id:productToEdit?.id,
+                color:productToEdit?.color,
+                talla:productToEdit?.size,
+                cantidad:productToEdit?.stock,
+            }]
+            setInputs({
+                nombre: productToEdit?.name,
+                desc: productToEdit?.description,
+                precio: productToEdit?.price,
+                categoria:productToEdit?.category,
+                imagenes: img,
+                type:type
+            })
+            console.log(inputs);
+        }else{
+            setInputs({
+                nombre: "",
+                desc: "",
+                precio: 0,
+                categoria:"",
+                imagenes: [],
+                type:[]
+            });
+              setErrors({
+                nombre: "",
+                desc: "",
+                precio: null,
+                categoria:"",
+                img:"",
+            });
+            setType({
+                id:type.id + 1,
+                color:'',
+                talla:'',
+                cantidad:1,
+            }) 
+        }
+    },[productToEdit])
     function addImage() {
         if (validateImg.ready === true) {
             setImg('')
@@ -80,7 +135,6 @@ const CreateProduct = ()=>{
     }
     function editType(e) {
         let allProps = e.target.id.split(',')
-        console.log(allProps);
         setType({
             id:Number(allProps[0]),
             color:allProps[1],
@@ -94,6 +148,15 @@ const CreateProduct = ()=>{
         let id = e.target.id
         let newlist = inputs.type.filter(t=> t.id !== Number(id))
         setInputs({...inputs, type:newlist})
+    }
+    function deleteImg(e) {
+        let img = e.target.id
+        let remove = inputs.imagenes.find(i=> i === img)
+        if (remove !== undefined) {
+            imgToRemove.push(remove)
+            let newlist = inputs.imagenes.filter(i=> i !== img)
+            setInputs({...inputs, imagenes: newlist})
+        }
     }
     function validate(inputs) {
         const errors = {};
@@ -134,7 +197,6 @@ const CreateProduct = ()=>{
         }
     }
     function handleColors(e) {
-        console.log(e.target.id);
         setColor(e.target.id)
         setType({
             ...type,
@@ -145,7 +207,6 @@ const CreateProduct = ()=>{
         }
     }
     function handleTalla(e) {
-        console.log(e.target.id);
         setTalla(e.target.id)
         setType({
             ...type,
@@ -200,8 +261,45 @@ const CreateProduct = ()=>{
             setReady(false)
             setErrors({...errors, img: 'debe agregar imagenes del producto'})
         }
-        if (Object.keys(errors).length === 0 && inputs.type.length > 0) {
-            dispatch(addProduct(inputs))
+        if (Object.keys(errors).length === 0 || Object.values(errors)[0] === '' && inputs.type.length > 0) {
+            if (Object.keys(productToEdit).length > 0) {
+                if (inputs.imagenes.length > productToEdit.image.length) {
+                    let newImgs = inputs.imagenes.slice(productToEdit.image.length, inputs.imagenes.length)
+                    let add = {id:productToEdit.id,image:newImgs}
+                    dispatch(addImgToProduct(add))
+                }else if (inputs.imagenes.length < productToEdit.image.length) {
+                    imgToRemove.map(i=> {
+                        let image = i.split('/')
+                        let send = image[image.length - 1].slice(0, image[image.length - 1].length - 4)
+                        let remove = {
+                            id: Number(productToEdit.id),
+                            image: send
+                        }
+                        dispatch(removeImgToProduct(remove))
+                    })
+                    console.log(imgToRemove);
+                }
+                console.log(inputs.imagenes.length > productToEdit.image.length);
+                let edit = {
+                    id: productToEdit.id,
+                    name: inputs.nombre,
+                    price: inputs.precio,
+                    description: inputs.desc,
+                    stock: inputs.type[0].cantidad,
+                    color: inputs.type[0].color,
+                    category: inputs.categoria,
+                    size:inputs.type[0].talla
+                }
+                dispatch(editProduct(edit))
+                console.log(edit);
+                if (inputs.type.length > 1) {
+                    inputs.type.shift()
+                    console.log(inputs);
+                    dispatch(addProduct(inputs))
+                }
+            }else{
+                dispatch(addProduct(inputs))
+            }
             setInputs({
                 nombre: "",
                 desc: "",
@@ -218,7 +316,7 @@ const CreateProduct = ()=>{
                 img:"",
             });
             setReady(true)
-            alert('producto creado!')
+            swal("Producto Creado", "Exitosamente!", "success");
             navigate("/admin?pestaña=productos");
         }else{
             setReady(false)
@@ -227,11 +325,11 @@ const CreateProduct = ()=>{
     return(
     <div className='relative w-full'>
         <div className="text-black" >
-            <Link className='absolute right-8 top-6 text-cyan-400' to={'/admin?pestaña=productos'}>
+            <Link className={`${Object.keys(productToEdit).length > 0 ? '-top-14' : 'top-6'} absolute right-8 text-cyan-400`} to={'/admin?pestaña=productos'}>
                 <p>Go Back</p>
             </Link>
             <div className='mt-2 w-full'>
-                <h2 className='mt-20 text-xl font-bold mb-10 mx-auto pb-2 w-32 border-b-4 border-cyan-400'>Agregar</h2>
+                <h2 className={`${Object.keys(productToEdit).length > 0 ? 'w-44' : 'w-32'} mt-20 text-xl font-bold mb-10 mx-auto pb-2 border-b-4 border-cyan-400`} >{Object.keys(productToEdit).length > 0 ? 'Editar Producto' : 'Agregar'}</h2>
                 <form className='flex flex-col items-center w-full justify-center' onSubmit={handleSubmit}>
                     <div className='flex w-full justify-center align-middle'>
                         <div className='w-4/5 flex flex-col justify-center align-middle mx-auto'>
@@ -241,10 +339,11 @@ const CreateProduct = ()=>{
                                     <input
                                         className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.nombre  && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="nombre"
-                                        value={inputs.nombre}
+                                        value={inputs?.nombre}
                                         onChange={handleChange}
                                         placeholder="Zapatillas Nike"
                                     ></input>
+                                    {console.log(inputs)}
                                     {ready === false ?
                                         <p className='text-red-500 relative bottom-0 md:bottom-2'>{errors.nombre}</p>
                                     :null}
@@ -254,7 +353,7 @@ const CreateProduct = ()=>{
                                     <input
                                         className={`placeholder-slate-400 focus:outline-none hover:shadow-md my-2 border bg-transparent rounded-md w-full md:w-fit p-2 pl-10 text-grey ${errors.precio && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="precio"
-                                        value={inputs.precio}
+                                        value={inputs?.precio}
                                         onChange={handleChange}
                                         placeholder="$599"
                                     ></input>
@@ -269,7 +368,7 @@ const CreateProduct = ()=>{
                                     <textarea
                                         className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.desc && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="desc"
-                                        value={inputs.desc}
+                                        value={inputs?.desc}
                                         onChange={handleChange}
                                         placeholder="loren input black..."
                                     ></textarea>
@@ -286,7 +385,7 @@ const CreateProduct = ()=>{
                                 <div className='w-full md:w-fit md:ml-4'>
                                     <select className={`${errors.categoria && ready === false ? 'hover:border-red-500 focus:border-red-500 border-red-500 text-red-500 focus:text-red-500' : 'hover:border-cyan-500 focus:border-cyan-500 border-grey text-grey focus:text-slate-800'} bg-transparent border hover:shadow-md focus:outline-none w-full my-5 md:my-0 md:w-fit rounded-md py-2`} onChange={handleChange} name="categoria" defaultValue={'DEFAULT'}>
                                         <option value="DEFAULT" disabled='true'>
-                                            {options[0].title}
+                                            {inputs?.categoria !== '' ? inputs?.categoria :  options[0].title}
                                         </option>
                                         {options[0].items.map(i=>(
                                             <option value={i}>{i}</option>
@@ -298,7 +397,7 @@ const CreateProduct = ()=>{
                                 </div>
                             </div>  
                             <div className='w-full flex flex-col align-middle mt-2 justify-start'>
-                                {inputs.type.map(t=>{
+                                {inputs?.type.map(t=>{
                                     console.log();
                                     let color = options[2].items.find(c=> c.name === t.color)
                                     return(
@@ -317,16 +416,12 @@ const CreateProduct = ()=>{
                                             </div>
                                             <div>
                                                 <ul className="flex flex-row items-center gap-2">
-                                                    <li className='relative z-10' onClick={editType}>
-                                                        <button type='reset' id={`${t.id},${t.color},${t.talla},${t.cantidad}`} className="p-1.5 bg-bluey rounded-full">
-                                                            <svg width="24px" height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000" >
-                                                                <path d="M14.363 5.652l1.48-1.48a2 2 0 012.829 0l1.414 1.414a2 2 0 010 2.828l-1.48 1.48m-4.243-4.242l-9.616 9.615a2 2 0 00-.578 1.238l-.242 2.74a1 1 0 001.084 1.085l2.74-.242a2 2 0 001.24-.578l9.615-9.616m-4.243-4.242l4.243 4.242"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
-                                                            </svg>
-                                                        </button>
+                                                    <li  className='relative z-10 p-2 bg-sky-500 rounded-full'>
+                                                        <img onClick={editType} id={`${t.id},${t.color},${t.talla},${t.cantidad}`} className=' h-3.5  w-3.5' src={edit} alt="" />
                                                     </li>
                                                     <li onClick={deleteType}>
-                                                        <button type='reset' id={t.id} className="p-1.5 border-bluey rounded-full"> 
-                                                            <svg width="24px" height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                                                        <button type='reset' className="p-1.5 border-bluey rounded-full"> 
+                                                            <svg width="24px" id={t.id} height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                                                                 <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
                                                             </svg>
                                                         </button>
@@ -343,7 +438,7 @@ const CreateProduct = ()=>{
                                                 <p className='text-cyan-400 bottom-9 md:bottom-6 left-0 h-fit w-20 z-10 absolute bg-slate-300'>Cantidad</p>
                                                 <div className='flex justify-center border rounded-lg border-slate-400'>
                                                     <p id='menos' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 transition-all' onClick={handleCantidad}>-</p>
-                                                    <p className='mt-1 text-xl'>{type.cantidad}</p>
+                                                    <p className='mt-1 text-xl'>{type?.cantidad}</p>
                                                     <p id='mas' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 transition-all' onClick={handleCantidad}>+</p>
                                                     <div onClick={handleType} className='h-full w-full pt-1 px-4 bg-cyan-400 text-slate-800 hover:text-black hover:font-bold transition-all rounded-r-lg'>
                                                         <p>Listo!</p>
@@ -357,14 +452,8 @@ const CreateProduct = ()=>{
                                                 <p className='w-full my-4'>{options[2].title}</p>
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[2].items.map(i=>{
-                                                        let selected = false
-                                                        if (i.name === color) {
-                                                            selected = true
-                                                        }
                                                         return(
-                                                        <div className={`w-fit bg-slate-400 rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex ${selected ? ' bg-sky-300' : null}`}>
-                                                            <p onClick={handleColors}id={i.name} className='text-black'>{i.name}</p>
-                                                        </div>
+                                                        <p onClick={handleColors}id={i.name} className={`text-black w-fit rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex ${i.name === color ? ' bg-sky-300' : 'bg-slate-400'}`} >{i.name}</p>
                                                     ) 
                                                     })}
                                                 </div>
@@ -373,14 +462,8 @@ const CreateProduct = ()=>{
                                                 <p className='w-full my-4'>{options[1].title}</p>
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[1].items.map(i=>{
-                                                        let selected = false
-                                                        if (i === talla) {
-                                                            selected = true
-                                                        }
                                                         return(
-                                                        <div className={`w-fit bg-slate-400 rounded-lg p-2 px-6 m-2 hover:bg-sky-300 transition-all flex ${selected ? ' bg-sky-300' : null}`}>
-                                                            <p onClick={handleTalla} id={i} className='text-black'>{i}</p>
-                                                        </div>
+                                                            <p onClick={handleTalla} id={i} className={`text-black w-fit rounded-lg p-2 px-4 m-2 hover:bg-sky-300 transition-all flex ${i === talla ? ' bg-sky-300' : 'bg-slate-400'}`}>{i}</p>
                                                     ) 
                                                     })}
                                                 </div>
@@ -407,7 +490,7 @@ const CreateProduct = ()=>{
                                         <input
                                             className='placeholder-slate-400 hover:border-cyan-500 hover:shadow-md focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey'
                                             name="img"
-                                            value={img.url}
+                                            value={img?.url}
                                             onChange={handleimagenes}
                                             placeholder="url"
                                         ></input>
@@ -417,12 +500,20 @@ const CreateProduct = ()=>{
                                     </div>: null}
                                 </div> 
                             </div>
-                            <div className='flex justify-center md:flex-row flex-col'>
-                                {inputs.imagenes.length !== 0 ? 
-                                    inputs.imagenes.map(img=>{
+                            <div className='flex justify-center md:flex-row flex-col flex-wrap'>
+                                {inputs?.imagenes ? 
+                                    inputs?.imagenes.map(img=>{
+                                        console.log(img);
                                         return(
-                                            <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
-                                                <img src={img} alt="imagen" />
+                                            <div>
+                                                <div className="mt-2 relative z-10 mx-auto w-fit h-fit hover:bg-sky-300 rounded-full hover:shadow-xl transition-all p-2.5"> 
+                                                    <svg onClick={deleteImg} id={img} width="24px" height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
+                                                        <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
+                                                    </svg>
+                                                </div>
+                                               <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
+                                                    <img src={img} alt="imagen" />
+                                                </div> 
                                             </div>
                                         )
                                     })
@@ -430,7 +521,7 @@ const CreateProduct = ()=>{
                             </div>
                         </div>
                     </div>
-                    <button className='bg-cyan-400 my-12' type="submit">Crear Producto</button>
+                    <button className='bg-cyan-400 my-12' type="submit">{Object.keys(productToEdit).length > 0 ? 'Editar Producto' : 'Crear Producto'}</button>
                 </form>
             </div>
         </div>

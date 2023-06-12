@@ -5,6 +5,7 @@ const commentsRouter = require("./comments");
 const colorsRouter = require("./colors");
 const sizesRouter = require("./sizes");
 const categoriesRouter = require("./categories");
+const paymentRouter = require("./payment");
 
 const mainRouter = Router();
 
@@ -19,5 +20,7 @@ mainRouter.use("/colors", colorsRouter);
 mainRouter.use("/sizes", sizesRouter);
 
 mainRouter.use("/categories", categoriesRouter);
+
+mainRouter.use("/payment", paymentRouter);
 
 module.exports = mainRouter;

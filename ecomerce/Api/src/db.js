@@ -3,7 +3,7 @@ const { Sequelize } = require("sequelize");
 const { ENVIROMENT, DB_DEPLOY, DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 const userModel = require("./models/User");
 const productModel = require("./models/Product");
-const orderModel = require("./models/Order");
+const orderModel = require("./models/UserOrder");
 const commentModel = require("./models/Comment");
 const categoryModel = require("./models/Category");
 const colorModel = require("./models/Color");
@@ -36,16 +36,16 @@ categoryModel(sequelize);
 colorModel(sequelize);
 sizeModel(sequelize);
 
-const { User, Product, Order, Category, Comment, Color, Size } =
+const { User, Product, UserOrder, Category, Comment, Color, Size } =
   sequelize.models;
 
 //  Aca vendrian las relaciones
 
-User.hasMany(Order);
-Order.belongsTo(User);
+User.hasMany(UserOrder);
+UserOrder.belongsTo(User);
 
-Order.hasMany(Product);
-Product.belongsTo(Order);
+UserOrder.hasMany(Product);
+Product.belongsTo(UserOrder);
 
 User.hasMany(Comment);
 Comment.belongsTo(User);
