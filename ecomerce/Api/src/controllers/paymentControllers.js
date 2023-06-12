@@ -1,5 +1,5 @@
 const mercadoPago = require("mercadopago");
-const { Order, User, Product } = require("../db");
+const { UserOrder, User, Product } = require("../db");
 const { Op } = require("sequelize");
 
 const createOrder = async (carrito) => {
@@ -20,7 +20,7 @@ const createOrder = async (carrito) => {
 
   console.log(items);
 
-  await Order.create({
+  await UserOrder.create({
     email: carrito[0].email,
     dni: carrito[0].dni,
     city: carrito[0].locality,
@@ -63,7 +63,7 @@ const createOrder = async (carrito) => {
 };
 
 const failure = async (dni) => {
-  const orden = await Order.findOne({
+  const orden = await UserOrder.findOne({
     where: {
       dni: dni,
       status: "in_process",
@@ -86,7 +86,7 @@ const failure = async (dni) => {
 };
 
 const success = async (dni) => {
-  const orden = await Order.findOne({
+  const orden = await UserOrder.findOne({
     where: {
       dni: dni,
       status: {
