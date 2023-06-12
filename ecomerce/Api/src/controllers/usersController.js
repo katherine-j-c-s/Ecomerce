@@ -51,7 +51,7 @@ const getUserById = async (id) => {
 
   const ordenes = await UserOrder.findAll({
     where: {
-      email: { [Op.iLike]: users.map((user) => user.mail) },
+      email: { [Op.iLike]: user.map((us) => us.mail) },
     },
   });
 
