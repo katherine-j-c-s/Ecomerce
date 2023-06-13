@@ -22,8 +22,7 @@ export default function Profile() {
   }, [access, navigate]); */
 
   const [userUpdate, setUserUpdate] = useState({});
-  const [id] = useState(localStorage.getItem("userData"));
-  console.log("🚀 ~ file: Profile.jsx:17 ~ Profile ~ user:", id);
+  const [userStorage] = useState(JSON.parse(localStorage.getItem("userData")));
   const [errors, setErrors] = useState({
     name: "",
     lastName: "",
@@ -88,7 +87,8 @@ export default function Profile() {
       alert("Cambios guardados!");
       setActivateuserUpdate(false);
     }
-    console.log("🚀 ~ file: Profile.jsx:91 ~ handleSubmit ~ id:", id);
+    const { id } = userStorage;
+    console.log("🚀 ~ file: Profile.jsx:91 ~ handleSubmit ~ id:", id,)
     dispatch(userUpDate({ id, userUpdate }));
   }
 
@@ -287,7 +287,7 @@ export default function Profile() {
                 <input
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="text"
-                  name="name"
+                  name="first_name"
                   onChange={handleChange}
                   defaultValue={user.name}
                 ></input>
@@ -313,7 +313,7 @@ export default function Profile() {
                 <input
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="text"
-                  name="lastName"
+                  name="last_name"
                   onChange={handleChange}
                   defaultValue={user.lastName}
                 ></input>
@@ -340,7 +340,7 @@ export default function Profile() {
                 <input
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="email"
-                  name="email"
+                  name="mail"
                   onChange={handleChange}
                   defaultValue={user.email}
                   placeholder="ejemplo@gmail.com"
