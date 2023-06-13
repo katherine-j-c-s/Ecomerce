@@ -1,25 +1,21 @@
-import userL from "../../assets/user.svg";
+
 import styles from "../Profile/Profile.module.css";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+
 import { userUpDate } from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
 export default function Profile() {
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
-  const access = useSelector((state) => state.access);
   const user = useSelector((state) => state.userData);
 
-  /* useEffect(() => {
-    !access && navigate("/");
-  }, [access, navigate]); */
 
   const [userUpdate, setUserUpdate] = useState({});
   const [id] = useState(localStorage.getItem("userData"));
