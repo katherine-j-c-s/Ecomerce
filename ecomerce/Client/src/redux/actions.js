@@ -25,6 +25,7 @@ import {
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  USER_UPDATE,
 } from "./types";
 
 import axios from "axios";
@@ -143,7 +144,7 @@ export function getUserId(id) {
 export function getAllUsers() {
   return async function (dispatch) {
     let { data } = await axios(
-      'https://ecomerce-production-8f61.up.railway.app/users'
+      "https://ecomerce-production-8f61.up.railway.app/users"
     );
     return dispatch({ type: GET_ALL_USERS, payload: data });
   };
@@ -286,6 +287,24 @@ export const removeImgToProduct = (obj) => {
         `https://ecomerce-production-8f61.up.railway.app/products/remove_image`,
         obj
       );
+      return dispatch({
+        type: REMOVE_IMG,
+      });
+    } catch (error) {
+      console.log("delete img products error ===>", error);
+    }
+  };
+};
+
+export const userUpDate = ({ id, userUpdate }) => {
+  console.log("🚀 ~ file: actions.js:300 ~ userUpDate ~ id, userUpdate :", id, userUpdate )
+  return async function (dispatch) {
+    try {
+      const data = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
+        userUpdate
+      );
+      console.log("🚀 ~ file: actions.js:307 ~ data:", data)
       return dispatch({
         type: REMOVE_IMG,
       });
