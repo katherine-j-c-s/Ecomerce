@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import { signUp, signIn } from "../../redux/actions";
+import { signUp } from "../../redux/actions";
 import { useDispatch } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
@@ -26,8 +27,9 @@ export default function SignUp() {
     email: "",
     password: "",
     address: "",
-    image: "",
   });
+
+  // const [file, setFile] = useState();
 
   function validate(inputs) {
     const errors = {};
@@ -49,8 +51,6 @@ export default function SignUp() {
       errors.password = "Debe tener al menos 8 caracteres";
     } else if (!inputs.address) {
       errors.address = "Debe haber una direccion";
-    } else if (!inputs.image) {
-      errors.image = "Debe haber una imagen";
     }
     return errors;
   }
@@ -66,8 +66,20 @@ export default function SignUp() {
       })
     );
   }
+
+  // function handleFileChange(e) {
+  //   const fileToBack = e.target.files[0];
+
+  //   if (fileToBack) {
+  //     const url = URL.createObjectURL(fileToBack);
+
+  //     setFile(url);
+  //   }
+  // }
+
   function handleSubmit(e) {
     e.preventDefault();
+
     /*
     {
       "mail":"pablo@mail.com",
@@ -87,11 +99,29 @@ export default function SignUp() {
       first_name: inputs.nombre,
       last_name: inputs.apellido,
       address: inputs.address,
-      image: inputs.image,
+      image:
+        inputs.image ||
+        "https://publicdomainvectors.org/photos/abstract-user-flat-3.png",
       role: "client",
     };
 
-    dispatch(signUp(newUser));
+    dispatch(signUp(newUser))
+      .then((r) => {
+        console.log(r);
+        toast.success("Usuario creado con éxito!");
+
+        setTimeout(() => {
+          toast.remove();
+          navigate("/");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err.message);
+
+        err.message === "Network Error"
+          ? toast.error("Ups, creo que hubo un error de servidor")
+          : toast.error("Este usuario ya existe");
+      });
 
     if (Object.keys(errors).length === 0) {
       setInputs({
@@ -106,14 +136,6 @@ export default function SignUp() {
         email: "",
         password: "",
       });
-
-      alert("Cuenta creada");
-
-      dispatch(signIn({ mail: newUser.mail, password: newUser.password }));
-
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
     }
   }
   return (
@@ -124,6 +146,28 @@ export default function SignUp() {
         </Link>
         <div className="mt-20">
           <h2 className="mb-16 font-bold text-3xl">Sign Up</h2>
+
+          <div>
+            <Toaster position="bottom-right" reverseOrder={false} />
+          </div>
+
+          <div className="flex items-center justify-center">
+            <button
+              className="px-4 py-2 border flex gap-2 border-slate-200 rounded-lg text-bluey hover:border-slate-400 hover:text-white hover:shadow transition duration-150"
+              onClick={() =>
+                (window.location.href =
+                  "https://ecomerce-production-8f61.up.railway.app/users/google")
+              }
+            >
+              <img
+                className="w-6 h-6"
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                loading="lazy"
+                alt="google logo"
+              />
+              <span>Login with Google</span>
+            </button>
+          </div>
 
           <form
             className="flex flex-col items-center justify-center"
@@ -211,7 +255,13 @@ export default function SignUp() {
               onChange={handleChange}
             ></input>
 
-            <p className="text-rose-500">{errors.image}</p>
+            {/* <input
+              type="file"
+              className="placeholder-slate-400 py-2 focus:outline-none focus:border-cyan-500 md:m-2 border border-white bg-transparent rounded-md p-1"
+              name="file"
+              accept="image/*"
+              onChange={handleFileChange}
+            ></input> */}
 
             <button
               className="px-32 bg-cyan-400 py-3 my-6 text-slate-300"

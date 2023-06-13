@@ -1,26 +1,32 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
-const { DB_DEPLOY, DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+const { ENVIROMENT, DB_DEPLOY, DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 const userModel = require("./models/User");
 const productModel = require("./models/Product");
-const orderModel = require("./models/Order");
+const orderModel = require("./models/UserOrder");
 const commentModel = require("./models/Comment");
 const categoryModel = require("./models/Category");
 const colorModel = require("./models/Color");
 const sizeModel = require("./models/Size");
 
-const sequelize = new Sequelize(DB_DEPLOY, {
-  logging: false,
-  native: false,
-});
 
-// const sequelize = new Sequelize(
-//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecomerce`,
-//   {
-//     logging: false, // set to console.log to see the raw SQL queries
-//     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-//   }
-// );
+let sequelize
+if(ENVIROMENT === 'local') {
+  sequelize = new Sequelize(
+    `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/ecommerce`,
+    {
+      logging: false, // set to console.log to see the raw SQL queries
+      native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+    }
+  );
+}
+if(ENVIROMENT === 'deploy') {
+  sequelize = new Sequelize(DB_DEPLOY, {
+    logging: false,
+    native: false,
+  });
+}
+
 
 userModel(sequelize);
 productModel(sequelize);
@@ -30,16 +36,16 @@ categoryModel(sequelize);
 colorModel(sequelize);
 sizeModel(sequelize);
 
-const { User, Product, Order, Category, Comment, Color, Size } =
+const { User, Product, UserOrder, Category, Comment, Color, Size } =
   sequelize.models;
 
 //  Aca vendrian las relaciones
 
-User.hasMany(Order);
-Order.belongsTo(User);
+User.hasMany(UserOrder);
+UserOrder.belongsTo(User);
 
-Order.hasMany(Product);
-Product.belongsTo(Order);
+UserOrder.hasMany(Product);
+Product.belongsTo(UserOrder);
 
 User.hasMany(Comment);
 Comment.belongsTo(User);

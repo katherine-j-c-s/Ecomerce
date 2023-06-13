@@ -9,6 +9,7 @@ const createOrderHandler = async (req, res) => {
   try {
     let car = await req.body;
     let carrito = [];
+
     carrito.push(car);
     console.log(carrito);
     const createOrders = await createOrder(carrito);
@@ -23,7 +24,7 @@ const successHandler = async (req, res) => {
   try {
     const { dni } = req.params;
     await success(dni);
-    res.redirect("https://sportwear.vercel.app/successful");
+    res.redirect("https://sportwear.vercel.app/");
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -42,7 +43,7 @@ const failureHandler = async (req, res) => {
     const { dni } = req.params;
     await failure(dni);
 
-    res.redirect("https://sportwear.vercel.app/cart");
+    res.redirect("https://sportwear.vercel.app/");
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

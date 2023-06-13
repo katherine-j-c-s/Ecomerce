@@ -1,4 +1,4 @@
-const { User, Order, Comment } = require("../db");
+const { User, UserOrder, Comment } = require("../db");
 const { Op } = require("sequelize");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
@@ -6,7 +6,7 @@ const cloudinary = require("../cloudinary");
 
 const getUsers = async () => {
   const users = await User.findAll({
-    include: [{ model: Order }, { model: Comment }],
+    include: [{ model: UserOrder }, { model: Comment }],
   });
 
   if (users.length === 0) {
@@ -21,7 +21,7 @@ const getUsersByName = async (name) => {
     where: {
       first_name: { [Op.iLike]: `%${name}%` },
     },
-    include: [{ model: Order }, { model: Comment }],
+    include: [{ model: UserOrder }, { model: Comment }],
   });
 
   if (users.length === 0) {
@@ -33,7 +33,7 @@ const getUsersByName = async (name) => {
 
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
-    include: [{ model: Order }, { model: Comment }],
+    include: [{ model: UserOrder }, { model: Comment }],
   });
 
   if (user) {

@@ -3,27 +3,27 @@ import styles from "../Profile/Profile.module.css";
 
 import { useState, useEffect } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
+import { userUpDate } from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
 export default function Profile() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const access = useSelector((state) => state.access);
+  const user = useSelector((state) => state.userData);
 
-  useEffect(() => {
+  /* useEffect(() => {
     !access && navigate("/");
-  }, [access, navigate]);
+  }, [access, navigate]); */
 
-  const [inputs, setInputs] = useState({
-    name: "Amadeo",
-    lastName: "Euralto",
-    email: "amadeo@gmail.com",
-    password: "12345",
-  });
+  const [userUpdate, setUserUpdate] = useState({});
+  const [id] = useState(localStorage.getItem("userData"));
+  console.log("🚀 ~ file: Profile.jsx:17 ~ Profile ~ user:", id);
   const [errors, setErrors] = useState({
     name: "",
     lastName: "",
@@ -31,42 +31,49 @@ export default function Profile() {
     password: "",
   });
 
-  const [activateInputs, setActivateInputs] = useState(false);
+  const [activateuserUpdate, setActivateuserUpdate] = useState(false);
 
-  function validate(inputs) {
+  function validate(userUpdate) {
     const errors = {};
-    if (!inputs.email) {
+    if (!userUpdate.email) {
       errors.email = "Debe haber un email";
-    } else if (!inputs.password) {
+    } else if (!userUpdate.password) {
       errors.password = "Debe haber un password";
-    } else if (!inputs.name) {
+    } else if (!userUpdate.name) {
       errors.name = "Debe haber un nombre";
-    } else if (!inputs.lastName) {
+    } else if (!userUpdate.lastName) {
       errors.lastName = "Debe haber un apellido";
-    } else if (!regexEmail.test(inputs.email)) {
+    } else if (!regexEmail.test(userUpdate.email)) {
       errors.email = "Debe ser un email válido";
-    } else if (inputs.password.length < 8) {
+    } else if (userUpdate.password.length < 8) {
       errors.password = "Debe tener al menos 8 caracteres";
     }
     return errors;
   }
   function handleChange(e) {
-    setInputs({
-      ...inputs,
+    e.preventDefault();
+
+    setUserUpdate({
+      ...userUpdate,
       [e.target.name]: e.target.value,
     });
     setErrors(
       validate({
-        ...inputs,
+        ...userUpdate,
         [e.target.name]: e.target.value,
       })
     );
   }
   function handleSubmit(e) {
     e.preventDefault();
+    console.log(
+      "🚀 ~ file: Profile.jsx:71 ~ handleSubmit ~ e:",
+      userUpdate,
+      Object.keys(errors).length
+    );
 
     if (Object.keys(errors).length === 0) {
-      setInputs({
+      setUserUpdate({
         name: "",
         lastName: "",
         email: "",
@@ -79,12 +86,14 @@ export default function Profile() {
         password: "",
       });
       alert("Cambios guardados!");
-      setActivateInputs(false);
+      setActivateuserUpdate(false);
     }
+    console.log("🚀 ~ file: Profile.jsx:91 ~ handleSubmit ~ id:", id);
+    dispatch(userUpDate({ id, userUpdate }));
   }
 
-  function toogleInputs() {
-    setActivateInputs(true);
+  function toogleuserUpdate() {
+    setActivateuserUpdate(true);
   }
   return (
     <section className={styles.container}>
@@ -198,7 +207,11 @@ export default function Profile() {
         <article className="m-2 p-6 flex flex-col items-center justify-center gap-11 bg-white shadow-lg rounded-md">
           <ul className="flex flex-row items-center justify-center gap-3">
             <li>
-              <img className={styles.userImg} src={userL} alt="user logo" />
+              <img
+                className={styles.userImg}
+                src={user.image.url}
+                alt="user logo"
+              />
             </li>
 
             <li>
@@ -206,7 +219,7 @@ export default function Profile() {
                 <li>
                   <button
                     className="p-1.5 bg-bluey rounded-full"
-                    onClick={toogleInputs}
+                    onClick={toogleuserUpdate}
                   >
                     <svg
                       width="24px"
@@ -262,13 +275,12 @@ export default function Profile() {
                 nombre
               </label>
 
-              {!activateInputs ? (
+              {!activateuserUpdate ? (
                 <input
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="text"
                   name="name"
-                  value={inputs.name}
-                  onChange={handleChange}
+                  defaultValue={user.name}
                   disabled
                 ></input>
               ) : (
@@ -276,8 +288,8 @@ export default function Profile() {
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="text"
                   name="name"
-                  value={inputs.name}
                   onChange={handleChange}
+                  defaultValue={user.name}
                 ></input>
               )}
 
@@ -289,13 +301,12 @@ export default function Profile() {
                 apellido
               </label>
 
-              {!activateInputs ? (
+              {!activateuserUpdate ? (
                 <input
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="text"
                   name="lastName"
-                  value={inputs.lastName}
-                  onChange={handleChange}
+                  value={user.lastName}
                   disabled
                 ></input>
               ) : (
@@ -303,8 +314,8 @@ export default function Profile() {
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="text"
                   name="lastName"
-                  value={inputs.lastName}
                   onChange={handleChange}
+                  defaultValue={user.lastName}
                 ></input>
               )}
 
@@ -316,13 +327,12 @@ export default function Profile() {
                 correo
               </label>
 
-              {!activateInputs ? (
+              {!activateuserUpdate ? (
                 <input
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="email"
                   name="email"
-                  value={inputs.email}
-                  onChange={handleChange}
+                  value={user.email}
                   placeholder="ejemplo@gmail.com"
                   disabled
                 ></input>
@@ -331,8 +341,8 @@ export default function Profile() {
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="email"
                   name="email"
-                  value={inputs.email}
                   onChange={handleChange}
+                  defaultValue={user.email}
                   placeholder="ejemplo@gmail.com"
                 ></input>
               )}
@@ -345,13 +355,12 @@ export default function Profile() {
                 contraseña
               </label>
 
-              {!activateInputs ? (
+              {!activateuserUpdate ? (
                 <input
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="password"
                   name="password"
-                  value={inputs.password}
-                  onChange={handleChange}
+                  value={user.password}
                   placeholder=""
                   disabled
                 ></input>
@@ -360,8 +369,8 @@ export default function Profile() {
                   className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
                   type="password"
                   name="password"
-                  value={inputs.password}
                   onChange={handleChange}
+                  defaultValue={user.password}
                   placeholder="********"
                 ></input>
               )}
@@ -369,7 +378,7 @@ export default function Profile() {
               <p className="text-rose-500">{errors.password}</p>
             </div>
 
-            {!activateInputs ? null : (
+            {!activateuserUpdate ? null : (
               <button className="px-16 bg-bluey capitalize md:w-full lg:w-min">
                 guardar
               </button>

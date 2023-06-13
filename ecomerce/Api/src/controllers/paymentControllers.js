@@ -1,5 +1,7 @@
 const mercadoPago = require("mercadopago");
-const { Order, User, Product } = require("../db");
+const { UserOrder, User, Product } = require("../db");
+const { Op } = require("sequelize");
+const sendEmail = require("../nodemailer");
 
 const createOrder = async (carrito) => {
   mercadoPago.configure({
@@ -19,7 +21,14 @@ const createOrder = async (carrito) => {
 
   console.log(items);
 
-  await Order.create({
+  const user = await User.findOne({
+    where: {
+      mail: carrito[0].mail,
+    },
+  });
+
+  const order = await UserOrder.create({
+    email: carrito[0].mail,
     dni: carrito[0].dni,
     city: carrito[0].locality,
     address: carrito[0].address,
@@ -30,6 +39,9 @@ const createOrder = async (carrito) => {
     status: "in_process",
     products: items,
   });
+
+  // Establecer la relación entre la orden y el usuario
+  await order.setUser(user);
 
   await Promise.all(
     items.map(async (item) => {
@@ -61,7 +73,7 @@ const createOrder = async (carrito) => {
 };
 
 const failure = async (dni) => {
-  const orden = await Order.findOne({
+  const orden = await UserOrder.findOne({
     where: {
       dni: dni,
       status: "in_process",
@@ -84,18 +96,29 @@ const failure = async (dni) => {
 };
 
 const success = async (dni) => {
-  const orden = await Order.findOne({
+  const orden = await UserOrder.findOne({
     where: {
       dni: dni,
       status: {
-        [Op.or]: ["in_process", "rejected"],
+        [Op.or]: ["in_process", "rejected"], // Corregido para usar el operador de "o" lógico
       },
     },
   });
 
   if (orden) {
-    orden.status = "fullfilled";
+    orden.status = "fullfilled"; // Corregido para tener una ortografía correcta
     await orden.save();
+  }
+
+  if(orden.status == 'fullfilled') {
+    let userEmail = orden.email
+    
+    await sendEmail({
+      from: 'grupo_pf_supergenial@test.com',
+      to: userEmail,
+      subject: 'Compra de productos',
+      text: `La compra se ha realizado con exito!`
+    })
   }
 };
 

@@ -2,8 +2,11 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    "Order",
+    "UserOrder",
     {
+      email: {
+        type: DataTypes.STRING,
+      },
       dni: { type: DataTypes.INTEGER },
       city: {
         type: DataTypes.STRING,
