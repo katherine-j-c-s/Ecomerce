@@ -1,6 +1,8 @@
 const { Product, Color, Category, Size } = require("../db");
 const { hard } = require("./mockedData/mockedProducts");
 const cloudinary = require("../cloudinary")
+const sendEmail = require("../nodemailer");
+const UserOrder = require("../models/UserOrder");
 require("dotenv").config();
 
 
@@ -81,23 +83,26 @@ const createProduct = async (name, price, description, image, stock, color, cate
   let available;
   if (stock === 0 || stock === null) available = false;
 
+  let ColorId 
+  let CategoryId
+  let SizeId
   if(color) {
       let { id } = await Color.findOne({
         where: { color }
       })
-      color = id
+      ColorId = id
   }
   if(category) {
       let { id } = await Category.findOne({
         where: { name: category }
       })
-      category = id
+      CategoryId = id
   }
   if(size) {
       let { id } = await Size.findOne({
         where: { size }
       })
-      size = id
+      SizeId = id
   }
 
   let imagesPromises = []
@@ -123,7 +128,7 @@ const createProduct = async (name, price, description, image, stock, color, cate
   }
 
   let [product, created] = await Product.findOrCreate({
-    where: { name },
+    where: { name, ColorId, SizeId, CategoryId },
     defaults: {
       name,
       price,
@@ -131,9 +136,9 @@ const createProduct = async (name, price, description, image, stock, color, cate
       stock,
       available,
       image: imagesObjects,
-      ColorId: color,
-      CategoryId: category,
-      SizeId: size,
+      ColorId,
+      CategoryId,
+      SizeId,
     },
   });
 
@@ -269,6 +274,17 @@ const addImage = async (id, images) => {
   return 'Imagen añadida correctamente'
 }
 
+const testController = async () => {
+  message = {
+    from: 'grupo_pf_supergenial@test.com',
+    to: 'sovod47310@ozatvn.com',
+    subject: 'Test001',
+    text: 'This is a test 001 from PF project'
+  }
+  let emailSended = await sendEmail(message)
+  return emailSended
+}
+
 module.exports = {
   createProduct,
   getProducts,
@@ -277,4 +293,5 @@ module.exports = {
   updateProduct,
   removeImage,
   addImage,
+  testController,
 };

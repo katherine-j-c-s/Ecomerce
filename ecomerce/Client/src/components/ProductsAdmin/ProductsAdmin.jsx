@@ -50,13 +50,19 @@ export default function ProductsAdmin() {
           <p className='mt-2'>Agregar</p>
         </div>
       </Link>
-      {products.map((product, index) => {
+      {products?.map((product, index) => {
         let imagenes = product.image.map(i=>{
-          if (i.url !== undefined) {
+          console.log(i);
+          if(i.url !== undefined){
             return i.url
-          }else{
+          }else {
             return i
           }
+          // if (i.url !== undefined) {
+          //   return i.url
+          // }else{
+          //   return i
+          // }
         })
         return(
           <div onMouseEnter={()=>setShowEdit({id:product.id,show:true})} onMouseLeave={()=>setShowEdit({id:null,show:false})} key={index} className='flex justify-center mx-4 relative'>
