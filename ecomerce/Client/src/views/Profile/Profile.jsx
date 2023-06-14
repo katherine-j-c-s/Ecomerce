@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   const [view, setView] = useState("perfil");
@@ -6,6 +7,9 @@ export default function Profile() {
   const comprasVistaRef = useRef(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
+  const { userData } = useSelector((state) => state);
+
+  console.log(userData);
 
   const handleRating = (event) => {
     const selectedRating = parseInt(event.target.getAttribute("target"));
@@ -36,7 +40,7 @@ export default function Profile() {
 
   return (
     <div>
-      <h2>Mi Perfil</h2>
+      <h2>{"Hola" + " " + userData.name + "!"}</h2>
 
       <section>
         <button id="perfil" onClick={handleView} value="perfil">
@@ -62,34 +66,38 @@ export default function Profile() {
       {isComprasView && (
         <section id="comprasVista" ref={comprasVistaRef}>
           <h2>Formulario de Puntuación y Reseña</h2>
+          ALGO.map
+          {
+            <form>
+              <div>
+                <link
+                  rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                />
 
-          <form>
-            <div>
-              <link
-                rel="stylesheet"
-                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-              />
-
-              {[1, 2, 3, 4, 5].map((value) => (
-                <span
-                  key={value}
-                  className={`fa fa-heart ${value <= rating ? "checked" : ""}`}
-                  onClick={handleRating}
-                  target={value}
-                  style={{ color: value <= rating ? "red" : "" }}
-                ></span>
-              ))}
-            </div>
-            <div className="review">
-              <textarea
-                name="review"
-                value={review}
-                placeholder="Escribe tu reseña aquí"
-                onChange={handleReviewChange}
-              ></textarea>
-            </div>
-            <input type="submit" value="Enviar" />
-          </form>
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <span
+                    key={value}
+                    className={`fa fa-heart ${
+                      value <= rating ? "checked" : ""
+                    }`}
+                    onClick={handleRating}
+                    target={value}
+                    style={{ color: value <= rating ? "red" : "" }}
+                  ></span>
+                ))}
+              </div>
+              <div className="review">
+                <textarea
+                  name="review"
+                  value={review}
+                  placeholder="Escribe tu reseña aquí"
+                  onChange={handleReviewChange}
+                ></textarea>
+              </div>
+              <input type="submit" value="Enviar" />
+            </form>
+          }
         </section>
       )}
     </div>

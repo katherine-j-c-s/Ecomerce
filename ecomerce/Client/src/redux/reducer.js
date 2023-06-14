@@ -131,19 +131,19 @@ const rootReducer = (state = initialState, action) => {
         },
       };
 
-      case USER_UPDATE:
-        return {
-          ...state,
-          userData: {
-            id: action.payload.id,
-            image: action.payload.image,
-            name: action.payload.first_name,
-            lastName: action.payload.last_name,
-            email: action.payload.mail,
-            password: action.payload.password,
-            access: true,
-          },
-        };
+    case USER_UPDATE:
+      return {
+        ...state,
+        userData: {
+          id: action.payload.id,
+          image: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
+          access: true,
+        },
+      };
 
     case SIGN_UP:
       localStorage.setItem(
@@ -202,6 +202,8 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: "",
+          orders: action.payload.userOrders.products,
+          comments: action.payload.comments,
         },
       };
     case GET_ALL_USERS:
