@@ -5,6 +5,7 @@ const {
   deleteComment,
   updateComment,
 } = require("../controllers/commentController");
+
 const getCommentsHandler = async (req, res) => {
   try {
     let getAllComments = await getComments();
