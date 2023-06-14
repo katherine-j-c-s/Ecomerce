@@ -1,7 +1,7 @@
 const { Comment } = require("../db");
 
 const getComments = async () => {
-  let comments = await Comment.findAll();
+  const comments = await Comment.findAll();
   if (comments.length === 0) {
     throw new Error("No se encontraron comentarios");
   }
@@ -9,15 +9,17 @@ const getComments = async () => {
 };
 
 const getCommentByID = async (id) => {
-  let comment = await Comment.findOne({
-    where: { id },
-  });
+  const comment = await Comment.findByPk(id);
 
-  return comment;
+  if (comment) {
+    return comment;
+  } else {
+    throw new Error("Comentario no encontrado");
+  }
 };
 
 const createComment = async (rate, content) => {
-  let comment = await Comment.create({
+  const comment = await Comment.create({
     rate,
     content,
   });

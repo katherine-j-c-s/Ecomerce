@@ -2,6 +2,7 @@ const { Router } = require("express");
 
 const {
   getCommentsHandler,
+  getCommentByIdHandler,
   postCommentHandler,
   deleteCommentHandler,
   updateCommentHandler,
@@ -10,6 +11,8 @@ const {
 const commentsRouter = Router();
 
 commentsRouter.get("/", getCommentsHandler);
+
+commentsRouter.get("/:id", getCommentByIdHandler);
 
 commentsRouter.delete("/:id", deleteCommentHandler);
 
