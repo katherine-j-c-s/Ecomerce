@@ -403,14 +403,14 @@ const CreateProduct = ()=>{
                                         <div key={t.id} className='flex bg-gray-200 dark:bg-slate-900 border dark:border-slate-400 dark:hover:shadow-xl dark:hover:border-sky-400 transition-all shadow-slate-950 dark:hover:boder-sky-4000 py-2 mt-2 rounded-lg justify-evenly'>
                                             <div className='flex'>
                                                 <div className={`relative z-10 h-8 w-8 rounded-3xl mr-3 ${color.class}`}></div>
-                                                <p className='md:text-black dark:md:text-slate-400 text-white md:relative absolute'>{t.color}</p>
+                                                <p className='md:text-black dark:md:text-slate-400 text-white dark:text-slate-900 md:relative absolute'>{t.color}</p>
                                             </div>
                                             <div className='flex'>
-                                                <p className='md:text-black dark:md:text-slate-400 text-white md:relative absolute'>talla:</p>
+                                                <p className='md:text-black dark:md:text-slate-400 text-white dark:text-slate-900 md:relative absolute'>talla:</p>
                                                 <p className='relative z-10 dark:text-slate-400 text-black'>{t.talla}</p>
                                             </div>
                                             <div className='flex'>
-                                                <p className='md:text-black dark:md:text-slate-400 text-white md:relative absolute'>Cantidad:</p>
+                                                <p className='md:text-black dark:md:text-slate-400 text-white dark:text-slate-900 md:relative absolute'>Cantidad:</p>
                                                 <p className='relative dark:text-slate-400 z-10'>{t.cantidad}</p>
                                             </div>
                                             <div>
