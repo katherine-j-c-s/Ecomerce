@@ -1,9 +1,4 @@
 import {
-  SHOW_SIDEBAR,
-  DISABLE_CART,
-  ADD_PRODUCT_CART,
-  ADD_QUANTITY,
-  DELETE_QUANTITY,
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
@@ -14,15 +9,21 @@ import {
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
+  SHOW_SIDEBAR,
+  DISABLE_CART,
+  ADD_QUANTITY,
   EDIT_PRODUCT,
   GET_ALL_USERS,
   DELETE_PRODUCT,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
+  DELETE_QUANTITY,
   PRODUCT_TO_EDIT,
   FILTER_PRODUCTS,
+  ADD_PRODUCT_CART,
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
+  ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
 } from "./types";
@@ -294,3 +295,8 @@ export const removeImgToProduct = (obj) => {
     }
   };
 };
+////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////
+
+export function addDarkModeAdmin(condicional) {
+  return { type: ADD_DARKMODE_ADMIN, payload:condicional };
+}

@@ -18,6 +18,7 @@ import {
   ADD_PRODUCT_CART,
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
+  ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
   USER_ADMIN,
@@ -48,6 +49,7 @@ const initialState = {
   sizes: [],
   categories: [],
   colors: [],
+  darkModeAdmin: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -285,6 +287,8 @@ const rootReducer = (state = initialState, action) => {
 
     case GET_FILTERS:
       return { ...state, [action.payload[0]]: action.payload[1] };
+    case ADD_DARKMODE_ADMIN:
+      return {...state, darkModeAdmin:action.payload}
     default:
       return state;
   }

@@ -329,29 +329,28 @@ const CreateProduct = ()=>{
                 <p>Go Back</p>
             </Link>
             <div className='mt-2 w-full'>
-                <h2 className={`${Object.keys(productToEdit).length > 0 ? 'w-44' : 'w-32'} mt-20 text-xl font-bold mb-10 mx-auto pb-2 border-b-4 border-cyan-400`} >{Object.keys(productToEdit).length > 0 ? 'Editar Producto' : 'Agregar'}</h2>
+                <h2 className={`${Object.keys(productToEdit).length > 0 ? 'w-44' : 'w-32'} mt-20 text-xl dark:text-slate-200 font-bold mb-10 mx-auto pb-2 border-b-4 border-cyan-400`} >{Object.keys(productToEdit).length > 0 ? 'Editar Producto' : 'Agregar'}</h2>
                 <form className='flex flex-col items-center w-full justify-center' onSubmit={handleSubmit}>
                     <div className='flex w-full justify-center align-middle'>
                         <div className='w-4/5 flex flex-col justify-center align-middle mx-auto'>
                             <div className='flex align-middle flex-col md:flex-row justify-center w-full'>
                                 <div className='flex mb-5 flex-col justify-center w-full md:w-fit relative'>
-                                    <label className={`absolute w-16 bg-slate-300 h-fit left-8  ${errors.nombre && ready === false ? 'bottom-14 md:bottom-16 text-red-500' : 'bottom-10 text-cyan-400'}`}>Nombre</label>
+                                    <label className={`absolute w-16 bg-slate-300 dark:bg-slate-900 h-fit left-8  ${errors.nombre && ready === false ? 'bottom-14 md:bottom-16 text-red-500' : 'bottom-10 text-cyan-400'}`}>Nombre</label>
                                     <input
-                                        className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.nombre  && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
+                                        className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.nombre  && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey dark:focus:border-grey dark:hover:border-sky-400 focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="nombre"
                                         value={inputs?.nombre}
                                         onChange={handleChange}
                                         placeholder="Zapatillas Nike"
                                     ></input>
-                                    {console.log(inputs)}
                                     {ready === false ?
                                         <p className='text-red-500 relative bottom-0 md:bottom-2'>{errors.nombre}</p>
                                     :null}
                                 </div>
                                 <div className='flex mb-5 flex-col justify-center w-full md:w-fit relative'>
-                                    <label className={`absolute w-16 bg-slate-300 h-fit left-8  ${errors.precio && ready === false ? 'bottom-16 text-red-500' : 'bottom-10 text-cyan-400'}`}>Precio</label>
+                                    <label className={`absolute w-16 bg-slate-300 dark:bg-slate-900 h-fit left-8  ${errors.precio && ready === false ? 'bottom-16 text-red-500' : 'bottom-10 text-cyan-400'}`}>Precio</label>
                                     <input
-                                        className={`placeholder-slate-400 focus:outline-none hover:shadow-md my-2 border bg-transparent rounded-md w-full md:w-fit p-2 pl-10 text-grey ${errors.precio && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
+                                        className={`placeholder-slate-400 focus:outline-none hover:shadow-md my-2 border bg-transparent rounded-md w-full md:w-fit p-2 pl-10 text-grey ${errors.precio && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey dark:focus:border-grey focus:border-cyan-500 dark:hover:border-sky-400 hover:border-cyan-500'}`} 
                                         name="precio"
                                         value={inputs?.precio}
                                         onChange={handleChange}
@@ -364,9 +363,9 @@ const CreateProduct = ()=>{
                             </div>
                             <div className='flex justify-center w-full'>
                                 <div className='w-full md:w-8/12 flex flex-col justify-center relative'>
-                                    <label  className={`absolute w-24 bg-slate-300 h-fit left-8  ${errors.desc && ready === false ? 'bottom-20 text-red-500' : 'bottom-16 text-cyan-400'}`}>Descripcion</label>
+                                    <label  className={`absolute w-24 dark:bg-slate-900 bg-slate-300 h-fit left-8  ${errors.desc && ready === false ? 'bottom-20 text-red-500' : 'bottom-16 text-cyan-400'}`}>Descripcion</label>
                                     <textarea
-                                        className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.desc && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
+                                        className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${errors.desc && ready === false ? 'border-red-500  focus:border-red-500' : 'border-grey dark:hover:border-sky-400 dark:focus:border-grey focus:border-cyan-500 hover:border-cyan-500'}`} 
                                         name="desc"
                                         value={inputs?.desc}
                                         onChange={handleChange}
@@ -401,26 +400,26 @@ const CreateProduct = ()=>{
                                     console.log();
                                     let color = options[2].items.find(c=> c.name === t.color)
                                     return(
-                                        <div key={t.id} className='flex bg-gray-200 py-2 mt-2 rounded-lg justify-evenly'>
+                                        <div key={t.id} className='flex bg-gray-200 dark:bg-slate-900 border dark:border-slate-400 dark:hover:shadow-xl dark:hover:border-sky-400 transition-all shadow-slate-950 dark:hover:boder-sky-4000 py-2 mt-2 rounded-lg justify-evenly'>
                                             <div className='flex'>
                                                 <div className={`relative z-10 h-8 w-8 rounded-3xl mr-3 ${color.class}`}></div>
-                                                <p className='md:text-black text-white md:relative absolute'>{t.color}</p>
+                                                <p className='md:text-black dark:md:text-slate-400 text-white md:relative absolute'>{t.color}</p>
                                             </div>
                                             <div className='flex'>
-                                                <p className='md:text-black text-white md:relative absolute'>talla:</p>
-                                                <p className='relative z-10 text-black'>{t.talla}</p>
+                                                <p className='md:text-black dark:md:text-slate-400 text-white md:relative absolute'>talla:</p>
+                                                <p className='relative z-10 dark:text-slate-400 text-black'>{t.talla}</p>
                                             </div>
                                             <div className='flex'>
-                                                <p className='md:text-black text-white md:relative absolute'>Cantidad:</p>
-                                                <p className='relative z-10'>{t.cantidad}</p>
+                                                <p className='md:text-black dark:md:text-slate-400 text-white md:relative absolute'>Cantidad:</p>
+                                                <p className='relative dark:text-slate-400 z-10'>{t.cantidad}</p>
                                             </div>
                                             <div>
                                                 <ul className="flex flex-row items-center gap-2">
-                                                    <li  className='relative z-10 p-2 bg-sky-500 rounded-full'>
+                                                    <li  className='relative z-10 p-2 dark:p-2.3 bg-sky-500 transition-all rounded-full cursor-pointer dark:bg-slate-900 border dark:border-sky-400 dark:hover:bg-sky-400'>
                                                         <img onClick={editType} id={`${t.id},${t.color},${t.talla},${t.cantidad}`} className=' h-3.5  w-3.5' src={edit} alt="" />
                                                     </li>
                                                     <li onClick={deleteType}>
-                                                        <button type='reset' className="p-1.5 border-bluey rounded-full"> 
+                                                        <button type='reset' className="p-1.5 transition-all border-sky-500 dark:bg-sky-500 dark:hover:bg-sky-200 dark:hover:border-sky-200 rounded-full"> 
                                                             <svg width="24px" id={t.id} height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                                                                 <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
                                                             </svg>
@@ -435,12 +434,12 @@ const CreateProduct = ()=>{
                                     <div className='flex flex-col justify-center h-fit w-full'>
                                         {readyType === true ? 
                                             <div className='flex relative w-fit mt-6 mx-auto justify-center'>
-                                                <p className='text-cyan-400 bottom-9 md:bottom-6 left-0 h-fit w-20 z-10 absolute bg-slate-300'>Cantidad</p>
+                                                <p className='text-cyan-400 bottom-9 md:bottom-6 left-0 h-fit w-20 z-10 absolute bg-slate-300 dark:bg-slate-900'>Cantidad</p>
                                                 <div className='flex justify-center border rounded-lg border-slate-400'>
-                                                    <p id='menos' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 transition-all' onClick={handleCantidad}>-</p>
-                                                    <p className='mt-1 text-xl'>{type?.cantidad}</p>
-                                                    <p id='mas' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 transition-all' onClick={handleCantidad}>+</p>
-                                                    <div onClick={handleType} className='h-full w-full pt-1 px-4 bg-cyan-400 text-slate-800 hover:text-black hover:font-bold transition-all rounded-r-lg'>
+                                                    <p id='menos' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer transition-all' onClick={handleCantidad}>-</p>
+                                                    <p className='mt-1 text-xl dark:text-slate-400'>{type?.cantidad}</p>
+                                                    <p id='mas' className='mx-8 py-1 md:py-0 md:mx-4 text-2xl text-slate-600 hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer transition-all' onClick={handleCantidad}>+</p>
+                                                    <div onClick={handleType} className='h-full w-full pt-1 px-4 cursor-pointer bg-cyan-400 text-slate-800 hover:text-black hover:font-bold transition-all rounded-r-lg'>
                                                         <p>Listo!</p>
                                                     </div>
                                                 </div>
@@ -449,21 +448,21 @@ const CreateProduct = ()=>{
                                         :null}
                                         <div className='flex md:flex-row flex-col justify-center align-middle'>
                                             <div className='w-full md:w-3/5'>
-                                                <p className='w-full my-4'>{options[2].title}</p>
+                                                <p className='w-full my-4 dark:text-slate-300'>{options[2].title}</p>
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[2].items.map(i=>{
                                                         return(
-                                                        <p onClick={handleColors}id={i.name} className={`text-black w-fit rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex ${i.name === color ? ' bg-sky-300' : 'bg-slate-400'}`} >{i.name}</p>
+                                                        <p onClick={handleColors}id={i.name} className={`text-black cursor-pointer w-fit rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex border dark:bg-slate-900 ${i.name === color ? ' bg-sky-300 dark:bg-slate-300 dark:text-black dark:hover:bg-sky-400 dark:hover:border-sky-400' : 'bg-slate-400 dark:border-slate-400 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-sky-400'}`} >{i.name}</p>
                                                     ) 
                                                     })}
                                                 </div>
                                             </div>
                                             <div className='w-full md:w-2/5'>
-                                                <p className='w-full my-4'>{options[1].title}</p>
+                                                <p className='w-full my-4 dark:text-slate-300'>{options[1].title}</p>
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[1].items.map(i=>{
                                                         return(
-                                                            <p onClick={handleTalla} id={i} className={`text-black w-fit rounded-lg p-2 px-4 m-2 hover:bg-sky-300 transition-all flex ${i === talla ? ' bg-sky-300' : 'bg-slate-400'}`}>{i}</p>
+                                                            <p onClick={handleTalla} id={i} className={`text-black w-fit cursor-pointer rounded-lg p-2 px-4 m-2 hover:bg-sky-300 transition-all border dark:bg-slate-900 flex ${i === talla ? ' bg-sky-300 dark:bg-slate-300 dark:text-black dark:hover:bg-sky-400 dark:hover:border-sky-400' : 'bg-slate-400 dark:border-slate-400 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-sky-400'}`}>{i}</p>
                                                     ) 
                                                     })}
                                                 </div>
@@ -495,7 +494,7 @@ const CreateProduct = ()=>{
                                             placeholder="url"
                                         ></input>
                                         {validateImg ?
-                                            <p className='h-fit relative top-2 hover:shadow-lg text-slate-600 py-2 px-6 rounded-md bg-bluey capitalize hover:font-bold' onClick={addImage}>Add</p>
+                                            <p className='h-fit relative top-2 hover:shadow-lg text-slate-600 py-2 px-6 rounded-md bg-bluey capitalize hover:font-bold cursor-pointer' onClick={addImage}>Add</p>
                                         :null}
                                     </div>: null}
                                 </div> 
@@ -503,16 +502,15 @@ const CreateProduct = ()=>{
                             <div className='flex justify-center md:flex-row flex-col flex-wrap'>
                                 {inputs?.imagenes ? 
                                     inputs?.imagenes.map(img=>{
-                                        console.log(img);
                                         return(
                                             <div>
-                                                <div className="mt-2 relative z-10 mx-auto w-fit h-fit hover:bg-sky-300 rounded-full hover:shadow-xl transition-all p-2.5"> 
+                                                <div className="mt-2 relative z-10 mx-auto w-fit h-fit hover:bg-sky-300 hover:shadow-xl cursor-pointer transition-all p-2.5 dark:bg-sky-500 dark:hover:bg-sky-200 dark:hover:border-sky-200 rounded-full"> 
                                                     <svg onClick={deleteImg} id={img} width="24px" height="24px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000">
                                                         <path d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" ></path>
                                                     </svg>
                                                 </div>
                                                <div className='mx-auto md:mx-4 mt-4 md:mt-1 w-60 md:w-60 h-60 rounded-lg bg-none border border-gray-500 border-dashed relative shadow hover:shadow-xl'>
-                                                    <img src={img} alt="imagen" />
+                                                    <img className='w-60 md:w-60 h-60 rounded-lg' src={img} alt="imagen" />
                                                 </div> 
                                             </div>
                                         )
