@@ -5,19 +5,31 @@ const {
   deleteComment,
   updateComment,
 } = require("../controllers/commentController");
+
 const getCommentsHandler = async (req, res) => {
   try {
-    let getAllComments = await getComments();
+    const getAllComments = await getComments();
     res.status(200).json(getAllComments);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
+const getCommentByIdHandler = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const comment = await getCommentByID(id);
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const postCommentHandler = async (req, res) => {
   try {
-    let { rate, content } = req.body;
-    let commentCreate = await createComment(rate, content);
+    const { rate, content } = req.body;
+    const commentCreate = await createComment(rate, content);
     res.status(200).json(commentCreate);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -26,8 +38,8 @@ const postCommentHandler = async (req, res) => {
 
 const deleteCommentHandler = async (req, res) => {
   try {
-    let { id } = req.params;
-    let comment = await deleteComment(id);
+    const { id } = req.params;
+    const comment = await deleteComment(id);
     res.status(200).json(comment);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -36,9 +48,9 @@ const deleteCommentHandler = async (req, res) => {
 
 const updateCommentHandler = async (req, res) => {
   try {
-    let { id } = req.params;
-    let { rate, content } = req.body;
-    let commentUpdate = await updateComment(id, rate, content);
+    const { id } = req.params;
+    const { rate, content } = req.body;
+    const commentUpdate = await updateComment(id, rate, content);
     res.status(200).json(commentUpdate);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -47,6 +59,7 @@ const updateCommentHandler = async (req, res) => {
 
 module.exports = {
   getCommentsHandler,
+  getCommentByIdHandler,
   postCommentHandler,
   deleteCommentHandler,
   updateCommentHandler,

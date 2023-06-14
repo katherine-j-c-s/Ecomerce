@@ -1,37 +1,41 @@
 const { Comment } = require("../db");
 
 const getComments = async () => {
-  let comments = await Comment.findAll();
+  const comments = await Comment.findAll();
   if (comments.length === 0) {
-    throw new Error("No comments found.");
+    throw new Error("No se encontraron comentarios");
   }
   return comments;
 };
 
 const getCommentByID = async (id) => {
-  let comment = await Comment.findOne({
-    where: { id },
-  });
+  const comment = await Comment.findByPk(id);
 
-  return comment;
+  if (comment) {
+    return comment;
+  } else {
+    throw new Error("Comentario no encontrado");
+  }
 };
 
 const createComment = async (rate, content) => {
-  let comment = await Comment.create({
+  const comment = await Comment.create({
     rate,
     content,
   });
-    console.log("commentController.js:24 rate, content,:", rate, content,)
 
   return comment;
 };
 
 const deleteComment = async (id) => {
-  let removedComment = await Comment.destroy({
-    where: { id },
-  });
+  const comment = await User.findByPk(id);
 
-  return removedComment;
+  if (comment) {
+    await comment.destroy();
+    return "Comentario eliminado con éxito";
+  } else {
+    throw new Error("Comentario no encontrado");
+  }
 };
 
 const updateComment = async (id, rate, content) => {
@@ -42,7 +46,7 @@ const updateComment = async (id, rate, content) => {
     await comment.save();
     return comment;
   } else {
-    throw new Error("Usuario no encontrado");
+    throw new Error("Comentario no encontrado");
   }
 };
 
