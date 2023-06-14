@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -30,6 +31,26 @@ export default function Profile() {
 
   const perfilVistaRef = useRef(null);
   const comprasVistaRef = useRef(null);
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState("");
+  const { userData } = useSelector((state) => state);
+
+  console.log(userData);
+
+  const handleRating = (event) => {
+    const selectedRating = parseInt(event.target.getAttribute("target"));
+    console.log(selectedRating);
+    setRating(selectedRating);
+    if (selectedRating === rating) {
+      setRating(0);
+    } else {
+      setRating(selectedRating);
+    }
+  };
+
+  const handleReviewChange = (event) => {
+    setReview(event.target.value);
+  };
 
   const handleView = (event) => {
     const value = event.target.value;
@@ -119,7 +140,7 @@ export default function Profile() {
 
   return (
     <div>
-      <h2>Mi Perfil</h2>
+      <h2>{"Hola" + " " + userData.name + "!"}</h2>
 
       <section>
         <button id="perfil" onClick={handleView} value="perfil">
@@ -176,6 +197,7 @@ export default function Profile() {
               disabled={!enabled}
               onChange={handleChange}
             />
+            <input type="text" placeholder="Dirección" />
             <input
               type="text"
               id="profileImage"
@@ -196,27 +218,38 @@ export default function Profile() {
       {isComprasView && (
         <section id="comprasVista" ref={comprasVistaRef}>
           <h2>Formulario de Puntuación y Reseña</h2>
+          ALGO.map
+          {
+            <form>
+              <div>
+                <link
+                  rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                />
 
-          <form>
-            <div className="rating">
-              <input type="radio" id="rating1-5" name="rating1" value="5" />
-              <label htmlFor="rating1-5"></label>
-              <input type="radio" id="rating1-4" name="rating1" value="4" />
-              <label htmlFor="rating1-4"></label>
-              <input type="radio" id="rating1-3" name="rating1" value="3" />
-              <label htmlFor="rating1-3"></label>
-              <input type="radio" id="rating1-2" name="rating1" value="2" />
-              <label htmlFor="rating1-2"></label>
-              <input type="radio" id="rating1-1" name="rating1" value="1" />
-              <label htmlFor="rating1-1"></label>
-            </div>
-            <div className="review">
-              <textarea
-                name="review1"
-                placeholder="Escribe tu reseña aquí"
-              ></textarea>
-            </div>
-          </form>
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <span
+                    key={value}
+                    className={`fa fa-heart ${
+                      value <= rating ? "checked" : ""
+                    }`}
+                    onClick={handleRating}
+                    target={value}
+                    style={{ color: value <= rating ? "red" : "" }}
+                  ></span>
+                ))}
+              </div>
+              <div className="review">
+                <textarea
+                  name="review"
+                  value={review}
+                  placeholder="Escribe tu reseña aquí"
+                  onChange={handleReviewChange}
+                ></textarea>
+              </div>
+              <input type="submit" value="Enviar" />
+            </form>
+          }
         </section>
       )}
     </div>
