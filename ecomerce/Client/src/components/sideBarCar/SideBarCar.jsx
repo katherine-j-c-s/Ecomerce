@@ -8,6 +8,7 @@ import {
   deleteQuantityProduct,
   disableCart,
 } from "../../redux/actions";
+import { Divide } from "iconoir-react";
 
 export default function SideBarCar() {
   const dispatch = useDispatch();
@@ -18,16 +19,17 @@ export default function SideBarCar() {
 
   const { total } = useSelector((state) => state.sideBarCar);
 
-  const { access } = useSelector((state) => state.userData);
+  const userInfo = localStorage.getItem("userData");
+
+  const { access } = JSON.parse(userInfo);
 
   function handleBuy() {
     if (access === false) {
       navigate("/signIn");
       dispatch(disableCart());
-    } else{
-      navigate("/cart")
+    } else {
+      navigate("/cart");
       dispatch(disableCart());
-
     }
   }
 
@@ -80,13 +82,17 @@ export default function SideBarCar() {
         </li>
       </ul>
 
-      <section className="m-5 p-8 flex flex-wrap items-center justify-center gap-16">
+      <section className="m-5 p-8 flex flex-wrap flex-col items-center justify-center gap-16">
+        {products.length <= 0 ? (
+          <div className="text-black">Carrito vacío</div>
+        ) : null}
+
         {products.map((product, i) => {
-          let image = []
+          let image = [];
           if (product.image.url === undefined) {
-            image.push(product.image)
-          }else{
-            image.push(product.image.url)
+            image.push(product.image);
+          } else {
+            image.push(product.image.url);
           }
           return (
             <article
@@ -104,7 +110,7 @@ export default function SideBarCar() {
                 <h2 className="text-gray-600 font-bold capitalize text-xl">
                   {product.name}
                 </h2>
-                <p className="text-gray-600 lg:text-center">
+                <p className="text-gray-600 lg:text-center h-24 overflow-hidden whitespace-pre-wrap overflow-ellipsis">
                   {product.description}
                 </p>
 
@@ -171,12 +177,22 @@ export default function SideBarCar() {
             </article>
           );
         })}
-        <button
-          className="px-8 rounded-sm bg-bluey capitalize lg:relative left-40"
-          onClick={handleBuy}
-        >
-          comprar ${total}
-        </button>
+
+        {products.length <= 0 ? (
+          <button
+            className="px-8 rounded-sm bg-blue-300 capitalize lg:relative left-40"
+            disabled
+          >
+            comprar ${total}
+          </button>
+        ) : (
+          <button
+            className="px-8 rounded-sm bg-bluey capitalize lg:relative left-40"
+            onClick={handleBuy}
+          >
+            comprar ${total}
+          </button>
+        )}
       </section>
     </aside>
   );
