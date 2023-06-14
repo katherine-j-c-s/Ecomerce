@@ -215,17 +215,24 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case ADD_PRODUCT_CART:
-      const newPriceA =
-        parseInt(action.payload.price) * action.payload.quantity;
+      const findProductE = state.sideBarCar.products.find(
+        (element) => element.id === action.payload.id
+      );
 
-      const newTotalA = state.sideBarCar.total + newPriceA;
+      if (!findProductE) {
+        const newPriceA = parseInt(action.payload.price);
+
+        var newTotalA = state.sideBarCar.total + newPriceA;
+      }
 
       return {
         ...state,
         sideBarCar: {
           ...state.sideBarCar,
-          products: [...state.sideBarCar.products, action.payload],
-          total: newTotalA,
+          products: !findProductE
+            ? [...state.sideBarCar.products, action.payload]
+            : [...state.sideBarCar.products],
+          total: newTotalA || state.sideBarCar.total,
         },
       };
 
@@ -234,12 +241,9 @@ const rootReducer = (state = initialState, action) => {
 
       findProduct.quantity++;
 
-      const newPrice = parseInt(findProduct.price) * findProduct.quantity;
+      const newPrice = parseInt(findProduct.price);
 
-      const newTotal = state.sideBarCar.total + newPrice;
-
-      console.log(findProduct);
-      console.log(newPrice);
+      var newTotal = state.sideBarCar.total + newPrice;
 
       return {
         ...state,
@@ -253,21 +257,19 @@ const rootReducer = (state = initialState, action) => {
     case DELETE_QUANTITY:
       let findProduct2 = state.sideBarCar.products[action.payload];
 
-      if (findProduct2.quantity <= 0) {
-        var newProdutcs = state.sideBarCar.products.splice(action.payload, 1);
+      if (findProduct2.quantity <= 1) {
+        state.sideBarCar.products.splice(action.payload, 1);
       }
 
       findProduct2.quantity--;
 
-      const newPrice2 = parseInt(findProduct2.price) - findProduct2.quantity;
-
-      const newTotal2 = state.sideBarCar.total - newPrice2;
+      var newTotal2 = state.sideBarCar.total - findProduct2.price;
 
       return {
         ...state,
         sideBarCar: {
           ...state.sideBarCar,
-          products: newProdutcs || [...state.sideBarCar.products],
+          products: [...state.sideBarCar.products],
           total: newTotal2,
         },
       };
