@@ -22,7 +22,7 @@ export default function CardUserAdmin() {
         navegate('/admin?pestaña=usuarioDetail')
     }
   return (
-    <div className='mt-16 h-screen ml-1 md:ml-10 dark'>
+    <div className='mt-16 h-fit ml-1 md:ml-10 dark'>
         <h1 className='text-slate-400 mb-8 text-xl font-bold'>Usuarios</h1>
         <div className='flex flex-wrap'>
             {allUsers?.map(u=>{
