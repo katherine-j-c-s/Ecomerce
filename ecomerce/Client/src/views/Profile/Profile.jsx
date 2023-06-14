@@ -18,9 +18,9 @@ export default function Profile() {
   }, []);
 
   const user = useSelector((state) => state.userData);
-
+  const products = useSelector((state) => state.userData.orders);
   console.log(user);
-
+  console.log(products);
   const [enabled, setEnabled] = useState(false);
 
   const [form, setForm] = useState({
@@ -45,7 +45,6 @@ export default function Profile() {
   const comprasVistaRef = useRef(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
-  const { userData } = useSelector((state) => state);
 
   const handleRating = (event) => {
     const selectedRating = parseInt(event.target.getAttribute("target"));
@@ -150,7 +149,7 @@ export default function Profile() {
 
   return (
     <div>
-      <h2>{"Hola" + " " + userData.name + "!"}</h2>
+      <h2>{"Hola" + " " + user.name + "!"}</h2>
 
       <section>
         <button id="perfil" onClick={handleView} value="perfil">
@@ -228,8 +227,8 @@ export default function Profile() {
       {isComprasView && (
         <section id="comprasVista" ref={comprasVistaRef}>
           <h2>Formulario de Puntuación y Reseña</h2>
-          ALGO.map
-          {
+
+          {/* {products.map((product) => {
             <form>
               <div>
                 <link
@@ -258,8 +257,8 @@ export default function Profile() {
                 ></textarea>
               </div>
               <input type="submit" value="Enviar" />
-            </form>
-          }
+            </form>;
+          })} */}
         </section>
       )}
     </div>
