@@ -452,7 +452,7 @@ const CreateProduct = ()=>{
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[2].items.map(i=>{
                                                         return(
-                                                        <p onClick={handleColors}id={i.name} className={`text-black cursor-pointer w-fit rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex border dark:bg-slate-900 ${i.name === color ? ' bg-sky-300 dark:bg-slate-300 dark:text-black dark:hover:bg-sky-400 dark:hover:border-sky-400' : 'bg-slate-400 dark:border-slate-400 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-sky-400'}`} >{i.name}</p>
+                                                        <p onClick={handleColors}id={i.name} className={`text-black cursor-pointer w-fit rounded-lg p-2 m-2 hover:bg-sky-300 transition-all flex border dark:bg-slate-900 ${i.name === color ? ' bg-sky-300 dark:bg-slate-200 dark:text-black dark:hover:bg-sky-400 dark:hover:border-sky-400' : 'bg-slate-400 dark:border-slate-400 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-sky-400'}`} >{i.name}</p>
                                                     ) 
                                                     })}
                                                 </div>
@@ -462,7 +462,7 @@ const CreateProduct = ()=>{
                                                 <div className='w-full flex flex-wrap justify-center'>
                                                     {options[1].items.map(i=>{
                                                         return(
-                                                            <p onClick={handleTalla} id={i} className={`text-black w-fit cursor-pointer rounded-lg p-2 px-4 m-2 hover:bg-sky-300 transition-all border dark:bg-slate-900 flex ${i === talla ? ' bg-sky-300 dark:bg-slate-300 dark:text-black dark:hover:bg-sky-400 dark:hover:border-sky-400' : 'bg-slate-400 dark:border-slate-400 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-sky-400'}`}>{i}</p>
+                                                            <p onClick={handleTalla} id={i} className={`text-black w-fit cursor-pointer rounded-lg p-2 px-4 m-2 hover:bg-sky-300 transition-all border dark:bg-slate-900 flex ${i === talla ? ' bg-sky-300 dark:bg-slate-200 dark:text-black dark:hover:bg-sky-400 dark:hover:border-sky-400' : 'bg-slate-400 dark:border-slate-400 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:border-sky-400'}`}>{i}</p>
                                                     ) 
                                                     })}
                                                 </div>
