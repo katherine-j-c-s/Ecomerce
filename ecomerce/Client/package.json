@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "iconoir-react": "^6.8.0",
+    "material": "^0.5.3",
     "postcss": "^8.4.23",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
