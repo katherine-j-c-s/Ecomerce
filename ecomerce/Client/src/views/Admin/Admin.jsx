@@ -8,6 +8,7 @@ import EditProductForm from '../../components/EditProductForm.jsx/EditProductFor
 import { useDispatch  } from 'react-redux'
 import { clearProductToEdit } from '../../redux/actions'
 import UserDetailAdmin from '../../components/UserDetailAdmin/UserDetailAdmin'
+import Dashboard from '../Dashboard/Dashboard'
 
 export default function Admin() {
   let { search } = useLocation();
@@ -19,9 +20,9 @@ export default function Admin() {
   },[search])
   let query = search.slice(14, search.length);
   return ( 
-    <div className="flex bg-slate-300">
+    <div className="flex bg-[#F5F4F7]">
       <SidebarAdmin />
-      {query === "dashboard" ? <h2 className="text-black">{query}</h2> : null}
+      {query === "dashboard" ? <Dashboard/> : null}
       {query === "usuarios" ? <CardUserAdmin/> : null}
       {query === "usuarioDetail" ? <UserDetailAdmin/> : null}
       {query === "estadisticas" ? (<h2 className="text-black">{query}</h2>) : null}
