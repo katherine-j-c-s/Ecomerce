@@ -3,6 +3,8 @@ import perfil from '../../assets/Vector1.png'
 import edit from '../../assets/edit.png'
 import { useDispatch } from "react-redux";
 
+import { getUserId } from "../../redux/actions";
+
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
 
@@ -11,6 +13,16 @@ export default function Profile() {
 
   const [view, setView] = useState("perfil");
 
+  const userInfo = JSON.parse(localStorage.getItem("userData"));
+
+  useEffect(() => {
+    dispatch(getUserId(userInfo.id));
+  }, []);
+
+  const user = useSelector((state) => state.userData);
+  const products = useSelector((state) => state.userData.orders);
+  console.log(user);
+  console.log(products);
   const [enabled, setEnabled] = useState(false);
 
   const [form, setForm] = useState({
@@ -35,9 +47,6 @@ export default function Profile() {
   const comprasVistaRef = useRef(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
-  const { userData } = useSelector((state) => state);
-
-  console.log(userData);
 
   const handleRating = (event) => {
     const selectedRating = parseInt(event.target.getAttribute("target"));
@@ -142,7 +151,7 @@ export default function Profile() {
 
   return (
     <div className="text-black w-full flex justify-center relative h-screen bg-slate-300">
-      <h2 className="absolute top-8 text-lg font-mono mx-auto w-fit">{"Hola" + " " + userData.name + "!"}</h2>
+      <h2 className="absolute top-8 text-lg font-mono mx-auto w-fit">{"Hola" + " " + user.name + "!"}</h2>
       <section className="w-fit mt-28 flex flex-col">
         <div className="w-fit flex flex-col mr-5 mx-auto">
           <h1 className="text-xl text-left font-bold mb-5 w-full">Configuraciones</h1>
@@ -279,28 +288,28 @@ export default function Profile() {
           </section>
         )}
         {isComprasView && (
-          <section id="comprasVista" ref={comprasVistaRef}>
-            <h2>Formulario de Puntuación y Reseña</h2>
-            ALGO.map
-            {
-              <form>
-                <div>
-                  <link
-                    rel="stylesheet"
-                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                  />
+        <section id="comprasVista" ref={comprasVistaRef}>
+          <h2>Formulario de Puntuación y Reseña</h2>
 
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <span
-                      key={value}
-                      className={`fa fa-heart ${
-                        value <= rating ? "checked" : ""
-                      }`}
-                      onClick={handleRating}
-                      target={value}
-                      style={{ color: value <= rating ? "red" : "" }}
-                    ></span>
-                  ))}
+          {/* {products.map((product) => {
+            <form>
+              <div>
+                <link
+                  rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                />
+
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <span
+                    key={value}
+                    className={`fa fa-heart ${
+                      value <= rating ? "checked" : ""
+                    }`}
+                    onClick={handleRating}
+                    target={value}
+                    style={{ color: value <= rating ? "red" : "" }}
+                  ></span>
+                ))}
                 </div>
                 <div className="review">
                   <textarea
@@ -312,7 +321,7 @@ export default function Profile() {
                 </div>
                 <input type="submit" value="Enviar" />
               </form>
-            }
+            } */}
           </section>
         )}
       </article>
