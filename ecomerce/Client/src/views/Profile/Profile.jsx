@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+import { getUserId } from "../../redux/actions";
+
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
 
@@ -8,6 +10,16 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   const [view, setView] = useState("perfil");
+
+  const userInfo = JSON.parse(localStorage.getItem("userData"));
+
+  useEffect(() => {
+    dispatch(getUserId(userInfo.id));
+  }, []);
+
+  const user = useSelector((state) => state.userData);
+
+  console.log(user);
 
   const [enabled, setEnabled] = useState(false);
 
@@ -34,8 +46,6 @@ export default function Profile() {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
   const { userData } = useSelector((state) => state);
-
-  console.log(userData);
 
   const handleRating = (event) => {
     const selectedRating = parseInt(event.target.getAttribute("target"));

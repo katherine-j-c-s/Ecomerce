@@ -202,7 +202,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: "",
-          orders: action.payload.userOrders.products,
+          orders: action.payload.userOrders,
           comments: action.payload.comments,
         },
       };
