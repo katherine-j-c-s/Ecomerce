@@ -22,6 +22,7 @@ import {
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
   USER_ADMIN,
+  USER_UPDATE,
 } from "./types";
 
 const initialState = {
@@ -131,6 +132,20 @@ const rootReducer = (state = initialState, action) => {
           access: true,
         },
       };
+
+      case USER_UPDATE:
+        return {
+          ...state,
+          userData: {
+            id: action.payload.id,
+            image: action.payload.image,
+            name: action.payload.first_name,
+            lastName: action.payload.last_name,
+            email: action.payload.mail,
+            password: action.payload.password,
+            access: true,
+          },
+        };
 
     case SIGN_UP:
       localStorage.setItem(

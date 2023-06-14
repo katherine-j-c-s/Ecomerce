@@ -26,6 +26,7 @@ import {
   ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  USER_UPDATE,
 } from "./types";
 
 import axios from "axios";
@@ -144,7 +145,7 @@ export function getUserId(id) {
 export function getAllUsers() {
   return async function (dispatch) {
     let { data } = await axios(
-      'https://ecomerce-production-8f61.up.railway.app/users'
+      "https://ecomerce-production-8f61.up.railway.app/users"
     );
     return dispatch({ type: GET_ALL_USERS, payload: data });
   };
