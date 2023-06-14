@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { getUserId } from "../../redux/actions";
+import { getUserId, userUpDate } from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
@@ -19,7 +19,18 @@ export default function Profile() {
 
   const user = useSelector((state) => state.userData);
 
-  console.log(user);
+  useEffect(() => {
+    if (user) {
+      setForm({
+        mail: user.email,
+        password: "********",
+        first_name: user.name,
+        last_name: user.lastName,
+        address: user.address,
+        image: user.image.url,
+      });
+    }
+  }, [user]);
 
   const [enabled, setEnabled] = useState(false);
 
@@ -121,16 +132,16 @@ export default function Profile() {
   function handleProfileSubmit(event) {
     event.preventDefault();
 
-    let user = {
+    const modifiedUser = {
       mail: form.mail || user.mail,
-      password: form.password || user.password,
+      password: form.password !== "********" ? form.password : user.password,
       first_name: form.nombre || user.nombre,
       last_name: form.apellido || user.apellido,
       address: form.address || user.address,
-      image: profileImage || user.image,
+      image: form.image || user.image,
     };
 
-    dispatch();
+    dispatch(userUpDate(user.id, user));
 
     if (Object.keys(errors).length === 0) {
       setForm({
@@ -170,8 +181,7 @@ export default function Profile() {
             <input
               type="text"
               name="first_name"
-              value={form.first_name}
-              placeholder="Nombre"
+              value={form.first_name ?? ""}
               disabled={!enabled}
               onChange={handleChange}
             />
@@ -179,14 +189,14 @@ export default function Profile() {
               type="text"
               placeholder="Apellido"
               name="last_name"
-              value={form.last_name}
+              value={form.last_name ?? ""}
               disabled={!enabled}
               onChange={handleChange}
             />
             <input
               type="text"
               name="mail"
-              value={form.mail}
+              value={form.mail ?? ""}
               placeholder="Correo Electronico"
               disabled={!enabled}
               onChange={handleChange}
@@ -197,7 +207,7 @@ export default function Profile() {
               disabled={!enabled}
               onChange={handleChange}
               name="address"
-              value={form.address}
+              value={form.address ?? ""}
             />
             <input
               type="password"
@@ -207,14 +217,13 @@ export default function Profile() {
               disabled={!enabled}
               onChange={handleChange}
             />
-            <input type="text" placeholder="Dirección" />
             <input
               type="text"
               id="profileImage"
               onChange={handleChange}
               placeholder="URL"
               name="image"
-              value={form.image}
+              value={form.image ?? ""}
               disabled={!enabled}
             />
 

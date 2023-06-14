@@ -296,17 +296,16 @@ export const removeImgToProduct = (obj) => {
   };
 };
 
-export const userUpDate = ({ id, userUpdate }) => {
-  console.log("🚀 ~ file: actions.js:300 ~ userUpDate ~ id, userUpdate :", id, userUpdate )
+export const userUpDate = (id, userUpdate) => {
   return async function (dispatch) {
     try {
       const data = await axios.patch(
         `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
         userUpdate
       );
-      console.log("🚀 ~ file: actions.js:307 ~ data:", data)
       return dispatch({
-        type: REMOVE_IMG,
+        type: USER_UPDATE,
+        payload: data,
       });
     } catch (error) {
       console.log("delete img products error ===>", error);
