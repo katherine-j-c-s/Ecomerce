@@ -308,7 +308,7 @@ export const userUpDate = (id, userUpdate) => {
         payload: data,
       });
     } catch (error) {
-      console.log("delete img products error ===>", error);
+      console.log(error);
     }
   };
 };
