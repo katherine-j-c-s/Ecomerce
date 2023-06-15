@@ -23,7 +23,6 @@ import {
   ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
- 
 } from "./types";
 
 const initialState = {
@@ -118,6 +117,10 @@ const rootReducer = (state = initialState, action) => {
         JSON.stringify({
           id: action.payload.id,
           imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
           access: true,
         })
       );
@@ -154,6 +157,10 @@ const rootReducer = (state = initialState, action) => {
         JSON.stringify({
           id: action.payload.id,
           imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
           access: true,
         })
       );
@@ -173,7 +180,15 @@ const rootReducer = (state = initialState, action) => {
     case LOG_OUT:
       localStorage.setItem(
         "userData",
-        JSON.stringify({ id: "", imageLocal: "", access: false })
+        JSON.stringify({
+          id: "",
+          imageLocal: "",
+          name: "",
+          lastName: "",
+          email: "",
+          password: "",
+          access: false,
+        })
       );
       return {
         ...state,
@@ -309,7 +324,7 @@ const rootReducer = (state = initialState, action) => {
     case GET_FILTERS:
       return { ...state, [action.payload[0]]: action.payload[1] };
     case ADD_DARKMODE_ADMIN:
-      return {...state, darkModeAdmin:action.payload}
+      return { ...state, darkModeAdmin: action.payload };
     default:
       return state;
   }
