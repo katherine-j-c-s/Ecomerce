@@ -9,14 +9,13 @@ const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
 
 export default function Profile() {
-
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.userData);  
   const {productDetail} = useSelector((st) => st);  
   const orders = user.orders;
 
-  const userInfo = JSON.parse(localStorage.getItem("userData"));
+  const userLocal = JSON.parse(localStorage.getItem("userData"));
 
   const uniqueProductNames = new Set();
   const uniqueProductIds = new Set();
@@ -50,15 +49,15 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    dispatch(getUserId(userInfo.id));
+    dispatch(getUserId(userLocal.id));
     if (user) {
       setForm({
-        mail: user.email,
+        mail: userLocal.email,
         password: "********",
-        first_name: user.name,
-        last_name: user.lastName,
-        address: user.address,
-        image: user.image.url,
+        first_name: userLocal.name,
+        last_name: userLocal.lastName,
+        address: userLocal.address,
+        image: userLocal.imageLocal.url,
       });
     }
   }, []);
@@ -72,16 +71,15 @@ export default function Profile() {
     }
   },[productDetail])
 
-  orders?.forEach(order => {
-    order.products.forEach(product => {
+  orders?.forEach((order) => {
+    order.products.forEach((product) => {
       uniqueProductNames.add(product.title);
       uniqueProductIds.add(product.id);
-      let newlist = {id:product.id,value:""}
-      let repetido = review.find( c => c.id === product.id)
+      let newlist = { id: product.id, value: "" };
+      let repetido = review.find((c) => c.id === product.id);
       if (!repetido) {
         review.push(newlist)
         dispatch(getProductById(product.id))
-        console.log(product.id);
       }
     });
   });
@@ -89,21 +87,21 @@ export default function Profile() {
   const handleRating = (productId, value) => {
     setRating({
       ...rating,
-      [productId]: value}
-    );
+      [productId]: value,
+    });
   };
 
   const handleReviewChange = (event) => {
-    let value = event.target.value
-    let id = event.target.id
-    let newList = review.map( c => {
+    let value = event.target.value;
+    let id = event.target.id;
+    let newList = review.map((c) => {
       if (c.id === Number(id)) {
-        let result = {id: c.id, value: value}
-        return result
+        let result = { id: c.id, value: value };
+        return result;
       }
-      return c
-    })
-    setReview(newList)
+      return c;
+    });
+    setReview(newList);
   };
 
   const handleView = (event) => {
@@ -145,7 +143,7 @@ export default function Profile() {
       errors.address = "Debe haber una direccion";
     }
     return errors;
-  }
+  };
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -165,16 +163,35 @@ export default function Profile() {
   const handleProfileSubmit = (event) => {
     event.preventDefault();
 
-    const modifiedUser = {
-      mail: form.mail || user.mail,
-      password: form.password !== "********" ? form.password : user.password,
-      first_name: form.nombre || user.nombre,
-      last_name: form.apellido || user.apellido,
-      address: form.address || user.address,
-      image: form.image || user.image,
-    };
+    const modifiedUser = {};
 
-    dispatch(userUpDate(user.id, user));
+    if (form.mail !== userLocal.email) {
+      modifiedUser.mail = form.mail;
+    }
+
+    if (form.password !== "********") {
+      modifiedUser.password = form.password;
+    }
+
+    if (form.first_name !== userLocal.first_name) {
+      modifiedUser.first_name = form.first_name;
+    }
+
+    if (form.last_name !== userLocal.lastName) {
+      modifiedUser.last_name = form.last_name;
+    }
+
+    if (form.address !== userLocal.address) {
+      modifiedUser.address = form.address;
+    }
+
+    if (form.image !== userLocal.imageLocal.url) {
+      modifiedUser.image = form.image;
+    }
+
+    console.log(modifiedUser);
+
+    dispatch(userUpDate(userLocal.id, modifiedUser));
 
     if (Object.keys(errors).length === 0) {
       setForm({
@@ -190,7 +207,7 @@ export default function Profile() {
         password: "",
       });
     }
-  }
+  };
 
   return (
     <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
@@ -209,7 +226,9 @@ export default function Profile() {
               onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
-              <button onClick={handleView} value="perfil">Mi Cuenta</button>
+              <button onClick={handleView} value="perfil">
+                Mi Cuenta
+              </button>
             </div>
             <div
               id="compras"
@@ -217,7 +236,9 @@ export default function Profile() {
               onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
-              <button onClick={handleView} value="compras">Compras</button>
+              <button onClick={handleView} value="compras">
+                Compras
+              </button>
             </div>
           </div>
         </div>
@@ -513,15 +534,25 @@ export default function Profile() {
             {uniqueProductNames.size > 0 ? (
               Array.from(uniqueProductNames).map((productName, i) => {
                 let id = Array.from(uniqueProductIds)[i]
-                let coment = review.find(c=>c.id === id)
                 let img = images.find( i => i.id === id)
+                let coment = review.find(
+                  (c) => c.id === Array.from(uniqueProductIds)[i]
+                );
                 return(
-                <div className="mx-2 bg-white relative z-20 rounded-xl trnasition-all hover:shadow-xl py-10 px-14" key={productName}>
+                <div 
+                  className="mx-2 bg-white relative z-20 rounded-xl trnasition-all hover:shadow-xl py-10 px-14" 
+                  key={productName}
+                >
                   <div className="bg-white relative z-40">
                     <img className="w-52 mx-auto rounded-full h-52" src={img.value} alt="img" />
                     <h2 className="mt-4 w-10/12 mx-auto font-mono">{productName}</h2>
                   </div>
-                  <form className={`${showForm === true ? ' translate-x-0 translate-y-0 relative' : 'absolute -translate-y-44 z-0'} transition-all bg-white `}>
+                  <form className={`${
+                    showForm === true 
+                    ? ' translate-x-0 translate-y-0 relative' 
+                    : 'absolute -translate-y-44 z-0'} 
+                    transition-all bg-white `
+                    }>
                     <div>
                       <link
                         rel="stylesheet"
@@ -530,9 +561,25 @@ export default function Profile() {
                       {[1, 2, 3, 4, 5].map((value) => (
                         <span
                           key={value}
-                          className={`fa fa-heart ${value <= rating[Array.from(uniqueProductIds)[i]] ? "checked" : ""}`}
-                          onClick={() => handleRating(Array.from(uniqueProductIds)[i], value)}
-                          style={{ color: value <= rating[Array.from(uniqueProductIds)[i]] ? "red" : "", marginRight: 5 }}
+                          className={`fa fa-heart ${
+                            value <= rating[Array.from(uniqueProductIds)[i]]
+                              ? "checked"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleRating(
+                              Array.from(uniqueProductIds)[i],
+                              value
+                            )
+                          }
+                          style={{
+                            color:
+                              value <=
+                              rating[Array.from(uniqueProductIds)[i]]
+                                ? "red"
+                                : "",
+                            marginRight: 5,
+                          }}
                         ></span>
                       ))}
                     </div>
@@ -558,7 +605,9 @@ export default function Profile() {
             }else{
               setShowform(true)
             }
-          }} className="bg-sky-400 mt-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg">{showForm === false ? 'Dejar Reseña': 'volver'}</p>
+          }} className="bg-sky-400 mt-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg">
+            {showForm === false ? 'Dejar Reseña': 'volver'}
+          </p>
         </section>)}
       </article>
     </div>

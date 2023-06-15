@@ -126,7 +126,7 @@ export default function Nav() {
                     className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                   >
                     <img
-                      src={image.url || image || imageLocal.url || imageLocal}
+                      src={image?.url || image || imageLocal?.url || imageLocal}
                       alt="profile picture logo"
                       className={styles.userProfile}
                     />
@@ -253,7 +253,7 @@ export default function Nav() {
                   className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                 >
                   <img
-                    src={image.url || image || imageLocal.url || imageLocal}
+                    src={image?.url || image || imageLocal?.url || imageLocal}
                     alt="profile picture logo"
                     className={styles.userProfile}
                   />
