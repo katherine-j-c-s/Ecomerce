@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import perfil from "../../assets/Vector1.png";
 import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
@@ -9,18 +9,21 @@ const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
 
 export default function Profile() {
+
   const dispatch = useDispatch();
 
   const [view, setView] = useState("perfil");
 
   const userInfo = JSON.parse(localStorage.getItem("userData"));
+  const products = useSelector((state) => state.products)
+  console.log(products)
 
   useEffect(() => {
     dispatch(getUserId(userInfo.id));
   }, []);
 
   const user = useSelector((state) => state.userData);
-  const products = useSelector((state) => state.userData.orders);
+  const orders = user.orders;
   useEffect(() => {
     if (user) {
       setForm({
@@ -33,7 +36,22 @@ export default function Profile() {
       });
     }
   }, [user]);
-  console.log(products);
+  console.log(orders);
+const uniqueProductNames = new Set();
+const uniqueProductIds = new Set();
+try {
+  orders.forEach(order => {
+    order.products.forEach(product => {
+      uniqueProductNames.add(product.title);
+      uniqueProductIds.add(product.id);
+    });
+  });
+  console.log("Unique Product Names:", [...uniqueProductNames]);
+  console.log("Unique Product IDs:", [...uniqueProductIds]);
+} catch (error) {
+  console.error("An error occurred:", error);
+}
+
   const [enabled, setEnabled] = useState(false);
 
   const [form, setForm] = useState({
@@ -56,19 +74,16 @@ export default function Profile() {
 
   const perfilVistaRef = useRef(null);
   const comprasVistaRef = useRef(null);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState({});
   const [review, setReview] = useState("");
 
-  const handleRating = (event) => {
-    const selectedRating = parseInt(event.target.getAttribute("target"));
-    console.log(selectedRating);
-    setRating(selectedRating);
-    if (selectedRating === rating) {
-      setRating(0);
-    } else {
-      setRating(selectedRating);
-    }
-  };
+  const handleRating = (productId, value) => {
+  setRating({
+    ...rating,
+    [productId]: value}
+  );
+};
+console.log(rating)
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
@@ -161,42 +176,44 @@ export default function Profile() {
   }
 
   return (
-    <div className="text-black w-full flex justify-center relative h-screen bg-slate-300">
-      <h2 className="absolute top-8 text-lg font-mono mx-auto w-fit">
+    <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
+      <h2 className="absolute md:top-8 top-56 text-lg w-full font-mono mx-auto md:w-fit">
         {"Hola" + " " + user.name + "!"}
       </h2>
-      <section className="w-fit mt-28 flex flex-col">
-        <div className="w-fit flex flex-col mr-5 mx-auto">
-          <h1 className="text-xl text-left font-bold mb-5 w-full">
+      <section className="md:w-fit w-full mx-auto md:mx-0 md:mt-28 mt-28 flex flex-col">
+        <div className="w-fit md:px-0 flex flex-col md:mr-5 mx-auto">
+          <h1 className="text-xl md:text-left font-bold mb-5 w-full">
             Configuraciones
           </h1>
-          <div
-            id="perfil"
-            value="perfil"
-            onClick={handleView}
-            className="w-full hover:font-bold transition-all p-2 hover:bg-sky-300"
-          >
-            <p>Mi Cuenta</p>
-          </div>
-          <div
-            id="compras"
-            value="compras"
-            onClick={handleView}
-            className="w-full hover:font-bold transition-all p-2 hover:bg-sky-300"
-          >
-            <p>Compras</p>
+          <div className="flex md:flex-col w-full justify-between">
+            <div
+              id="perfil"
+              value="perfil"
+              onClick={handleView}
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button onClick={handleView} value="perfil">Mi Cuenta</button>
+            </div>
+            <div
+              id="compras"
+              value="compras"
+              onClick={handleView}
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button onClick={handleView} value="compras">Compras</button>
+            </div>
           </div>
         </div>
       </section>
-      <article className="w-fit">
+      <article className="md:w-fit w-full">
         {isPerfilView && (
           <section
-            className="bg-white w-fit m-auto mt-20 shadow-lg rounded-lg px-10 py-16"
+            className="bg-white md:w-fit w-10/12 m-auto mt-20 shadow-lg mb-20 rounded-lg md:px-10 py-8 md:py-16"
             id="perfilVista"
             ref={perfilVistaRef}
           >
             <form onSubmit={handleProfileSubmit}>
-              <div className="flex mb-4 w-10/12 mx-auto justify-between">
+              <div className="flex md:mb-4 mb-10 w-10/12 mx-auto justify-between">
                 <div className="flex w-fit">
                   <div className="bg-slate-600 w-fit rounded-full p-6 mr-8">
                     <img src={perfil} alt="vector" className="w-6 h-6" />
@@ -237,8 +254,8 @@ export default function Profile() {
                   </ul>
                 </div>
               </div>
-              <div className="flex w-full justify-center">
-                <div className="flex mb-5 flex-col justify-center w-full md:w-fit relative">
+              <div className="flex w-full md:flex-row flex-col justify-center">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
                   <label
                     className={`absolute left-8  ${
                       errors.first_name && enabled === true
@@ -246,7 +263,7 @@ export default function Profile() {
                         : "bottom-10 text-cyan-400"
                     } transition-all ${
                       enabled === false
-                        ? " translate-y-6 translate-x-0"
+                        ? " md:translate-y-6 translate-y-0 translate-x-0"
                         : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
                     }`}
                   >
@@ -259,7 +276,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? " border-transparent translate-y-0 translate-x-20"
+                        ? " border-transparent translate-y-0 md:translate-x-14 translate-x-0"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="text"
@@ -275,7 +292,7 @@ export default function Profile() {
                     </p>
                   )}
                 </div>
-                <div className="flex mb-5 flex-col justify-center w-full md:w-fit relative">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
                   <label
                     className={`absolute left-8  ${
                       errors.last_name && enabled === true
@@ -283,7 +300,7 @@ export default function Profile() {
                         : "bottom-10 text-cyan-400"
                     } transition-all ${
                       enabled === false
-                        ? " translate-y-6 translate-x-0"
+                        ? " md:translate-y-6 translate-y-0 translate-x-0"
                         : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
                     }`}
                   >
@@ -296,7 +313,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? "border-transparent translate-y-0 translate-x-20"
+                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="text"
@@ -313,8 +330,8 @@ export default function Profile() {
                   )}
                 </div>
               </div>
-              <div className="flex w-full justify-center">
-                <div className="flex mb-5 flex-col justify-center w-full md:w-fit relative">
+              <div className="flex w-full md:flex-row flex-col  justify-center">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
                   <label
                     className={`absolute left-8  ${
                       errors.mail && enabled === true
@@ -322,7 +339,7 @@ export default function Profile() {
                         : "bottom-10 text-cyan-400"
                     } transition-all ${
                       enabled === false
-                        ? " translate-y-6 translate-x-0"
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
                         : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
                     }`}
                   >
@@ -335,7 +352,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? "border-transparent translate-y-0 translate-x-20"
+                        ? "border-transparent translate-y-0 md:translate-x-8 translate-x-0"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="text"
@@ -351,7 +368,7 @@ export default function Profile() {
                     </p>
                   )}
                 </div>
-                <div className="flex mb-5 flex-col justify-center w-full md:w-fit relative">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
                   <label
                     className={`absolute left-8  ${
                       errors.address && enabled === true
@@ -359,7 +376,7 @@ export default function Profile() {
                         : "bottom-10 text-cyan-400"
                     } transition-all ${
                       enabled === false
-                        ? " translate-y-6 translate-x-0"
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
                         : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
                     }`}
                   >
@@ -372,7 +389,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? "border-transparent translate-y-0 translate-x-20"
+                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="text"
@@ -388,7 +405,7 @@ export default function Profile() {
                     </p>
                   )}
                 </div>
-                <div className="flex mb-5 flex-col justify-center w-full md:w-fit relative">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
                   <label
                     className={`absolute left-8  ${
                       errors.password && enabled === true
@@ -396,7 +413,7 @@ export default function Profile() {
                         : "bottom-10 text-cyan-400"
                     } transition-all ${
                       enabled === false
-                        ? " translate-y-6 translate-x-0"
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
                         : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
                     }`}
                   >
@@ -409,7 +426,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? "border-transparent translate-y-0 translate-x-20"
+                        ? "border-transparent translate-y-0 md:translate-x-20 translate-x-0"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="password"
@@ -427,7 +444,7 @@ export default function Profile() {
                 </div>
               </div>
               {enabled && (
-                <div className="flex mb-5 mx-auto flex-col justify-center w-full md:w-fit relative">
+                <div className="flex mb-5 mx-aut10 flex-col justify-center w-10/12 mx-auto md:w-fit relative">
                   <label
                     className={`absolute left-8  ${
                       errors.image && enabled === true
@@ -435,7 +452,7 @@ export default function Profile() {
                         : "bottom-10 text-cyan-400 bg-white w-16 z-10 h-fit"
                     } transition-all `}
                   >
-                    URL
+                    Image
                   </label>
                   <input
                     className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-14 text-grey ${
@@ -444,7 +461,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? "border-transparent translate-y-0 translate-x-20"
+                        ? "border-transparent translate-y-0 translate-x-14"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="text"
@@ -472,12 +489,15 @@ export default function Profile() {
             </form>
           </section>
         )}
-        {isComprasView && (
-          <section id="comprasVista" ref={comprasVistaRef}>
-            <h2>Formulario de Puntuación y Reseña</h2>
-
-            {/* {products.map((product) => {
-            <form>
+        {isComprasView && (<section id="comprasVista" ref={comprasVistaRef}>
+        <h2>Formulario de Puntuación y Reseña</h2>
+        {uniqueProductNames.size > 0 ? (
+  Array.from(uniqueProductNames).map((productName, i) => (
+    <section key={productName}>
+      <p>-----------------------------------</p>
+      <h2>{productName}</h2>
+      <p>{}</p>
+      <form>
               <div>
                 <link
                   rel="stylesheet"
@@ -487,12 +507,9 @@ export default function Profile() {
                 {[1, 2, 3, 4, 5].map((value) => (
                   <span
                     key={value}
-                    className={`fa fa-heart ${
-                      value <= rating ? "checked" : ""
-                    }`}
-                    onClick={handleRating}
-                    target={value}
-                    style={{ color: value <= rating ? "red" : "" }}
+                    className={`fa fa-heart ${value <= rating[uniqueProductIds[i-1]] ? "checked" : ""}`}
+                    onClick={() => handleRating(uniqueProductIds[i-1], value)}
+                    style={{ color: value <= rating[uniqueProductIds[i-1]] ? "red" : "", marginRight: 5 }}
                   ></span>
                 ))}
                 </div>
@@ -502,13 +519,18 @@ export default function Profile() {
                     value={review}
                     placeholder="Escribe tu reseña aquí"
                     onChange={handleReviewChange}
+                    id={uniqueProductIds}
                   ></textarea>
                 </div>
-                <input type="submit" value="Enviar" />
-              </form>
-            } */}
-          </section>
-        )}
+                <button>Enviar Comentario</button>
+                <p>-----------------------------------</p>
+              </form>     
+    </section>
+    
+  ))
+): "No Hay compras disponibles"}
+</section>)}
+        
       </article>
     </div>
   );
