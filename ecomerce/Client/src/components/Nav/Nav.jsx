@@ -62,7 +62,7 @@ export default function Nav() {
   }
 
   return (
-    <nav className="bg-transparent">
+    <nav className="bg-transparent relative z-30">
       <div>
         <Toaster />
       </div>

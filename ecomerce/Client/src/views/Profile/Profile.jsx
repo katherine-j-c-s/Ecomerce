@@ -530,7 +530,7 @@ export default function Profile() {
         {isComprasView && (
         <section className="flex flex-col" id="comprasVista" ref={comprasVistaRef}>
           <h2 className="mt-20 mb-10 font-bold text-lg border-b-4 border-sky-400 w-fit mx-auto">{showForm === true ? 'Formulario de Puntuación y Reseña' : 'Mis Compras'}</h2>
-          <div className="flex">
+          <div className="flex md:flex-row flex-col">
             {uniqueProductNames.size > 0 ? (
               Array.from(uniqueProductNames).map((productName, i) => {
                 let id = Array.from(uniqueProductIds)[i]
@@ -540,10 +540,10 @@ export default function Profile() {
                 );
                 return(
                 <div 
-                  className="mx-2 bg-white relative z-20 rounded-xl trnasition-all hover:shadow-xl py-10 px-14" 
+                  className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white rounded-xl trnasition-all hover:shadow-xl py-10 px-14" 
                   key={productName}
                 >
-                  <div className="bg-white relative z-40">
+                  <div className="bg-white relative z-20">
                     <img className="w-52 mx-auto rounded-full h-52" src={img.value} alt="img" />
                     <h2 className="mt-4 w-10/12 mx-auto font-mono">{productName}</h2>
                   </div>
@@ -605,7 +605,7 @@ export default function Profile() {
             }else{
               setShowform(true)
             }
-          }} className="bg-sky-400 mt-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg">
+          }} className="bg-sky-400 md:t-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg">
             {showForm === false ? 'Dejar Reseña': 'volver'}
           </p>
         </section>)}
