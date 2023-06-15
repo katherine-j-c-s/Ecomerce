@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 
 import FeaturedSegment from "../CardsProduct/FeaturedSegment";
 import GenresHome from "../GenresHome/GenresHome";
+import { register } from "swiper/element/bundle";
+
+register();
 
 import stylesHome from "../Home/Home.module.css";
 import marcas1 from "../../assets/marcas1.png";
@@ -15,7 +18,69 @@ const brands = [marcas1, marcas2, marcas3, marcas4, marcas5];
 const Home = () => {
   return (
     <div>
-      <div id={stylesHome.backgroundHome} className="h-screen">
+      <swiper-container
+        slides-per-view="1"
+        navigation="true"
+        pagination="true"
+        css-mode="true"
+        speed="200"
+        loop="true"
+      >
+        <swiper-slide>
+          <div id={stylesHome.backgroundHome} className="h-screen">
+            <article className="mb-14 p-3">
+              <h1 className="mt-32 text-7xl text-white font-medium">
+                Just buy it
+              </h1>
+              <p className="text-3xl text-white font-light">
+                Descubre nuevos estilos
+              </p>
+            </article>
+            <Link to="/alls" className="text-white hover:text-black">
+              <button className="px-20 rounded-sm border-bluey">
+                Comprar ya!
+              </button>
+            </Link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div id={stylesHome.backgroundHome} className="h-screen">
+            <article className="mb-14 p-3">
+              <h1 className="mt-32 text-7xl text-white font-medium">
+                Just buy it
+              </h1>
+              <p className="text-3xl text-white font-light">
+                Descubre nuevos estilos
+              </p>
+            </article>
+            <Link to="/alls" className="text-white hover:text-black">
+              <button className="px-20 rounded-sm border-bluey">
+                Comprar ya!
+              </button>
+            </Link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div id={stylesHome.backgroundHome} className="h-screen">
+            <article className="mb-14 p-3">
+              <h1 className="mt-32 text-7xl text-white font-medium">
+                Just buy it
+              </h1>
+              <p className="text-3xl text-white font-light">
+                Descubre nuevos estilos
+              </p>
+            </article>
+            <Link to="/alls" className="text-white hover:text-black">
+              <button className="px-20 rounded-sm border-bluey">
+                Comprar ya!
+              </button>
+            </Link>
+          </div>
+        </swiper-slide>
+      </swiper-container>
+
+      {/*POR SI QUIERES CAMBIARLO A COMO ESTABA ANTES */}
+      {/* <div id={stylesHome.backgroundHome} className="h-screen">
         <article className="m-3 mt-36 mb-14 p-3">
           <h1 className="text-7xl text-white font-medium">Just buy it</h1>
           <p className="text-3xl text-white font-light">
@@ -25,8 +90,14 @@ const Home = () => {
         <Link to="/alls" className="text-white hover:text-black">
           <button className="px-20 rounded-sm border-bluey">Comprar ya!</button>
         </Link>
-      </div>
-      <div className="h-[60vh] w-auto"></div>
+      </div> */}
+
+      {/*ESTE ES EL NUEVO */}
+      <div className="h-[15vh] w-auto"></div>
+
+      {/*EL ANTERIOR */}
+      {/* <div className="h-[60vh] w-auto"></div> */}
+
       <div className="h-fit w-full flex justify-start">
         <h2 className="text-[40px] text-black font-bold ms-20">
           Nuevos <strong className="text-teal-400"> estilos </strong>

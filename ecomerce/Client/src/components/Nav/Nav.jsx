@@ -118,7 +118,7 @@ export default function Nav() {
                     className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                     onClick={() => dispatch(showCart())}
                   >
-                    <Cart color={actualRoute === "/" ? "#FFFFFF" : "#000000"} />
+                    <Cart color="#000000" />
                   </button>
 
                   <button
@@ -134,15 +134,9 @@ export default function Nav() {
 
                   <button
                     onClick={signOut}
-                    className={
-                      actualRoute === "/"
-                        ? "flex items-center gap-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
-                        : "flex items-center gap-2 text-black transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
-                    }
+                    className="flex items-center gap-2 text-black transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                   >
-                    <LogOut
-                      color={actualRoute === "/" ? "#FFFFFF" : "#000000"}
-                    />
+                    <LogOut color="#000000" />
                     Cerrar sesión
                   </button>
                 </>

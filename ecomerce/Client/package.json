@@ -23,6 +23,7 @@
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
     "sweetalert": "^2.1.2",
+    "swiper": "^9.4.1",
     "tailwindcss": "^3.3.2"
   },
   "devDependencies": {
