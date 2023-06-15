@@ -11,43 +11,21 @@ import { useSelector } from "react-redux";
 export default function Profile() {
   const dispatch = useDispatch();
 
-  const [view, setView] = useState("perfil");
-
-  const user = JSON.parse(localStorage.getItem("userData"));
-  const products = useSelector((state) => state.products);
-  console.log(user);
-
+  const user = useSelector((state) => state.userData);
   const orders = user.orders;
-  useEffect(() => {
-    if (user) {
-      setForm({
-        mail: user.email,
-        password: "********",
-        first_name: user.name,
-        last_name: user.lastName,
-        address: user.address,
-        image: user.imageLocal.url,
-      });
-    }
-  }, []);
-  // console.log(orders);
+
+  const userInfo = JSON.parse(localStorage.getItem("userData"));
+
   const uniqueProductNames = new Set();
   const uniqueProductIds = new Set();
-  // try {
-  //   orders.forEach((order) => {
-  //     order.products.forEach((product) => {
-  //       uniqueProductNames.add(product.title);
-  //       uniqueProductIds.add(product.id);
-  //     });
-  //   });
-  //   console.log("Unique Product Names:", [...uniqueProductNames]);
-  //   console.log("Unique Product IDs:", [...uniqueProductIds]);
-  // } catch (error) {
-  //   console.error("An error occurred:", error);
-  // }
 
+  const perfilVistaRef = useRef(null);
+  const comprasVistaRef = useRef(null);
+
+  const [view, setView] = useState("perfil");
   const [enabled, setEnabled] = useState(false);
-
+  const [rating, setRating] = useState({});
+  const [review, setReview] = useState([]);
   const [form, setForm] = useState({
     mail: "",
     password: "",
@@ -56,7 +34,6 @@ export default function Profile() {
     address: "",
     image: "",
   });
-
   const [errors, setErrors] = useState({
     mail: "",
     password: "",
@@ -66,10 +43,31 @@ export default function Profile() {
     image: "",
   });
 
-  const perfilVistaRef = useRef(null);
-  const comprasVistaRef = useRef(null);
-  const [rating, setRating] = useState({});
-  const [review, setReview] = useState("");
+  useEffect(() => {
+    dispatch(getUserId(userInfo.id));
+    if (user) {
+      setForm({
+        mail: user.email,
+        password: "********",
+        first_name: user.name,
+        last_name: user.lastName,
+        address: user.address,
+        image: user.image.url,
+      });
+    }
+  }, []);
+
+  orders?.forEach((order) => {
+    order.products.forEach((product) => {
+      uniqueProductNames.add(product.title);
+      uniqueProductIds.add(product.id);
+      let newlist = { id: product.id, value: "" };
+      let repetido = review.find((c) => c.id === product.id);
+      if (!repetido) {
+        review.push(newlist);
+      }
+    });
+  });
 
   const handleRating = (productId, value) => {
     setRating({
@@ -77,10 +75,18 @@ export default function Profile() {
       [productId]: value,
     });
   };
-  // console.log(rating);
 
   const handleReviewChange = (event) => {
-    setReview(event.target.value);
+    let value = event.target.value;
+    let id = event.target.id;
+    let newList = review.map((c) => {
+      if (c.id === Number(id)) {
+        let result = { id: c.id, value: value };
+        return result;
+      }
+      return c;
+    });
+    setReview(newList);
   };
 
   const handleView = (event) => {
@@ -100,7 +106,7 @@ export default function Profile() {
     setEnabled(!enabled);
   };
 
-  function validate(form) {
+  const validate = (form) => {
     const errors = {};
     if (!form.first_name) {
       errors.first_name = "Debe haber un nombre";
@@ -122,7 +128,7 @@ export default function Profile() {
       errors.address = "Debe haber una direccion";
     }
     return errors;
-  }
+  };
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -139,7 +145,7 @@ export default function Profile() {
       })
     );
   };
-  function handleProfileSubmit(event) {
+  const handleProfileSubmit = (event) => {
     event.preventDefault();
 
     const modifiedUser = {};
@@ -186,7 +192,7 @@ export default function Profile() {
         password: "",
       });
     }
-  }
+  };
 
   return (
     <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
@@ -510,53 +516,63 @@ export default function Profile() {
           <section id="comprasVista" ref={comprasVistaRef}>
             <h2>Formulario de Puntuación y Reseña</h2>
             {uniqueProductNames.size > 0
-              ? Array.from(uniqueProductNames).map((productName, i) => (
-                  <section key={productName}>
-                    <p>-----------------------------------</p>
-                    <h2>{productName}</h2>
-                    <p>{}</p>
-                    <form>
-                      <div>
-                        <link
-                          rel="stylesheet"
-                          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                        />
-
-                        {[1, 2, 3, 4, 5].map((value) => (
-                          <span
-                            key={value}
-                            className={`fa fa-heart ${
-                              value <= rating[uniqueProductIds[i - 1]]
-                                ? "checked"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              handleRating(uniqueProductIds[i - 1], value)
-                            }
-                            style={{
-                              color:
-                                value <= rating[uniqueProductIds[i - 1]]
-                                  ? "red"
-                                  : "",
-                              marginRight: 5,
-                            }}
-                          ></span>
-                        ))}
-                      </div>
-                      <div className="review">
-                        <textarea
-                          name="review"
-                          value={review}
-                          placeholder="Escribe tu reseña aquí"
-                          onChange={handleReviewChange}
-                          id={uniqueProductIds}
-                        ></textarea>
-                      </div>
-                      <button>Enviar Comentario</button>
+              ? Array.from(uniqueProductNames).map((productName, i) => {
+                  let coment = review.find(
+                    (c) => c.id === Array.from(uniqueProductIds)[i]
+                  );
+                  console.log(coment);
+                  return (
+                    <section key={productName}>
                       <p>-----------------------------------</p>
-                    </form>
-                  </section>
-                ))
+                      <h2>{productName}</h2>
+                      <p>{}</p>
+                      <form>
+                        <div>
+                          <link
+                            rel="stylesheet"
+                            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                          />
+
+                          {[1, 2, 3, 4, 5].map((value) => (
+                            <span
+                              key={value}
+                              className={`fa fa-heart ${
+                                value <= rating[Array.from(uniqueProductIds)[i]]
+                                  ? "checked"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                handleRating(
+                                  Array.from(uniqueProductIds)[i],
+                                  value
+                                )
+                              }
+                              style={{
+                                color:
+                                  value <=
+                                  rating[Array.from(uniqueProductIds)[i]]
+                                    ? "red"
+                                    : "",
+                                marginRight: 5,
+                              }}
+                            ></span>
+                          ))}
+                        </div>
+                        <div className="review">
+                          <textarea
+                            name="review"
+                            value={coment.value}
+                            placeholder="Escribe tu reseña aquí"
+                            onChange={handleReviewChange}
+                            id={Array.from(uniqueProductIds)[i]}
+                          ></textarea>
+                        </div>
+                        <button>Enviar Comentario</button>
+                        <p>-----------------------------------</p>
+                      </form>
+                    </section>
+                  );
+                })
               : "No Hay compras disponibles"}
           </section>
         )}
