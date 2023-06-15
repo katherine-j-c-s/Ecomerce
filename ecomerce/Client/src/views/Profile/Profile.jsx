@@ -337,7 +337,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        ? "border-transparent translate-y-0 md:translate-x-8 translate-x-0"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="text"
@@ -411,7 +411,7 @@ export default function Profile() {
                         : "border-grey "
                     }${
                       enabled === false
-                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        ? "border-transparent translate-y-0 md:translate-x-20 translate-x-0"
                         : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
                     }`}
                     type="password"
