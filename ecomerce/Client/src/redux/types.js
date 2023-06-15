@@ -43,6 +43,7 @@ export const LOG_OUT = "LOG_OUT";
 export const GET_ALL_USERS = "GET_ALL_USERS";
 export const USER_ADMIN = "USER_ADMIN";
 export const USER_BY_ID = "USER_BY_ID";
+export const USER_UPDATE = "USER_UPDATE";
 
 //DARKMODE
 export const ADD_DARKMODE_ADMIN = "ADD_DARKMODE_ADMIN"

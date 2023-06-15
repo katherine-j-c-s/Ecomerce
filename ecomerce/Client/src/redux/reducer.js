@@ -2,7 +2,9 @@ import {
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
+  USER_ADMIN,
   USER_BY_ID,
+  USER_UPDATE,
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
@@ -21,8 +23,7 @@ import {
   ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
-  USER_ADMIN,
-  USER_UPDATE,
+ 
 } from "./types";
 
 const initialState = {
