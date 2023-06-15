@@ -12,19 +12,40 @@ export default function Profile() {
 
   const dispatch = useDispatch();
 
-  const [view, setView] = useState("perfil");
+  const user = useSelector((state) => state.userData);  
+  const orders = user.orders;
 
   const userInfo = JSON.parse(localStorage.getItem("userData"));
-  const products = useSelector((state) => state.products)
-  console.log(products)
+
+  const uniqueProductNames = new Set();
+  const uniqueProductIds = new Set();
+
+  const perfilVistaRef = useRef(null);
+  const comprasVistaRef = useRef(null);
+
+  const [view, setView] = useState("perfil");
+  const [enabled, setEnabled] = useState(false);  
+  const [rating, setRating] = useState({});
+  const [review, setReview] = useState([]);
+  const [form, setForm] = useState({
+    mail: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+    address: "",
+    image: "",
+  });
+  const [errors, setErrors] = useState({
+    mail: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+    address: "",
+    image: "",
+  });
 
   useEffect(() => {
     dispatch(getUserId(userInfo.id));
-  }, []);
-
-  const user = useSelector((state) => state.userData);
-  const orders = user.orders;
-  useEffect(() => {
     if (user) {
       setForm({
         mail: user.email,
@@ -35,58 +56,38 @@ export default function Profile() {
         image: user.image.url,
       });
     }
-  }, [user]);
-  console.log(orders);
-const uniqueProductNames = new Set();
-const uniqueProductIds = new Set();
-try {
-  orders.forEach(order => {
+  }, []);
+
+  orders?.forEach(order => {
     order.products.forEach(product => {
       uniqueProductNames.add(product.title);
       uniqueProductIds.add(product.id);
+      let newlist = {id:product.id,value:""}
+      let repetido = review.find( c => c.id === product.id)
+      if (!repetido) {
+        review.push(newlist)
+      }
     });
   });
-  console.log("Unique Product Names:", [...uniqueProductNames]);
-  console.log("Unique Product IDs:", [...uniqueProductIds]);
-} catch (error) {
-  console.error("An error occurred:", error);
-}
-
-  const [enabled, setEnabled] = useState(false);
-
-  const [form, setForm] = useState({
-    mail: "",
-    password: "",
-    first_name: "",
-    last_name: "",
-    address: "",
-    image: "",
-  });
-
-  const [errors, setErrors] = useState({
-    mail: "",
-    password: "",
-    first_name: "",
-    last_name: "",
-    address: "",
-    image: "",
-  });
-
-  const perfilVistaRef = useRef(null);
-  const comprasVistaRef = useRef(null);
-  const [rating, setRating] = useState({});
-  const [review, setReview] = useState("");
-
+  
   const handleRating = (productId, value) => {
-  setRating({
-    ...rating,
-    [productId]: value}
-  );
-};
-console.log(rating)
+    setRating({
+      ...rating,
+      [productId]: value}
+    );
+  };
 
   const handleReviewChange = (event) => {
-    setReview(event.target.value);
+    let value = event.target.value
+    let id = event.target.id
+    let newList = review.map( c => {
+      if (c.id === Number(id)) {
+        let result = {id: c.id, value: value}
+        return result
+      }
+      return c
+    })
+    setReview(newList)
   };
 
   const handleView = (event) => {
@@ -106,7 +107,7 @@ console.log(rating)
     setEnabled(!enabled);
   };
 
-  function validate(form) {
+  const validate = (form) => {
     const errors = {};
     if (!form.first_name) {
       errors.first_name = "Debe haber un nombre";
@@ -145,7 +146,7 @@ console.log(rating)
       })
     );
   };
-  function handleProfileSubmit(event) {
+  const handleProfileSubmit = (event) => {
     event.preventDefault();
 
     const modifiedUser = {
@@ -492,7 +493,10 @@ console.log(rating)
         {isComprasView && (<section id="comprasVista" ref={comprasVistaRef}>
         <h2>Formulario de Puntuación y Reseña</h2>
         {uniqueProductNames.size > 0 ? (
-  Array.from(uniqueProductNames).map((productName, i) => (
+  Array.from(uniqueProductNames).map((productName, i) => {
+    let coment = review.find(c=>c.id === Array.from(uniqueProductIds)[i])
+    console.log(coment)
+    return(
     <section key={productName}>
       <p>-----------------------------------</p>
       <h2>{productName}</h2>
@@ -507,19 +511,19 @@ console.log(rating)
                 {[1, 2, 3, 4, 5].map((value) => (
                   <span
                     key={value}
-                    className={`fa fa-heart ${value <= rating[uniqueProductIds[i-1]] ? "checked" : ""}`}
-                    onClick={() => handleRating(uniqueProductIds[i-1], value)}
-                    style={{ color: value <= rating[uniqueProductIds[i-1]] ? "red" : "", marginRight: 5 }}
+                    className={`fa fa-heart ${value <= rating[Array.from(uniqueProductIds)[i]] ? "checked" : ""}`}
+                    onClick={() => handleRating(Array.from(uniqueProductIds)[i], value)}
+                    style={{ color: value <= rating[Array.from(uniqueProductIds)[i]] ? "red" : "", marginRight: 5 }}
                   ></span>
                 ))}
                 </div>
                 <div className="review">
                   <textarea
                     name="review"
-                    value={review}
+                    value={coment.value}
                     placeholder="Escribe tu reseña aquí"
                     onChange={handleReviewChange}
-                    id={uniqueProductIds}
+                    id={Array.from(uniqueProductIds)[i]}
                   ></textarea>
                 </div>
                 <button>Enviar Comentario</button>
@@ -527,7 +531,7 @@ console.log(rating)
               </form>     
     </section>
     
-  ))
+  )})
 ): "No Hay compras disponibles"}
 </section>)}
         
