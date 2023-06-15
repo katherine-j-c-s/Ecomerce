@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
+import perfil from "../../assets/Vector1.png";
+import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
+
+import { getUserId, userUpDate } from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
@@ -9,6 +13,27 @@ export default function Profile() {
 
   const [view, setView] = useState("perfil");
 
+  const userInfo = JSON.parse(localStorage.getItem("userData"));
+
+  useEffect(() => {
+    dispatch(getUserId(userInfo.id));
+  }, []);
+
+  const user = useSelector((state) => state.userData);
+  const products = useSelector((state) => state.userData.orders);
+  useEffect(() => {
+    if (user) {
+      setForm({
+        mail: user.email,
+        password: "********",
+        first_name: user.name,
+        last_name: user.lastName,
+        address: user.address,
+        image: user.image.url,
+      });
+    }
+  }, [user]);
+  console.log(products);
   const [enabled, setEnabled] = useState(false);
 
   const [form, setForm] = useState({
@@ -33,9 +58,6 @@ export default function Profile() {
   const comprasVistaRef = useRef(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
-  const { userData } = useSelector((state) => state);
-
-  console.log(userData);
 
   const handleRating = (event) => {
     const selectedRating = parseInt(event.target.getAttribute("target"));
@@ -111,16 +133,16 @@ export default function Profile() {
   function handleProfileSubmit(event) {
     event.preventDefault();
 
-    let user = {
+    const modifiedUser = {
       mail: form.mail || user.mail,
-      password: form.password || user.password,
+      password: form.password !== "********" ? form.password : user.password,
       first_name: form.nombre || user.nombre,
       last_name: form.apellido || user.apellido,
       address: form.address || user.address,
-      image: profileImage || user.image,
+      image: form.image || user.image,
     };
 
-    dispatch();
+    dispatch(userUpDate(user.id, user));
 
     if (Object.keys(errors).length === 0) {
       setForm({
@@ -139,87 +161,324 @@ export default function Profile() {
   }
 
   return (
-    <div>
-      <h2>{"Hola" + " " + userData.name + "!"}</h2>
-
-      <section>
-        <button id="perfil" onClick={handleView} value="perfil">
-          Mi Cuenta
-        </button>
-        <button id="compras" onClick={handleView} value="compras">
-          Compras
-        </button>
+    <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
+      <h2 className="absolute md:top-8 top-56 text-lg w-full font-mono mx-auto md:w-fit">
+        {"Hola" + " " + user.name + "!"}
+      </h2>
+      <section className="md:w-fit w-full mx-auto md:mx-0 md:mt-28 mt-28 flex flex-col">
+        <div className="w-fit md:px-0 flex flex-col md:mr-5 mx-auto">
+          <h1 className="text-xl md:text-left font-bold mb-5 w-full">
+            Configuraciones
+          </h1>
+          <div className="flex md:flex-col w-full justify-between">
+            <div
+              id="perfil"
+              value="perfil"
+              onClick={handleView}
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <p>Mi Cuenta</p>
+            </div>
+            <div
+              id="compras"
+              value="compras"
+              onClick={handleView}
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <p>Compras</p>
+            </div>
+          </div>
+        </div>
       </section>
+      <article className="md:w-fit w-full">
+        {isPerfilView && (
+          <section
+            className="bg-white md:w-fit w-10/12 m-auto mt-20 shadow-lg mb-20 rounded-lg md:px-10 py-8 md:py-16"
+            id="perfilVista"
+            ref={perfilVistaRef}
+          >
+            <form onSubmit={handleProfileSubmit}>
+              <div className="flex md:mb-4 mb-10 w-10/12 mx-auto justify-between">
+                <div className="flex w-fit">
+                  <div className="bg-slate-600 w-fit rounded-full p-6 mr-8">
+                    <img src={perfil} alt="vector" className="w-6 h-6" />
+                  </div>
+                  <ul className="flex flex-row items-center gap-2">
+                    <li className="relative z-10 p-2 bg-sky-500 rounded-full">
+                      <img
+                        onClick={handleEdit}
+                        className=" h-3.5  w-3.5"
+                        src={edit}
+                        alt=""
+                      />
+                    </li>
+                    <li>
+                      <button
+                        type="reset"
+                        className="p-1.5 border-bluey rounded-full"
+                      >
+                        <svg
+                          width="24px"
+                          height="24px"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          color="#000000"
+                        >
+                          <path
+                            d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"
+                            stroke="#000000"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                        </svg>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="flex w-full md:flex-row flex-col justify-center">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.first_name && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? " md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Nombre
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.first_name && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? " border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="first_name"
+                    value={form.first_name}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Nombre"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.first_name}
+                    </p>
+                  )}
+                </div>
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.last_name && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? " md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Apellido
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.last_name && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="last_name"
+                    value={form.last_name}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Apellido"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.last_name}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex w-full md:flex-row flex-col  justify-center">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.mail && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Email
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.mail && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-8 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="mail"
+                    value={form.mail}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Email"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.mail}
+                    </p>
+                  )}
+                </div>
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.address && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Direccion
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.address && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="address"
+                    value={form.address}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Direccion"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.address}
+                    </p>
+                  )}
+                </div>
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.password && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Contraseña
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.password && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-20 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Contraseña"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {enabled && (
+                <div className="flex mb-5 mx-aut10 flex-col justify-center w-10/12 mx-auto md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.image && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400 bg-white w-16 z-10 h-fit"
+                    } transition-all `}
+                  >
+                    Image
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-14 text-grey ${
+                      errors.image && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 translate-x-14"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    id="profileImage"
+                    name="image"
+                    value={form.image}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Imagen de perfil"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.image}
+                    </p>
+                  )}
+                </div>
+              )}
+              <button
+                disabled={!enabled}
+                className="bg-cyan-400 mt-5 hover:shadow-xl hover:font-bold transition-all"
+                type="submit"
+              >
+                Confirmar cambios
+              </button>
+            </form>
+          </section>
+        )}
+        {isComprasView && (
+          <section id="comprasVista" ref={comprasVistaRef}>
+            <h2>Formulario de Puntuación y Reseña</h2>
 
-      {isPerfilView && (
-        <section id="perfilVista" ref={perfilVistaRef}>
-          <form onSubmit={handleProfileSubmit}>
-            <button onClick={handleEdit} disabled={enabled}>
-              Editar
-            </button>
-            <input
-              type="text"
-              name="first_name"
-              value={form.first_name}
-              placeholder="Nombre"
-              disabled={!enabled}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              placeholder="Apellido"
-              name="last_name"
-              value={form.last_name}
-              disabled={!enabled}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="mail"
-              value={form.mail}
-              placeholder="Correo Electronico"
-              disabled={!enabled}
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              placeholder="Direccion"
-              disabled={!enabled}
-              onChange={handleChange}
-              name="address"
-              value={form.address}
-            />
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              placeholder="Contraseña"
-              disabled={!enabled}
-              onChange={handleChange}
-            />
-            <input type="text" placeholder="Dirección" />
-            <input
-              type="text"
-              id="profileImage"
-              onChange={handleChange}
-              placeholder="URL"
-              name="image"
-              value={form.image}
-              disabled={!enabled}
-            />
-
-            <button type="submit" disabled={!enabled}>
-              Confirmar cambios
-            </button>
-          </form>
-        </section>
-      )}
-
-      {isComprasView && (
-        <section id="comprasVista" ref={comprasVistaRef}>
-          <h2>Formulario de Puntuación y Reseña</h2>
-          ALGO.map
-          {
+            {/* {products.map((product) => {
             <form>
               <div>
                 <link
@@ -238,20 +497,21 @@ export default function Profile() {
                     style={{ color: value <= rating ? "red" : "" }}
                   ></span>
                 ))}
-              </div>
-              <div className="review">
-                <textarea
-                  name="review"
-                  value={review}
-                  placeholder="Escribe tu reseña aquí"
-                  onChange={handleReviewChange}
-                ></textarea>
-              </div>
-              <input type="submit" value="Enviar" />
-            </form>
-          }
-        </section>
-      )}
+                </div>
+                <div className="review">
+                  <textarea
+                    name="review"
+                    value={review}
+                    placeholder="Escribe tu reseña aquí"
+                    onChange={handleReviewChange}
+                  ></textarea>
+                </div>
+                <input type="submit" value="Enviar" />
+              </form>
+            } */}
+          </section>
+        )}
+      </article>
     </div>
   );
 }

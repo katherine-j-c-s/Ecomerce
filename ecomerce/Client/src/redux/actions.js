@@ -156,6 +156,22 @@ export function userAdmin(user) {
     payload: user,
   };
 }
+export const userUpDate = (id, userUpdate) => {
+  return async function (dispatch) {
+    try {
+      const data = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
+        userUpdate
+      );
+      return dispatch({
+        type: USER_UPDATE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log("delete img products error ===>", error);
+    }
+  };
+};
 ////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////
 
 export function showCart() {
