@@ -14,7 +14,7 @@ export default function Profile() {
   const user = useSelector((state) => state.userData);
   const orders = user.orders;
 
-  const userInfo = JSON.parse(localStorage.getItem("userData"));
+  const userLocal = JSON.parse(localStorage.getItem("userData"));
 
   const uniqueProductNames = new Set();
   const uniqueProductIds = new Set();
@@ -44,15 +44,15 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    dispatch(getUserId(userInfo.id));
+    dispatch(getUserId(userLocal.id));
     if (user) {
       setForm({
-        mail: user.email,
+        mail: userLocal.email,
         password: "********",
-        first_name: user.name,
-        last_name: user.lastName,
-        address: user.address,
-        image: user.image.url,
+        first_name: userLocal.name,
+        last_name: userLocal.lastName,
+        address: userLocal.address,
+        image: userLocal.imageLocal.url,
       });
     }
   }, []);
@@ -150,7 +150,7 @@ export default function Profile() {
 
     const modifiedUser = {};
 
-    if (form.mail !== user.email) {
+    if (form.mail !== userLocal.email) {
       modifiedUser.mail = form.mail;
     }
 
@@ -158,25 +158,25 @@ export default function Profile() {
       modifiedUser.password = form.password;
     }
 
-    if (form.first_name !== user.first_name) {
+    if (form.first_name !== userLocal.first_name) {
       modifiedUser.first_name = form.first_name;
     }
 
-    if (form.last_name !== user.lastName) {
+    if (form.last_name !== userLocal.lastName) {
       modifiedUser.last_name = form.last_name;
     }
 
-    if (form.address !== user.address) {
+    if (form.address !== userLocal.address) {
       modifiedUser.address = form.address;
     }
 
-    if (form.image !== user.imageLocal.url) {
+    if (form.image !== userLocal.imageLocal.url) {
       modifiedUser.image = form.image;
     }
 
     console.log(modifiedUser);
 
-    dispatch(userUpDate(user.id, modifiedUser));
+    dispatch(userUpDate(userLocal.id, modifiedUser));
 
     if (Object.keys(errors).length === 0) {
       setForm({
