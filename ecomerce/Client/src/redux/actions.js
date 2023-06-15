@@ -44,11 +44,11 @@ export const getAllProducts = () => {
     if (filtrosAlmacenados) {
       filtros = JSON.parse(filtrosAlmacenados);
     }
-    dispatch({ type: GET_ALL_PRODUCTS, payload: Products });
     //Si hay filtros almacenados, despachamos una accion
     if (filtros.length > 0) {
       dispatch({ type: SET_FILTERS, payload: filtros });
     }
+    return dispatch({ type: GET_ALL_PRODUCTS, payload: Products });
   };
 };
 export const getProductById = (id) => {
