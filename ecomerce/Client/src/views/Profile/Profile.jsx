@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import perfil from "../../assets/Vector1.png";
 import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
@@ -9,18 +9,21 @@ const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
 
 export default function Profile() {
+
   const dispatch = useDispatch();
 
   const [view, setView] = useState("perfil");
 
   const userInfo = JSON.parse(localStorage.getItem("userData"));
+  const products = useSelector((state) => state.products)
+  console.log(products)
 
   useEffect(() => {
     dispatch(getUserId(userInfo.id));
   }, []);
 
   const user = useSelector((state) => state.userData);
-  const products = useSelector((state) => state.userData.orders);
+  const orders = user.orders;
   useEffect(() => {
     if (user) {
       setForm({
@@ -33,7 +36,22 @@ export default function Profile() {
       });
     }
   }, [user]);
-  console.log(products);
+  console.log(orders);
+const uniqueProductNames = new Set();
+const uniqueProductIds = new Set();
+try {
+  orders.forEach(order => {
+    order.products.forEach(product => {
+      uniqueProductNames.add(product.title);
+      uniqueProductIds.add(product.id);
+    });
+  });
+  console.log("Unique Product Names:", [...uniqueProductNames]);
+  console.log("Unique Product IDs:", [...uniqueProductIds]);
+} catch (error) {
+  console.error("An error occurred:", error);
+}
+
   const [enabled, setEnabled] = useState(false);
 
   const [form, setForm] = useState({
@@ -56,19 +74,16 @@ export default function Profile() {
 
   const perfilVistaRef = useRef(null);
   const comprasVistaRef = useRef(null);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState({});
   const [review, setReview] = useState("");
 
-  const handleRating = (event) => {
-    const selectedRating = parseInt(event.target.getAttribute("target"));
-    console.log(selectedRating);
-    setRating(selectedRating);
-    if (selectedRating === rating) {
-      setRating(0);
-    } else {
-      setRating(selectedRating);
-    }
-  };
+  const handleRating = (productId, value) => {
+  setRating({
+    ...rating,
+    [productId]: value}
+  );
+};
+console.log(rating)
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
@@ -176,7 +191,7 @@ export default function Profile() {
             onClick={handleView}
             className="w-full hover:font-bold transition-all p-2 hover:bg-sky-300"
           >
-            <p>Mi Cuenta</p>
+            <button onClick={handleView} value="perfil">Mi Cuenta</button>
           </div>
           <div
             id="compras"
@@ -184,7 +199,7 @@ export default function Profile() {
             onClick={handleView}
             className="w-full hover:font-bold transition-all p-2 hover:bg-sky-300"
           >
-            <p>Compras</p>
+            <button onClick={handleView} value="compras">Compras</button>
           </div>
         </div>
       </section>
@@ -472,12 +487,15 @@ export default function Profile() {
             </form>
           </section>
         )}
-        {isComprasView && (
-          <section id="comprasVista" ref={comprasVistaRef}>
-            <h2>Formulario de Puntuación y Reseña</h2>
-
-            {/* {products.map((product) => {
-            <form>
+        {isComprasView && (<section id="comprasVista" ref={comprasVistaRef}>
+        <h2>Formulario de Puntuación y Reseña</h2>
+        {uniqueProductNames.size > 0 ? (
+  Array.from(uniqueProductNames).map((productName, i) => (
+    <section key={productName}>
+      <p>-----------------------------------</p>
+      <h2>{productName}</h2>
+      <p>{}</p>
+      <form>
               <div>
                 <link
                   rel="stylesheet"
@@ -487,12 +505,9 @@ export default function Profile() {
                 {[1, 2, 3, 4, 5].map((value) => (
                   <span
                     key={value}
-                    className={`fa fa-heart ${
-                      value <= rating ? "checked" : ""
-                    }`}
-                    onClick={handleRating}
-                    target={value}
-                    style={{ color: value <= rating ? "red" : "" }}
+                    className={`fa fa-heart ${value <= rating[uniqueProductIds[i-1]] ? "checked" : ""}`}
+                    onClick={() => handleRating(uniqueProductIds[i-1], value)}
+                    style={{ color: value <= rating[uniqueProductIds[i-1]] ? "red" : "", marginRight: 5 }}
                   ></span>
                 ))}
                 </div>
@@ -502,13 +517,18 @@ export default function Profile() {
                     value={review}
                     placeholder="Escribe tu reseña aquí"
                     onChange={handleReviewChange}
+                    id={uniqueProductIds}
                   ></textarea>
                 </div>
-                <input type="submit" value="Enviar" />
-              </form>
-            } */}
-          </section>
-        )}
+                <button>Enviar Comentario</button>
+                <p>-----------------------------------</p>
+              </form>     
+    </section>
+    
+  ))
+): "No Hay compras disponibles"}
+</section>)}
+        
       </article>
     </div>
   );
