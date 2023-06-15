@@ -9,20 +9,14 @@ const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
 
 export default function Profile() {
-
   const dispatch = useDispatch();
 
   const [view, setView] = useState("perfil");
 
-  const userInfo = JSON.parse(localStorage.getItem("userData"));
-  const products = useSelector((state) => state.products)
-  console.log(products)
+  const user = JSON.parse(localStorage.getItem("userData"));
+  const products = useSelector((state) => state.products);
+  console.log(user);
 
-  useEffect(() => {
-    dispatch(getUserId(userInfo.id));
-  }, []);
-
-  const user = useSelector((state) => state.userData);
   const orders = user.orders;
   useEffect(() => {
     if (user) {
@@ -32,25 +26,25 @@ export default function Profile() {
         first_name: user.name,
         last_name: user.lastName,
         address: user.address,
-        image: user.image.url,
+        image: user.imageLocal.url,
       });
     }
-  }, [user]);
-  console.log(orders);
-const uniqueProductNames = new Set();
-const uniqueProductIds = new Set();
-try {
-  orders.forEach(order => {
-    order.products.forEach(product => {
-      uniqueProductNames.add(product.title);
-      uniqueProductIds.add(product.id);
-    });
-  });
-  console.log("Unique Product Names:", [...uniqueProductNames]);
-  console.log("Unique Product IDs:", [...uniqueProductIds]);
-} catch (error) {
-  console.error("An error occurred:", error);
-}
+  }, []);
+  // console.log(orders);
+  const uniqueProductNames = new Set();
+  const uniqueProductIds = new Set();
+  // try {
+  //   orders.forEach((order) => {
+  //     order.products.forEach((product) => {
+  //       uniqueProductNames.add(product.title);
+  //       uniqueProductIds.add(product.id);
+  //     });
+  //   });
+  //   console.log("Unique Product Names:", [...uniqueProductNames]);
+  //   console.log("Unique Product IDs:", [...uniqueProductIds]);
+  // } catch (error) {
+  //   console.error("An error occurred:", error);
+  // }
 
   const [enabled, setEnabled] = useState(false);
 
@@ -78,12 +72,12 @@ try {
   const [review, setReview] = useState("");
 
   const handleRating = (productId, value) => {
-  setRating({
-    ...rating,
-    [productId]: value}
-  );
-};
-console.log(rating)
+    setRating({
+      ...rating,
+      [productId]: value,
+    });
+  };
+  // console.log(rating);
 
   const handleReviewChange = (event) => {
     setReview(event.target.value);
@@ -148,16 +142,35 @@ console.log(rating)
   function handleProfileSubmit(event) {
     event.preventDefault();
 
-    const modifiedUser = {
-      mail: form.mail || user.mail,
-      password: form.password !== "********" ? form.password : user.password,
-      first_name: form.nombre || user.nombre,
-      last_name: form.apellido || user.apellido,
-      address: form.address || user.address,
-      image: form.image || user.image,
-    };
+    const modifiedUser = {};
 
-    dispatch(userUpDate(user.id, user));
+    if (form.mail !== user.email) {
+      modifiedUser.mail = form.mail;
+    }
+
+    if (form.password !== "********") {
+      modifiedUser.password = form.password;
+    }
+
+    if (form.first_name !== user.first_name) {
+      modifiedUser.first_name = form.first_name;
+    }
+
+    if (form.last_name !== user.lastName) {
+      modifiedUser.last_name = form.last_name;
+    }
+
+    if (form.address !== user.address) {
+      modifiedUser.address = form.address;
+    }
+
+    if (form.image !== user.imageLocal.url) {
+      modifiedUser.image = form.image;
+    }
+
+    console.log(modifiedUser);
+
+    dispatch(userUpDate(user.id, modifiedUser));
 
     if (Object.keys(errors).length === 0) {
       setForm({
@@ -192,7 +205,9 @@ console.log(rating)
               onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
-              <button onClick={handleView} value="perfil">Mi Cuenta</button>
+              <button onClick={handleView} value="perfil">
+                Mi Cuenta
+              </button>
             </div>
             <div
               id="compras"
@@ -200,7 +215,9 @@ console.log(rating)
               onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
-              <button onClick={handleView} value="compras">Compras</button>
+              <button onClick={handleView} value="compras">
+                Compras
+              </button>
             </div>
           </div>
         </div>
@@ -489,48 +506,60 @@ console.log(rating)
             </form>
           </section>
         )}
-        {isComprasView && (<section id="comprasVista" ref={comprasVistaRef}>
-        <h2>Formulario de Puntuación y Reseña</h2>
-        {uniqueProductNames.size > 0 ? (
-  Array.from(uniqueProductNames).map((productName, i) => (
-    <section key={productName}>
-      <p>-----------------------------------</p>
-      <h2>{productName}</h2>
-      <p>{}</p>
-      <form>
-              <div>
-                <link
-                  rel="stylesheet"
-                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                />
+        {isComprasView && (
+          <section id="comprasVista" ref={comprasVistaRef}>
+            <h2>Formulario de Puntuación y Reseña</h2>
+            {uniqueProductNames.size > 0
+              ? Array.from(uniqueProductNames).map((productName, i) => (
+                  <section key={productName}>
+                    <p>-----------------------------------</p>
+                    <h2>{productName}</h2>
+                    <p>{}</p>
+                    <form>
+                      <div>
+                        <link
+                          rel="stylesheet"
+                          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                        />
 
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <span
-                    key={value}
-                    className={`fa fa-heart ${value <= rating[uniqueProductIds[i-1]] ? "checked" : ""}`}
-                    onClick={() => handleRating(uniqueProductIds[i-1], value)}
-                    style={{ color: value <= rating[uniqueProductIds[i-1]] ? "red" : "", marginRight: 5 }}
-                  ></span>
-                ))}
-                </div>
-                <div className="review">
-                  <textarea
-                    name="review"
-                    value={review}
-                    placeholder="Escribe tu reseña aquí"
-                    onChange={handleReviewChange}
-                    id={uniqueProductIds}
-                  ></textarea>
-                </div>
-                <button>Enviar Comentario</button>
-                <p>-----------------------------------</p>
-              </form>     
-    </section>
-    
-  ))
-): "No Hay compras disponibles"}
-</section>)}
-        
+                        {[1, 2, 3, 4, 5].map((value) => (
+                          <span
+                            key={value}
+                            className={`fa fa-heart ${
+                              value <= rating[uniqueProductIds[i - 1]]
+                                ? "checked"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              handleRating(uniqueProductIds[i - 1], value)
+                            }
+                            style={{
+                              color:
+                                value <= rating[uniqueProductIds[i - 1]]
+                                  ? "red"
+                                  : "",
+                              marginRight: 5,
+                            }}
+                          ></span>
+                        ))}
+                      </div>
+                      <div className="review">
+                        <textarea
+                          name="review"
+                          value={review}
+                          placeholder="Escribe tu reseña aquí"
+                          onChange={handleReviewChange}
+                          id={uniqueProductIds}
+                        ></textarea>
+                      </div>
+                      <button>Enviar Comentario</button>
+                      <p>-----------------------------------</p>
+                    </form>
+                  </section>
+                ))
+              : "No Hay compras disponibles"}
+          </section>
+        )}
       </article>
     </div>
   );
