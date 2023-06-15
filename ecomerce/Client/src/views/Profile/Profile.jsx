@@ -605,7 +605,7 @@ export default function Profile() {
             }else{
               setShowform(true)
             }
-          }} className="bg-sky-400 md:t-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg">
+          }} className="bg-sky-400 md:mt-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg">
             {showForm === false ? 'Dejar Reseña': 'volver'}
           </p>
         </section>)}
