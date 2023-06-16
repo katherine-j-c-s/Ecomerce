@@ -6,6 +6,7 @@ import {
   USER_ADMIN,
   REMOVE_IMG,
   USER_BY_ID,
+  USER_UPDATE,
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
@@ -14,6 +15,7 @@ import {
   DISABLE_CART,
   ADD_QUANTITY,
   EDIT_PRODUCT,
+  POST_COMMENTS,
   GET_ALL_USERS,
   GET_ALL_VISITS,
   DELETE_PRODUCT,
@@ -28,8 +30,6 @@ import {
   ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
-  
-  
 } from "./types";
 
 import axios from "axios";
@@ -324,12 +324,21 @@ export function addDarkModeAdmin(condicional) {
 
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
 
-export const postCommetn = () => {
+export const postComments = (envio) => {
+  console.log(envio);
   return async function (dispatch) {
-    com;
-    const data = await axios.post(
-      `https://ecomerce-production-8f61.up.railway.app/comments/${id}`
-    );
+    try {
+      const data = await axios.post(
+        `https://ecomerce-production-8f61.up.railway.app/comments`,
+        envio
+      );
+      return dispatch({
+        type: POST_COMMENTS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
