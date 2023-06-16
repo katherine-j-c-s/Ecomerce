@@ -19,14 +19,14 @@ const data = [
 export default function AreaChartComponents() {
   return (
     <div >
-        <div className='flex flex-row w-full mx-10 mb-8'>
+        <div className='flex md:flex-row flex-col w-full mx-10 mb-8'>
             <div className='flex flex-row w-auto justify-start items-center mr-6'>
                 <div className='w-4 h-4 bg-[#6384E7] rounded-full mr-2' ></div>
-                <h1 className='text-lg text-[#6384E7]' >Ganancias totales</h1>
+                <h1 className='md:text-lg text-sm text-[#6384E7]' >Ganancias totales</h1>
             </div>
             <div className='flex flex-row w-auto justify-start items-center'>
                 <div className='w-4 h-4 bg-[#83CBEE] rounded-full mr-2' ></div>
-                <h1 className='text-lg text-[#83CBEE]' >Ventas totales</h1>
+                <h1 className='md:text-lg text-sm text-[#83CBEE]' >Ventas totales</h1>
             </div>
         </div>
         <ResponsiveContainer width="100%" height="80%" >  

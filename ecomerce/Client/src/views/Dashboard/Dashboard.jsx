@@ -12,17 +12,17 @@ export default function Dashboard() {
         {name: "Usuarios totales", number: '13', stat: "+ 0,95%", icon:  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"> <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /> </svg> }, 
     ]
     return (
-        <div className='w-full h-auto mt-40'>
+        <div className='w-full h-auto md:mt-40 mt-20'>
             <div className='flex md:flex-row flex-col w-full justify-between align-center px-14'>
                 { dataCards.map((info, index)=>  (
                     <DashboardCard name={info.name} stat={info.stat} number={info.number} icon={info.icon} key={index} />
                 )) }
             </div>
             <div className='flex md:flex-row flex-col w-full px-14 mt-8'>
-                <div className='flex flex-col w-3/4 h-auto bg-white mr-8 pt-14'>
+                <div className='flex flex-col md:w-3/4  w-full  md:h-auto h-auto bg-white md:mr-8  pt-14'>
                     <AreaChartComponents/>
                 </div>
-                <div className='flex flex-col w-1/4 h-96 bg-white justify-center items-center'>
+                <div className='flex flex-col  md:w-1/4 w-full h-96 bg-white justify-center items-center md:mt-0 mt-12 '>
                     <BarChartComponent/>
                 </div>
                     
