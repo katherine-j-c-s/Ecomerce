@@ -25,6 +25,7 @@ import {
   GET_PRODUCT_BY_ID,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  GET_ALL_VISITS,
 } from "./types";
 
 import axios from "axios";
@@ -44,11 +45,11 @@ export const getAllProducts = () => {
     if (filtrosAlmacenados) {
       filtros = JSON.parse(filtrosAlmacenados);
     }
-    dispatch({ type: GET_ALL_PRODUCTS, payload: Products });
     //Si hay filtros almacenados, despachamos una accion
     if (filtros.length > 0) {
       dispatch({ type: SET_FILTERS, payload: filtros });
     }
+    return dispatch({ type: GET_ALL_PRODUCTS, payload: Products });
   };
 };
 export const getProductById = (id) => {
@@ -291,6 +292,18 @@ export const removeImgToProduct = (obj) => {
       });
     } catch (error) {
       console.log("delete img products error ===>", error);
+    }
+  };
+};
+
+export const getAppVisits = () => {
+  return async function (dispatch) {
+    try {
+      let { data } = await axios.get(`visits`)
+      return dispatch({ type: GET_ALL_VISITS, payload: data })
+      
+    } catch (error) {
+      console.log("get app visits error ===>", error);
     }
   };
 };

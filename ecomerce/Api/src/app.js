@@ -7,6 +7,7 @@ const passport = require("passport");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const { conn } = require("./db");
+const incrementVisit = require("./visitsMiddleware");
 require("dotenv").config();
 const app = express();
 
@@ -49,6 +50,8 @@ sessionStore.sync();
 app.use(passport.initialize()); // Inicializa Passport.js
 
 app.use(passport.session());
+
+app.use(incrementVisit)
 
 app.use("/", mainRouter);
 
