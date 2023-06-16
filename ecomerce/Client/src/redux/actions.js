@@ -317,6 +317,7 @@ export const userUpDate = (id, userUpdate) => {
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
 
 export const postComments = (envio) => {
+  console.log(envio);
   return async function (dispatch) {
     try {
       const data = await axios.post(

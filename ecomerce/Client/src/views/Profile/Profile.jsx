@@ -3,7 +3,7 @@ import perfil from "../../assets/Vector1.png";
 import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
 
-import { getProductById, getUserId, userUpDate } from "../../redux/actions";
+import { getProductById, getUserId, userUpDate, postComments } from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
@@ -12,7 +12,7 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.userData);
-  const { productDetail } = useSelector((st) => st);
+  const { productDetail, commentsUser } = useSelector((st) => st);
   const orders = user.orders;
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
@@ -229,7 +229,8 @@ export default function Profile() {
   
   let envio = resultado.find(producto => producto.id === parseInt(event.target.id))
   send.push(parseInt(event.target.id))
-  dispatch(envio)
+  dispatch(postComments(envio))
+  console.log(commentsUser)
 }
 
 
