@@ -3,16 +3,15 @@ import {
   SIGN_UP,
   LOG_OUT,
   USER_ADMIN,
-  USER_ADMIN,
   USER_BY_ID,
   USER_UPDATE,
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
-  USER_UPDATE,
   SHOW_SIDEBAR,
   DISABLE_CART,
   ADD_QUANTITY,
+  POST_COMMENTS,
   GET_ALL_USERS,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
@@ -52,6 +51,8 @@ const initialState = {
   sizes: [],
   categories: [],
   colors: [],
+  darkModeAdmin: false,
+  commentsUser: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -340,6 +341,13 @@ const rootReducer = (state = initialState, action) => {
 
     case GET_FILTERS:
       return { ...state, [action.payload[0]]: action.payload[1] };
+    case ADD_DARKMODE_ADMIN:
+      return { ...state, darkModeAdmin: action.payload };
+    case POST_COMMENTS:
+      return {
+        ...state,
+        commentsUser: [...state.commentsUser, action.payload],
+      };
     default:
       return state;
   }
