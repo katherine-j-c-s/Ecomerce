@@ -223,7 +223,8 @@ export default function Profile() {
     resultado.push({
       id: element.id,
       content: element.value,
-      rate: rate
+      rate: rate,
+      id_usuario: user.id
     });
   })
   
