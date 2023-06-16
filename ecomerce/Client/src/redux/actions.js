@@ -316,12 +316,12 @@ export const userUpDate = (id, userUpdate) => {
 
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
 
-export const postComments = () => {
+export const postComments = (envio) => {
   return async function (dispatch) {
     try {
-      const data = await axios.patch(
+      const data = await axios.post(
         `https://ecomerce-production-8f61.up.railway.app/comments`,
-        {}
+        envio
       );
       return dispatch({
         type: POST_COMMENTS,

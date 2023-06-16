@@ -229,7 +229,7 @@ export default function Profile() {
   
   let envio = resultado.find(producto => producto.id === parseInt(event.target.id))
   send.push(parseInt(event.target.id))
-  
+  dispatch(envio)
 }
 
 
