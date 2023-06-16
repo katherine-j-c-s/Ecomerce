@@ -21,7 +21,15 @@ export default function Nav() {
   if (!userInfo) {
     localStorage.setItem(
       "userData",
-      JSON.stringify({ id: "", imageLocal: "", access: false })
+      JSON.stringify({
+        id: "",
+        imageLocal: "",
+        name: "",
+        lastName: "",
+        email: "",
+        password: "",
+        access: false,
+      })
     );
   }
 
