@@ -62,10 +62,10 @@ export default function Dashboard() {
                 )) }
             </div>
             <div className='flex md:flex-row flex-col w-full px-14 mt-8'>
-                <div className='flex flex-col md:w-3/4  w-full  md:h-auto h-auto bg-white md:mr-8  pt-14'>
+                <div className='flex flex-col md:w-3/4  w-full  md:h-auto h-auto bg-white dark:bg-transparent dark:border dark:border-dashed dark:rounded-xl md:mr-8  pt-14'>
                     <AreaChartComponents/>
                 </div>
-                <div className='flex flex-col  md:w-1/4 w-full h-96 bg-white justify-center items-center md:mt-0 mt-12 '>
+                <div className='flex flex-col  md:w-1/4 w-full h-96 bg-white justify-center items-center md:mt-0 mt-12 dark:bg-transparent dark:border dark:border-dashed dark:rounded-xl'>
                     <BarChartComponent/>
                 </div>
                     
