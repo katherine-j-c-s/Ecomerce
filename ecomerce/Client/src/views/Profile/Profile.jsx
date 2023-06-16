@@ -11,8 +11,8 @@ import { useSelector } from "react-redux";
 export default function Profile() {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.userData);  
-  const {productDetail} = useSelector((st) => st);  
+  const user = useSelector((state) => state.userData);
+  const { productDetail } = useSelector((st) => st);
   const orders = user.orders;
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
@@ -24,12 +24,12 @@ export default function Profile() {
   const comprasVistaRef = useRef(null);
 
   const [view, setView] = useState("perfil");
-  const [enabled, setEnabled] = useState(false);  
-  const [showForm,setShowform] = useState(false)
+  const [enabled, setEnabled] = useState(false);
+  const [showForm, setShowform] = useState(false);
 
   const [rating, setRating] = useState({});
   const [review, setReview] = useState([]);
-  const [images,setImages] = useState([])
+  const [images, setImages] = useState([]);
 
   const [form, setForm] = useState({
     mail: "",
@@ -61,15 +61,15 @@ export default function Profile() {
       });
     }
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     if (Object.keys(productDetail).length > 0) {
-      let newlist = {id:productDetail.id,value:productDetail.image[0]}
-      let repetido = images.find( i => i.id === productDetail.id)
+      let newlist = { id: productDetail.id, value: productDetail.image[0] };
+      let repetido = images.find((i) => i.id === productDetail.id);
       if (!repetido) {
-        images.push(newlist)
+        images.push(newlist);
       }
     }
-  },[productDetail])
+  }, [productDetail]);
 
   orders?.forEach((order) => {
     order.products.forEach((product) => {
@@ -78,8 +78,8 @@ export default function Profile() {
       let newlist = { id: product.id, value: "" };
       let repetido = review.find((c) => c.id === product.id);
       if (!repetido) {
-        review.push(newlist)
-        dispatch(getProductById(product.id))
+        review.push(newlist);
+        dispatch(getProductById(product.id));
       }
     });
   });
@@ -233,12 +233,18 @@ export default function Profile() {
             <div
               id="compras"
               value="compras"
-              onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
               <button onClick={handleView} value="compras">
                 Compras
               </button>
+            </div>
+            <div
+              id="Admin"
+              value="Admin"
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button value="admin">Panel de Administrador</button>
             </div>
           </div>
         </div>
@@ -528,87 +534,111 @@ export default function Profile() {
           </section>
         )}
         {isComprasView && (
-        <section className="flex flex-col" id="comprasVista" ref={comprasVistaRef}>
-          <h2 className="mt-20 mb-10 font-bold text-lg border-b-4 border-sky-400 w-fit mx-auto">{showForm === true ? 'Formulario de Puntuación y Reseña' : 'Mis Compras'}</h2>
-          <div className="flex md:flex-row flex-col">
-            {uniqueProductNames.size > 0 ? (
-              Array.from(uniqueProductNames).map((productName, i) => {
-                let id = Array.from(uniqueProductIds)[i]
-                let img = images.find( i => i.id === id)
-                let coment = review.find(
-                  (c) => c.id === Array.from(uniqueProductIds)[i]
-                );
-                return(
-                <div 
-                  className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white rounded-xl trnasition-all hover:shadow-xl py-10 px-14" 
-                  key={productName}
-                >
-                  <div className="bg-white relative z-20">
-                    <img className="w-52 mx-auto rounded-full h-52" src={img.value} alt="img" />
-                    <h2 className="mt-4 w-10/12 mx-auto font-mono">{productName}</h2>
-                  </div>
-                  <form className={`${
-                    showForm === true 
-                    ? ' translate-x-0 translate-y-0 relative' 
-                    : 'absolute -translate-y-44 z-0'} 
-                    transition-all bg-white `
-                    }>
-                    <div>
-                      <link
-                        rel="stylesheet"
-                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                      />
-                      {[1, 2, 3, 4, 5].map((value) => (
-                        <span
-                          key={value}
-                          className={`fa fa-heart ${
-                            value <= rating[Array.from(uniqueProductIds)[i]]
-                              ? "checked"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            handleRating(
-                              Array.from(uniqueProductIds)[i],
-                              value
-                            )
-                          }
-                          style={{
-                            color:
-                              value <=
-                              rating[Array.from(uniqueProductIds)[i]]
-                                ? "red"
-                                : "",
-                            marginRight: 5,
-                          }}
-                        ></span>
-                      ))}
-                    </div>
-                    <div className="">
-                      <textarea
-                        className="py-2 px-4"
-                        name="review"
-                        value={coment.value}
-                        placeholder="Escribe tu reseña aquí"
-                        onChange={handleReviewChange}
-                        id={Array.from(uniqueProductIds)[i]}
-                      ></textarea>
-                    </div>
-                    <button className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg">Enviar Comentario</button>
-                  </form>
-                </div>
-              )})
-            ): "No Hay compras disponibles"}
-          </div>
-          <p onClick={()=>{
-            if (showForm) {
-              setShowform(false)
-            }else{
-              setShowform(true)
-            }
-          }} className="bg-sky-400 md:mt-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg">
-            {showForm === false ? 'Dejar Reseña': 'volver'}
-          </p>
-        </section>)}
+          <section
+            className="flex flex-col"
+            id="comprasVista"
+            ref={comprasVistaRef}
+          >
+            <h2 className="mt-20 mb-10 font-bold text-lg border-b-4 border-sky-400 w-fit mx-auto">
+              {showForm === true
+                ? "Formulario de Puntuación y Reseña"
+                : "Mis Compras"}
+            </h2>
+            <div className="flex md:flex-row flex-col">
+              {uniqueProductNames.size > 0
+                ? Array.from(uniqueProductNames).map((productName, i) => {
+                    let id = Array.from(uniqueProductIds)[i];
+                    let img = images.find((i) => i.id === id);
+                    let coment = review.find(
+                      (c) => c.id === Array.from(uniqueProductIds)[i]
+                    );
+                    return (
+                      <div
+                        className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white rounded-xl trnasition-all hover:shadow-xl py-10 px-14"
+                        key={productName}
+                      >
+                        <div className="bg-white relative z-20">
+                          <img
+                            className="w-52 mx-auto rounded-full h-52"
+                            src={img.value}
+                            alt="img"
+                          />
+                          <h2 className="mt-4 w-10/12 mx-auto font-mono">
+                            {productName}
+                          </h2>
+                        </div>
+                        <form
+                          className={`${
+                            showForm === true
+                              ? " translate-x-0 translate-y-0 relative"
+                              : "absolute -translate-y-44 z-0"
+                          } 
+                    transition-all bg-white `}
+                        >
+                          <div>
+                            <link
+                              rel="stylesheet"
+                              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                            />
+                            {[1, 2, 3, 4, 5].map((value) => (
+                              <span
+                                key={value}
+                                className={`fa fa-heart ${
+                                  value <=
+                                  rating[Array.from(uniqueProductIds)[i]]
+                                    ? "checked"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleRating(
+                                    Array.from(uniqueProductIds)[i],
+                                    value
+                                  )
+                                }
+                                style={{
+                                  color:
+                                    value <=
+                                    rating[Array.from(uniqueProductIds)[i]]
+                                      ? "red"
+                                      : "",
+                                  marginRight: 5,
+                                }}
+                              ></span>
+                            ))}
+                          </div>
+                          <div className="">
+                            <textarea
+                              className="py-2 px-4"
+                              name="review"
+                              value={coment.value}
+                              placeholder="Escribe tu reseña aquí"
+                              onChange={handleReviewChange}
+                              id={Array.from(uniqueProductIds)[i]}
+                            ></textarea>
+                          </div>
+                          <button className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg">
+                            Enviar Comentario
+                          </button>
+                        </form>
+                      </div>
+                    );
+                  })
+                : "No Hay compras disponibles"}
+            </div>
+            <p
+              onClick={() => {
+                if (showForm) {
+                  setShowform(false);
+                } else {
+                  setShowform(true);
+                }
+              }}
+              className="bg-sky-400 md:mt-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg"
+            >
+              {showForm === false ? "Dejar Reseña" : "volver"}
+            </p>
+          </section>
+        )}
       </article>
     </div>
   );

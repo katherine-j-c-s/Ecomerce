@@ -312,3 +312,14 @@ export const userUpDate = (id, userUpdate) => {
     }
   };
 };
+
+//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
+
+export const postCommetn = () => {
+  return async function (dispatch) {
+    com;
+    const data = await axios.post(
+      `https://ecomerce-production-8f61.up.railway.app/comments/${id}`
+    );
+  };
+};
