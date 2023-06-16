@@ -168,7 +168,7 @@ export const userUpDate = (id, userUpdate) => {
         payload: data,
       });
     } catch (error) {
-      console.log("delete img products error ===>", error);
+      console.log(error);
     }
   };
 };
@@ -317,3 +317,15 @@ export const removeImgToProduct = (obj) => {
 export function addDarkModeAdmin(condicional) {
   return { type: ADD_DARKMODE_ADMIN, payload:condicional };
 }
+
+
+//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
+
+export const postCommetn = () => {
+  return async function (dispatch) {
+    com;
+    const data = await axios.post(
+      `https://ecomerce-production-8f61.up.railway.app/comments/${id}`
+    );
+  };
+};

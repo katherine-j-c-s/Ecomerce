@@ -138,6 +138,18 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case USER_UPDATE:
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
+          access: true,
+        })
+      );
       return {
         ...state,
         userData: {
@@ -208,6 +220,10 @@ const rootReducer = (state = initialState, action) => {
         JSON.stringify({
           id: action.payload.id,
           imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
           access: true,
         })
       );

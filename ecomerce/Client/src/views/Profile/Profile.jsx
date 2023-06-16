@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import perfil from "../../assets/Vector1.png";
 import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
 
-import { getUserId, userUpDate } from "../../redux/actions";
+import { getProductById, getUserId, userUpDate } from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
@@ -11,30 +11,25 @@ import { useSelector } from "react-redux";
 export default function Profile() {
   const dispatch = useDispatch();
 
-  const [view, setView] = useState("perfil");
-
-  const userInfo = JSON.parse(localStorage.getItem("userData"));
-
-  useEffect(() => {
-    dispatch(getUserId(userInfo.id));
-  }, []);
-
   const user = useSelector((state) => state.userData);
-  const products = useSelector((state) => state.userData.orders);
-  useEffect(() => {
-    if (user) {
-      setForm({
-        mail: user.email,
-        password: "********",
-        first_name: user.name,
-        last_name: user.lastName,
-        address: user.address,
-        image: user.image.url,
-      });
-    }
-  }, [user]);
-  console.log(products);
+  const { productDetail } = useSelector((st) => st);
+  const orders = user.orders;
+
+  const userLocal = JSON.parse(localStorage.getItem("userData"));
+
+  const uniqueProductNames = new Set();
+  const uniqueProductIds = new Set();
+
+  const perfilVistaRef = useRef(null);
+  const comprasVistaRef = useRef(null);
+
+  const [view, setView] = useState("perfil");
   const [enabled, setEnabled] = useState(false);
+  const [showForm, setShowform] = useState(false);
+
+  const [rating, setRating] = useState({});
+  const [review, setReview] = useState([]);
+  const [images, setImages] = useState([]);
 
   const [form, setForm] = useState({
     mail: "",
@@ -44,7 +39,6 @@ export default function Profile() {
     address: "",
     image: "",
   });
-
   const [errors, setErrors] = useState({
     mail: "",
     password: "",
@@ -54,24 +48,60 @@ export default function Profile() {
     image: "",
   });
 
-  const perfilVistaRef = useRef(null);
-  const comprasVistaRef = useRef(null);
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
-
-  const handleRating = (event) => {
-    const selectedRating = parseInt(event.target.getAttribute("target"));
-    console.log(selectedRating);
-    setRating(selectedRating);
-    if (selectedRating === rating) {
-      setRating(0);
-    } else {
-      setRating(selectedRating);
+  useEffect(() => {
+    dispatch(getUserId(userLocal.id));
+    if (user) {
+      setForm({
+        mail: userLocal.email,
+        password: "********",
+        first_name: userLocal.name,
+        last_name: userLocal.lastName,
+        address: userLocal.address,
+        image: userLocal.imageLocal.url,
+      });
     }
+  }, []);
+  useEffect(() => {
+    if (Object.keys(productDetail).length > 0) {
+      let newlist = { id: productDetail.id, value: productDetail.image[0] };
+      let repetido = images.find((i) => i.id === productDetail.id);
+      if (!repetido) {
+        images.push(newlist);
+      }
+    }
+  }, [productDetail]);
+
+  orders?.forEach((order) => {
+    order.products.forEach((product) => {
+      uniqueProductNames.add(product.title);
+      uniqueProductIds.add(product.id);
+      let newlist = { id: product.id, value: "" };
+      let repetido = review.find((c) => c.id === product.id);
+      if (!repetido) {
+        review.push(newlist);
+        dispatch(getProductById(product.id));
+      }
+    });
+  });
+
+  const handleRating = (productId, value) => {
+    setRating({
+      ...rating,
+      [productId]: value,
+    });
   };
 
   const handleReviewChange = (event) => {
-    setReview(event.target.value);
+    let value = event.target.value;
+    let id = event.target.id;
+    let newList = review.map((c) => {
+      if (c.id === Number(id)) {
+        let result = { id: c.id, value: value };
+        return result;
+      }
+      return c;
+    });
+    setReview(newList);
   };
 
   const handleView = (event) => {
@@ -91,7 +121,7 @@ export default function Profile() {
     setEnabled(!enabled);
   };
 
-  function validate(form) {
+  const validate = (form) => {
     const errors = {};
     if (!form.first_name) {
       errors.first_name = "Debe haber un nombre";
@@ -113,7 +143,7 @@ export default function Profile() {
       errors.address = "Debe haber una direccion";
     }
     return errors;
-  }
+  };
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -130,19 +160,38 @@ export default function Profile() {
       })
     );
   };
-  function handleProfileSubmit(event) {
+  const handleProfileSubmit = (event) => {
     event.preventDefault();
 
-    const modifiedUser = {
-      mail: form.mail || user.mail,
-      password: form.password !== "********" ? form.password : user.password,
-      first_name: form.nombre || user.nombre,
-      last_name: form.apellido || user.apellido,
-      address: form.address || user.address,
-      image: form.image || user.image,
-    };
+    const modifiedUser = {};
 
-    dispatch(userUpDate(user.id, user));
+    if (form.mail !== userLocal.email) {
+      modifiedUser.mail = form.mail;
+    }
+
+    if (form.password !== "********") {
+      modifiedUser.password = form.password;
+    }
+
+    if (form.first_name !== userLocal.first_name) {
+      modifiedUser.first_name = form.first_name;
+    }
+
+    if (form.last_name !== userLocal.lastName) {
+      modifiedUser.last_name = form.last_name;
+    }
+
+    if (form.address !== userLocal.address) {
+      modifiedUser.address = form.address;
+    }
+
+    if (form.image !== userLocal.imageLocal.url) {
+      modifiedUser.image = form.image;
+    }
+
+    console.log(modifiedUser);
+
+    dispatch(userUpDate(userLocal.id, modifiedUser));
 
     if (Object.keys(errors).length === 0) {
       setForm({
@@ -158,7 +207,7 @@ export default function Profile() {
         password: "",
       });
     }
-  }
+  };
 
   return (
     <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
@@ -177,15 +226,25 @@ export default function Profile() {
               onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
-              <p>Mi Cuenta</p>
+              <button onClick={handleView} value="perfil">
+                Mi Cuenta
+              </button>
             </div>
             <div
               id="compras"
               value="compras"
-              onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
-              <p>Compras</p>
+              <button onClick={handleView} value="compras">
+                Compras
+              </button>
+            </div>
+            <div
+              id="Admin"
+              value="Admin"
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button value="admin">Panel de Administrador</button>
             </div>
           </div>
         </div>
@@ -475,40 +534,109 @@ export default function Profile() {
           </section>
         )}
         {isComprasView && (
-          <section id="comprasVista" ref={comprasVistaRef}>
-            <h2>Formulario de Puntuación y Reseña</h2>
-
-            {/* {products.map((product) => {
-            <form>
-              <div>
-                <link
-                  rel="stylesheet"
-                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                />
-
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <span
-                    key={value}
-                    className={`fa fa-heart ${
-                      value <= rating ? "checked" : ""
-                    }`}
-                    onClick={handleRating}
-                    target={value}
-                    style={{ color: value <= rating ? "red" : "" }}
-                  ></span>
-                ))}
-                </div>
-                <div className="review">
-                  <textarea
-                    name="review"
-                    value={review}
-                    placeholder="Escribe tu reseña aquí"
-                    onChange={handleReviewChange}
-                  ></textarea>
-                </div>
-                <input type="submit" value="Enviar" />
-              </form>
-            } */}
+          <section
+            className="flex flex-col"
+            id="comprasVista"
+            ref={comprasVistaRef}
+          >
+            <h2 className="mt-20 mb-10 font-bold text-lg border-b-4 border-sky-400 w-fit mx-auto">
+              {showForm === true
+                ? "Formulario de Puntuación y Reseña"
+                : "Mis Compras"}
+            </h2>
+            <div className="flex md:flex-row flex-col">
+              {uniqueProductNames.size > 0
+                ? Array.from(uniqueProductNames).map((productName, i) => {
+                    let id = Array.from(uniqueProductIds)[i];
+                    let img = images.find((i) => i.id === id);
+                    let coment = review.find(
+                      (c) => c.id === Array.from(uniqueProductIds)[i]
+                    );
+                    return (
+                      <div
+                        className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white rounded-xl trnasition-all hover:shadow-xl py-10 px-14"
+                        key={productName}
+                      >
+                        <div className="bg-white relative z-20">
+                          <img
+                            className="w-52 mx-auto rounded-full h-52"
+                            src={img.value}
+                            alt="img"
+                          />
+                          <h2 className="mt-4 w-10/12 mx-auto font-mono">
+                            {productName}
+                          </h2>
+                        </div>
+                        <form
+                          className={`${
+                            showForm === true
+                              ? " translate-x-0 translate-y-0 relative"
+                              : "absolute -translate-y-44 z-0"
+                          } 
+                    transition-all bg-white `}
+                        >
+                          <div>
+                            <link
+                              rel="stylesheet"
+                              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                            />
+                            {[1, 2, 3, 4, 5].map((value) => (
+                              <span
+                                key={value}
+                                className={`fa fa-heart ${
+                                  value <=
+                                  rating[Array.from(uniqueProductIds)[i]]
+                                    ? "checked"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleRating(
+                                    Array.from(uniqueProductIds)[i],
+                                    value
+                                  )
+                                }
+                                style={{
+                                  color:
+                                    value <=
+                                    rating[Array.from(uniqueProductIds)[i]]
+                                      ? "red"
+                                      : "",
+                                  marginRight: 5,
+                                }}
+                              ></span>
+                            ))}
+                          </div>
+                          <div className="">
+                            <textarea
+                              className="py-2 px-4"
+                              name="review"
+                              value={coment.value}
+                              placeholder="Escribe tu reseña aquí"
+                              onChange={handleReviewChange}
+                              id={Array.from(uniqueProductIds)[i]}
+                            ></textarea>
+                          </div>
+                          <button className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg">
+                            Enviar Comentario
+                          </button>
+                        </form>
+                      </div>
+                    );
+                  })
+                : "No Hay compras disponibles"}
+            </div>
+            <p
+              onClick={() => {
+                if (showForm) {
+                  setShowform(false);
+                } else {
+                  setShowform(true);
+                }
+              }}
+              className="bg-sky-400 md:mt-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg"
+            >
+              {showForm === false ? "Dejar Reseña" : "volver"}
+            </p>
           </section>
         )}
       </article>
