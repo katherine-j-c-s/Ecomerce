@@ -8,6 +8,7 @@ const commentModel = require("./models/Comment");
 const categoryModel = require("./models/Category");
 const colorModel = require("./models/Color");
 const sizeModel = require("./models/Size");
+const visitModel = require("./models/Visit")
 
 
 let sequelize
@@ -35,8 +36,10 @@ commentModel(sequelize);
 categoryModel(sequelize);
 colorModel(sequelize);
 sizeModel(sequelize);
+visitModel(sequelize);
 
-const { User, Product, UserOrder, Category, Comment, Color, Size } =
+
+const { User, Product, UserOrder, Category, Comment, Color, Size, Visit } =
   sequelize.models;
 
 //  Aca vendrian las relaciones

@@ -41,24 +41,24 @@ export default function SidebarAdmin() {
           <p onClick={darkMode} className='dark:text-sky-200 text-sky-400 font-bold absolute top-28 left-6'>Control Pannel</p>
           <div className='flex flex-col'>
             <Link to={'/admin?pestaña=dashboard'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
-              <img className='mr-4 w-5 h-4 relative top-1' src={imagen1} alt="vector" />
-              <p>Dashboard</p>
+              <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen1} alt="vector" />
+              <p className=' font-thin hover:text-cyan-400'>Dashboard</p>
             </Link>
             <Link to={'/admin?pestaña=usuarios'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
-              <img className='mr-4 w-5 h-4 relative top-1' src={imagen2} alt="vector" />
-              <p>Usuarios</p>
+              <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen2} alt="vector" />
+              <p className=' font-thin hover:text-cyan-400'>Usuarios</p>
             </Link>
             <Link to={'/admin?pestaña=estadisticas'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
-              <img className='mr-4 w-5 h-4 relative top-1' src={imagen3} alt="vector" />
-              <p>Estadísticas</p>
+              <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen3} alt="vector" />
+              <p className=' font-thin hover:text-cyan-400'>Estadísticas</p>
             </Link>
             <Link to={'/admin?pestaña=envios'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
-              <img className='mr-4 w-5 h-4 relative top-1' src={imagen4} alt="vector" />
-              <p>Envíos</p>
+              <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen4} alt="vector" />
+              <p className=' font-thin hover:text-cyan-400'>Envíos</p>
             </Link>
             <Link to={'/admin?pestaña=productos'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
-              <img className='mr-4 w-5 h-4 relative top-1' src={imagen5} alt="vector" />
-              <p>Productos</p>
+              <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen5} alt="vector" />
+              <p className=' font-thin hover:text-cyan-400'>Productos</p>
             </Link>
           </div>
         </div>

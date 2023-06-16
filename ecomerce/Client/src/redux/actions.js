@@ -9,11 +9,13 @@ import {
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
+  USER_UPDATE,
   SHOW_SIDEBAR,
   DISABLE_CART,
   ADD_QUANTITY,
   EDIT_PRODUCT,
   GET_ALL_USERS,
+  GET_ALL_VISITS,
   DELETE_PRODUCT,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
@@ -26,7 +28,8 @@ import {
   ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
-  USER_UPDATE,
+  
+  
 } from "./types";
 
 import axios from "axios";
@@ -46,11 +49,11 @@ export const getAllProducts = () => {
     if (filtrosAlmacenados) {
       filtros = JSON.parse(filtrosAlmacenados);
     }
-    dispatch({ type: GET_ALL_PRODUCTS, payload: Products });
     //Si hay filtros almacenados, despachamos una accion
     if (filtros.length > 0) {
       dispatch({ type: SET_FILTERS, payload: filtros });
     }
+    return dispatch({ type: GET_ALL_PRODUCTS, payload: Products });
   };
 };
 export const getProductById = (id) => {
@@ -327,5 +330,19 @@ export const postCommetn = () => {
     const data = await axios.post(
       `https://ecomerce-production-8f61.up.railway.app/comments/${id}`
     );
+  };
+};
+
+////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////
+
+export const getAppVisits = () => {
+  return async function (dispatch) {
+    try {
+      let { data } = await axios.get(`visits`)
+      return dispatch({ type: GET_ALL_VISITS, payload: data })
+      
+    } catch (error) {
+      console.log("get app visits error ===>", error);
+    }
   };
 };
