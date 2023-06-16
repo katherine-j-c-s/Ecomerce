@@ -30,6 +30,7 @@ export default function Profile() {
   const [rating, setRating] = useState({});
   const [review, setReview] = useState([]);
   const [images, setImages] = useState([]);
+  const [send, setSend] = useState([])
 
   const [form, setForm] = useState({
     mail: "",
@@ -91,6 +92,8 @@ export default function Profile() {
     });
   };
 
+  console.log(rating)
+
   const handleReviewChange = (event) => {
     let value = event.target.value;
     let id = event.target.id;
@@ -103,6 +106,8 @@ export default function Profile() {
     });
     setReview(newList);
   };
+
+  console.log(review)
 
   const handleView = (event) => {
     const value = event.target.value;
@@ -208,6 +213,25 @@ export default function Profile() {
       });
     }
   };
+
+ const handleSubmitComments = (event) => {
+  event.preventDefault();
+  let resultado = [];
+  
+  review.forEach(element => {
+    const rate = rating[element.id];
+    resultado.push({
+      id: element.id,
+      content: element.value,
+      rate: rate
+    });
+  })
+  
+  let envio = resultado.find(producto => producto.id === parseInt(event.target.id))
+  send.push(parseInt(event.target.id))
+  
+}
+
 
   return (
     <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
@@ -567,7 +591,7 @@ export default function Profile() {
                             {productName}
                           </h2>
                         </div>
-                        <form
+                        {<form
                           className={`${
                             showForm === true
                               ? " translate-x-0 translate-y-0 relative"
@@ -616,10 +640,10 @@ export default function Profile() {
                               id={Array.from(uniqueProductIds)[i]}
                             ></textarea>
                           </div>
-                          <button className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg">
+                          <button className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg" onClick={handleSubmitComments} id={Array.from(uniqueProductIds)[i]}>
                             Enviar Comentario
                           </button>
-                        </form>
+                        </form>}
                       </div>
                     );
                   })

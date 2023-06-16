@@ -26,6 +26,7 @@ import {
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
   USER_UPDATE,
+  POST_COMMENTS,
 } from "./types";
 
 import axios from "axios";
@@ -315,11 +316,19 @@ export const userUpDate = (id, userUpdate) => {
 
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
 
-export const postCommetn = () => {
+export const postComments = () => {
   return async function (dispatch) {
-    com;
-    const data = await axios.post(
-      `https://ecomerce-production-8f61.up.railway.app/comments/${id}`
-    );
+    try {
+      const data = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/comments`,
+        {}
+      );
+      return dispatch({
+        type: POST_COMMENTS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
