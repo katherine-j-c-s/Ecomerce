@@ -105,17 +105,17 @@ export default function Dashboard() {
     }, [])
 
     return (
-        <div className='w-full h-auto mt-40'>
+        <div className='w-full h-auto md:mt-40 mt-20'>
             <div className='flex md:flex-row flex-col w-full justify-between align-center px-14'>
                 { dataCards.map((info, index)=>  (
                     <DashboardCard name={info.name} stat={info.stat} number={info.number} icon={info.icon} key={index} />
                 )) }
             </div>
             <div className='flex md:flex-row flex-col w-full px-14 mt-8'>
-                <div className='flex flex-col w-3/4 h-auto bg-white mr-8 pt-14'>
+                <div className='flex flex-col md:w-3/4  w-full  md:h-auto h-auto bg-white md:mr-8  pt-14'>
                     <AreaChartComponents/>
                 </div>
-                <div className='flex flex-col w-1/4 h-96 bg-white justify-center items-center'>
+                <div className='flex flex-col  md:w-1/4 w-full h-96 bg-white justify-center items-center md:mt-0 mt-12 '>
                     <BarChartComponent/>
                 </div>
                     
