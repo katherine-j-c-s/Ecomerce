@@ -26,6 +26,7 @@ import {
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
   USER_UPDATE,
+  DELETE_USER,
 } from "./types";
 
 import axios from "axios";
@@ -153,6 +154,33 @@ export function userAdmin(user) {
   return {
     type: USER_ADMIN,
     payload: user,
+  };
+}
+
+export const userUpDate = (id, userUpdate) => {
+  return async function (dispatch) {
+    try {
+      const { data } = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
+        userUpdate
+      );
+      return dispatch({
+        type: USER_UPDATE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export function deleteUser(id) {
+  return async function (dispatch) {
+    let { data } = await axios.delete(
+      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
+    );
+
+    return dispatch({ type: DELETE_USER, payload: data });
   };
 }
 ////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////
@@ -292,23 +320,6 @@ export const removeImgToProduct = (obj) => {
       });
     } catch (error) {
       console.log("delete img products error ===>", error);
-    }
-  };
-};
-
-export const userUpDate = (id, userUpdate) => {
-  return async function (dispatch) {
-    try {
-      const data = await axios.patch(
-        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
-        userUpdate
-      );
-      return dispatch({
-        type: USER_UPDATE,
-        payload: data,
-      });
-    } catch (error) {
-      console.log(error);
     }
   };
 };

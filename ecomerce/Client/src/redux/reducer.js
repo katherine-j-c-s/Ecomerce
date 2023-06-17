@@ -119,6 +119,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          address: action.payload.address,
           access: true,
         })
       );
@@ -145,6 +146,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          address: action.payload.address,
           access: true,
         })
       );
@@ -157,6 +159,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          address: action.payload.address,
           access: true,
         },
       };
@@ -171,6 +174,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          address: action.payload.address,
           access: true,
         })
       );
@@ -222,6 +226,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          address: action.payload.address,
           access: true,
         })
       );
