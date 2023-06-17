@@ -27,6 +27,7 @@ import {
   CLEAR_PRODUCT_TO_EDIT,
   USER_UPDATE,
   DELETE_USER,
+  POST_COMMENTS,
 } from "./types";
 
 import axios from "axios";
@@ -157,6 +158,15 @@ export function userAdmin(user) {
   };
 }
 
+export function deleteUser(id) {
+  return async function (dispatch) {
+    let { data } = await axios.delete(
+      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
+    );
+
+    return dispatch({ type: DELETE_USER, payload: data });
+  };
+}
 export const userUpDate = (id, userUpdate) => {
   return async function (dispatch) {
     try {
@@ -173,16 +183,6 @@ export const userUpDate = (id, userUpdate) => {
     }
   };
 };
-
-export function deleteUser(id) {
-  return async function (dispatch) {
-    let { data } = await axios.delete(
-      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
-    );
-
-    return dispatch({ type: DELETE_USER, payload: data });
-  };
-}
 ////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////
 
 export function showCart() {
@@ -320,6 +320,26 @@ export const removeImgToProduct = (obj) => {
       });
     } catch (error) {
       console.log("delete img products error ===>", error);
+    }
+  };
+};
+
+//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
+
+export const postComments = (envio) => {
+  console.log(envio);
+  return async function (dispatch) {
+    try {
+      const data = await axios.post(
+        `https://ecomerce-production-8f61.up.railway.app/comments`,
+        envio
+      );
+      return dispatch({
+        type: POST_COMMENTS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 };

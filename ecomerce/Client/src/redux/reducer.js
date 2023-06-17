@@ -22,6 +22,7 @@ import {
   CLEAR_PRODUCT_TO_EDIT,
   USER_ADMIN,
   USER_UPDATE,
+  POST_COMMENTS,
 } from "./types";
 
 const initialState = {
@@ -49,6 +50,7 @@ const initialState = {
   sizes: [],
   categories: [],
   colors: [],
+  commentsUser: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -340,6 +342,11 @@ const rootReducer = (state = initialState, action) => {
 
     case GET_FILTERS:
       return { ...state, [action.payload[0]]: action.payload[1] };
+    case POST_COMMENTS:
+      return {
+        ...state,
+        commentsUser: [...state.commentsUser, action.payload],
+      };
     default:
       return state;
   }

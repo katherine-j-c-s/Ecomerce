@@ -9,6 +9,7 @@ import {
   getProductById,
   getUserId,
   userUpDate,
+  postComments,
   deleteUser,
   logOut,
 } from "../../redux/actions";
@@ -21,11 +22,10 @@ export default function Profile() {
   const [submit, setSubmit] = useState(false);
 
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.userData);
-  const { productDetail } = useSelector((st) => st);
+  const { productDetail, commentsUser } = useSelector((st) => st);
   const orders = user.orders;
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
@@ -43,6 +43,7 @@ export default function Profile() {
   const [rating, setRating] = useState({});
   const [review, setReview] = useState([]);
   const [images, setImages] = useState([]);
+  const [send, setSend] = useState([]);
 
   const [form, setForm] = useState({
     mail: userLocal.email || user.email,
@@ -96,6 +97,8 @@ export default function Profile() {
     });
   };
 
+  console.log(rating);
+
   const handleReviewChange = (event) => {
     let value = event.target.value;
     let id = event.target.id;
@@ -108,6 +111,8 @@ export default function Profile() {
     });
     setReview(newList);
   };
+
+  console.log(review);
 
   const handleView = (event) => {
     const value = event.target.value;
@@ -255,6 +260,28 @@ export default function Profile() {
     }
   };
 
+  const handleSubmitComments = (event) => {
+    event.preventDefault();
+    let resultado = [];
+
+    review.forEach((element) => {
+      const rate = rating[element.id];
+      resultado.push({
+        id: element.id,
+        content: element.value,
+        rate: rate,
+        id_usuario: user.id,
+      });
+    });
+
+    let envio = resultado.find(
+      (producto) => producto.id === parseInt(event.target.id)
+    );
+    send.push(parseInt(event.target.id));
+    dispatch(postComments(envio));
+    console.log(commentsUser);
+  };
+
   return (
     <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
       <h2 className="absolute md:top-8 top-56 text-lg w-full font-mono mx-auto md:w-fit">
@@ -282,12 +309,18 @@ export default function Profile() {
             <div
               id="compras"
               value="compras"
-              onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
               <button onClick={handleView} value="compras">
                 Compras
               </button>
+            </div>
+            <div
+              id="Admin"
+              value="Admin"
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button value="admin">Panel de Administrador</button>
             </div>
           </div>
         </div>
@@ -636,59 +669,65 @@ export default function Profile() {
                             {productName}
                           </h2>
                         </div>
-                        <form
-                          className={`${
-                            showForm === true
-                              ? " translate-x-0 translate-y-0 relative"
-                              : "absolute -translate-y-44 z-0"
-                          } 
+                        {
+                          <form
+                            className={`${
+                              showForm === true
+                                ? " translate-x-0 translate-y-0 relative"
+                                : "absolute -translate-y-44 z-0"
+                            } 
                     transition-all bg-white `}
-                        >
-                          <div>
-                            <link
-                              rel="stylesheet"
-                              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                            />
-                            {[1, 2, 3, 4, 5].map((value) => (
-                              <span
-                                key={value}
-                                className={`fa fa-heart ${
-                                  value <=
-                                  rating[Array.from(uniqueProductIds)[i]]
-                                    ? "checked"
-                                    : ""
-                                }`}
-                                onClick={() =>
-                                  handleRating(
-                                    Array.from(uniqueProductIds)[i],
-                                    value
-                                  )
-                                }
-                                style={{
-                                  color:
+                          >
+                            <div>
+                              <link
+                                rel="stylesheet"
+                                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                              />
+                              {[1, 2, 3, 4, 5].map((value) => (
+                                <span
+                                  key={value}
+                                  className={`fa fa-heart ${
                                     value <=
                                     rating[Array.from(uniqueProductIds)[i]]
-                                      ? "red"
-                                      : "",
-                                  marginRight: 5,
-                                }}
-                              ></span>
-                            ))}
-                          </div>
-                          <div className="">
-                            <textarea
-                              className="py-2 px-4"
-                              name="review"
-                              value={coment.value}
-                              placeholder="Escribe tu reseña aquí"
-                              onChange={handleReviewChange}
+                                      ? "checked"
+                                      : ""
+                                  }`}
+                                  onClick={() =>
+                                    handleRating(
+                                      Array.from(uniqueProductIds)[i],
+                                      value
+                                    )
+                                  }
+                                  style={{
+                                    color:
+                                      value <=
+                                      rating[Array.from(uniqueProductIds)[i]]
+                                        ? "red"
+                                        : "",
+                                    marginRight: 5,
+                                  }}
+                                ></span>
+                              ))}
+                            </div>
+                            <div className="">
+                              <textarea
+                                className="py-2 px-4"
+                                name="review"
+                                value={coment.value}
+                                placeholder="Escribe tu reseña aquí"
+                                onChange={handleReviewChange}
+                                id={Array.from(uniqueProductIds)[i]}
+                              ></textarea>
+                            </div>
+                            <button
+                              className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg"
+                              onClick={handleSubmitComments}
                               id={Array.from(uniqueProductIds)[i]}
-                            ></textarea>
-                          </div>
-                          <button className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg">
-                            Enviar Comentario
-                          </button>
-                        </form>
+                            >
+                              Enviar Comentario
+                            </button>
+                          </form>
+                        }
                       </div>
                     );
                   })
