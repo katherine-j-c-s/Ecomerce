@@ -7,7 +7,7 @@ conn
   .sync({ alter: true })
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server corriendo en el puerto ${port}`); // eslint-disable-line no-console
+      console.log(`Server corriendo en el puerto ${port}`);
     });
   })
   .catch((err) => console.log(err));
