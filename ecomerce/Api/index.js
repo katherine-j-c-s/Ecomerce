@@ -4,10 +4,10 @@ const { conn } = require("./src/db.js");
 const port = process.env.PORT || 3001;
 
 conn
-  .sync({ force: false })
+  .sync({ alter: true })
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server corriendo en el puerto ${port}`); // eslint-disable-line no-console
+      console.log(`Server corriendo en el puerto ${port}`);
     });
   })
   .catch((err) => console.log(err));
