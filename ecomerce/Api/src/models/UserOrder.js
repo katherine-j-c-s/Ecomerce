@@ -48,5 +48,8 @@ module.exports = (sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
+    },
+    {
+      timestamps: true,
     })
 };
