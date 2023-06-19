@@ -7,7 +7,7 @@ require("dotenv").config();
 
 
 const convertAllProducts = (res) => {
-  let { id, name, price, image, Color, Size, Category } = res;
+  let { id, name, price, image, createdAt, updatedAt, Color, Size, Category } = res;
   return (newObj = {
     id,
     name,
@@ -16,6 +16,8 @@ const convertAllProducts = (res) => {
     size: Size?.dataValues.size || null,
     category: Category?.dataValues.name || null,
     image,
+    createdAt, 
+    updatedAt,
   });
 };
 
@@ -28,6 +30,8 @@ const convertSingleProduct = (res) => {
     description,
     stock,
     available,
+    createdAt, 
+    updatedAt,
     Comments,
     Category,
     Color,
@@ -46,6 +50,8 @@ const convertSingleProduct = (res) => {
     category: Category?.dataValues.name || null,
     comments: Comments,
     image,
+    createdAt, 
+    updatedAt,
   });
 };
 
