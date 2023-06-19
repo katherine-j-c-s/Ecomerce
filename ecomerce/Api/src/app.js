@@ -51,7 +51,7 @@ app.use(passport.initialize()); // Inicializa Passport.js
 
 app.use(passport.session());
 
-app.use(incrementVisit)
+// app.use(incrementVisit)
 
 app.use("/", mainRouter);
 
