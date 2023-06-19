@@ -26,6 +26,8 @@ import {
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
   USER_UPDATE,
+  DELETE_USER,
+  POST_COMMENTS,
 } from "./types";
 
 import axios from "axios";
@@ -155,6 +157,32 @@ export function userAdmin(user) {
     payload: user,
   };
 }
+
+export function deleteUser(id) {
+  return async function (dispatch) {
+    let { data } = await axios.delete(
+      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
+    );
+
+    return dispatch({ type: DELETE_USER, payload: data });
+  };
+}
+export const userUpDate = (id, userUpdate) => {
+  return async function (dispatch) {
+    try {
+      const { data } = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
+        userUpdate
+      );
+      return dispatch({
+        type: USER_UPDATE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 ////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////
 
 export function showCart() {
@@ -296,15 +324,18 @@ export const removeImgToProduct = (obj) => {
   };
 };
 
-export const userUpDate = (id, userUpdate) => {
+//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
+
+export const postComments = (envio) => {
+  console.log(envio);
   return async function (dispatch) {
     try {
-      const data = await axios.patch(
-        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
-        userUpdate
+      const data = await axios.post(
+        `https://ecomerce-production-8f61.up.railway.app/comments`,
+        envio
       );
       return dispatch({
-        type: USER_UPDATE,
+        type: POST_COMMENTS,
         payload: data,
       });
     } catch (error) {

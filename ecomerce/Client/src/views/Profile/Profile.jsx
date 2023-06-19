@@ -2,16 +2,30 @@ import { useState, useRef, useEffect } from "react";
 import perfil from "../../assets/Vector1.png";
 import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
-import { getUserId, userUpDate } from "../../redux/actions";
+import {
+  getProductById,
+  getUserId,
+  userUpDate,
+  postComments,
+  deleteUser,
+  logOut,
+} from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 import { useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Profile() {
+  const [submit, setSubmit] = useState(false);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.userData);
+  const { productDetail, commentsUser } = useSelector((st) => st);
   const orders = user.orders;
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
@@ -24,16 +38,22 @@ export default function Profile() {
 
   const [view, setView] = useState("perfil");
   const [enabled, setEnabled] = useState(false);
+  const [showForm, setShowform] = useState(false);
+
   const [rating, setRating] = useState({});
   const [review, setReview] = useState([]);
+  const [images, setImages] = useState([]);
+  const [send, setSend] = useState([]);
+
   const [form, setForm] = useState({
-    mail: "",
-    password: "",
-    first_name: "",
-    last_name: "",
-    address: "",
-    image: "",
+    mail: userLocal.email || user.email,
+    password: "********",
+    first_name: userLocal.name || user.name,
+    last_name: userLocal.lastName || user.lastName,
+    address: userLocal.address || user.address,
+    image: userLocal.image?.url || user.image?.url,
   });
+
   const [errors, setErrors] = useState({
     mail: "",
     password: "",
@@ -45,17 +65,17 @@ export default function Profile() {
 
   useEffect(() => {
     dispatch(getUserId(userLocal.id));
-    if (user) {
-      setForm({
-        mail: userLocal.email,
-        password: "********",
-        first_name: userLocal.name,
-        last_name: userLocal.lastName,
-        address: userLocal.address,
-        image: userLocal.imageLocal.url,
-      });
-    }
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(productDetail).length > 0) {
+      let newlist = { id: productDetail.id, value: productDetail.image[0] };
+      let repetido = images.find((i) => i.id === productDetail.id);
+      if (!repetido) {
+        images.push(newlist);
+      }
+    }
+  }, [productDetail]);
 
   orders?.forEach((order) => {
     order.products.forEach((product) => {
@@ -65,6 +85,7 @@ export default function Profile() {
       let repetido = review.find((c) => c.id === product.id);
       if (!repetido) {
         review.push(newlist);
+        dispatch(getProductById(product.id));
       }
     });
   });
@@ -75,6 +96,8 @@ export default function Profile() {
       [productId]: value,
     });
   };
+
+  console.log(rating);
 
   const handleReviewChange = (event) => {
     let value = event.target.value;
@@ -88,6 +111,8 @@ export default function Profile() {
     });
     setReview(newList);
   };
+
+  console.log(review);
 
   const handleView = (event) => {
     const value = event.target.value;
@@ -105,6 +130,33 @@ export default function Profile() {
     event.preventDefault();
     setEnabled(!enabled);
   };
+
+  function handleDelete() {
+    swal({
+      title: "Eliminar cuenta",
+      text: "¿Estás seguro de que deseas continuar?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((confirm) => {
+      if (confirm) {
+        dispatch(deleteUser(userLocal.id)).then((success) => {
+          toast.success("Cuenta eliminada exitosamente.", {
+            duration: 2000,
+          });
+
+          setTimeout(() => {
+            toast.remove();
+            dispatch(logOut());
+            navigate("/");
+          }, 2000);
+        });
+      } else {
+        // Lógica a ejecutar si se cancela la confirmación
+        // ...
+      }
+    });
+  }
 
   const validate = (form) => {
     const errors = {};
@@ -174,9 +226,23 @@ export default function Profile() {
       modifiedUser.image = form.image;
     }
 
-    console.log(modifiedUser);
+    dispatch(userUpDate(userLocal.id, modifiedUser))
+      .then(() => {
+        if (!submit) {
+          setSubmit(true);
+          toast.success("Cambios guardados", {
+            duration: 2000,
+          });
 
-    dispatch(userUpDate(userLocal.id, modifiedUser));
+          setTimeout(() => {
+            toast.remove();
+            navigate("/");
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        toast.error("Hubo un error");
+      });
 
     if (Object.keys(errors).length === 0) {
       setForm({
@@ -194,11 +260,36 @@ export default function Profile() {
     }
   };
 
+  const handleSubmitComments = (event) => {
+    event.preventDefault();
+    let resultado = [];
+
+    review.forEach((element) => {
+      const rate = rating[element.id];
+      resultado.push({
+        id: element.id,
+        content: element.value,
+        rate: rate,
+        id_usuario: user.id,
+      });
+    });
+
+    let envio = resultado.find(
+      (producto) => producto.id === parseInt(event.target.id)
+    );
+    send.push(parseInt(event.target.id));
+    dispatch(postComments(envio));
+    console.log(commentsUser);
+  };
+
   return (
     <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
       <h2 className="absolute md:top-8 top-56 text-lg w-full font-mono mx-auto md:w-fit">
         {"Hola" + " " + user.name + "!"}
       </h2>
+      <div>
+        <Toaster />
+      </div>
       <section className="md:w-fit w-full mx-auto md:mx-0 md:mt-28 mt-28 flex flex-col">
         <div className="w-fit md:px-0 flex flex-col md:mr-5 mx-auto">
           <h1 className="text-xl md:text-left font-bold mb-5 w-full">
@@ -218,12 +309,18 @@ export default function Profile() {
             <div
               id="compras"
               value="compras"
-              onClick={handleView}
               className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
               <button onClick={handleView} value="compras">
                 Compras
               </button>
+            </div>
+            <div
+              id="Admin"
+              value="Admin"
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button value="admin">Panel de Administrador</button>
             </div>
           </div>
         </div>
@@ -238,22 +335,32 @@ export default function Profile() {
             <form onSubmit={handleProfileSubmit}>
               <div className="flex md:mb-4 mb-10 w-10/12 mx-auto justify-between">
                 <div className="flex w-fit">
-                  <div className="bg-slate-600 w-fit rounded-full p-6 mr-8">
-                    <img src={perfil} alt="vector" className="w-6 h-6" />
+                  <div className="w-fit rounded-full p-6 mr-8 max-w-[120px]">
+                    <img
+                      src={userLocal.imageLocal?.url || perfil}
+                      alt="vector"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                        objectFit: "cover",
+                        borderRadius: "50%",
+                      }}
+                    />
                   </div>
                   <ul className="flex flex-row items-center gap-2">
                     <li className="relative z-10 p-2 bg-sky-500 rounded-full">
-                      <img
+                      <button
+                        className="p-1.5 rounded-full"
                         onClick={handleEdit}
-                        className=" h-3.5  w-3.5"
-                        src={edit}
-                        alt=""
-                      />
+                      >
+                        <img className=" h-3.5  w-3.5" src={edit} alt="" />
+                      </button>
                     </li>
                     <li>
                       <button
                         type="reset"
                         className="p-1.5 border-bluey rounded-full"
+                        onClick={handleDelete}
                       >
                         <svg
                           width="24px"
@@ -293,7 +400,9 @@ export default function Profile() {
                     Nombre
                   </label>
                   <input
-                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                    className={`placeholder-slate-400 focus:outline-none ${
+                      enabled ? "hover:shadow-md" : null
+                    } md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
                       errors.first_name && enabled === true
                         ? "border-red-500  focus:border-red-500"
                         : "border-grey "
@@ -330,7 +439,9 @@ export default function Profile() {
                     Apellido
                   </label>
                   <input
-                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                    className={`placeholder-slate-400 focus:outline-none ${
+                      enabled ? "hover:shadow-md" : null
+                    } md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
                       errors.last_name && enabled === true
                         ? "border-red-500  focus:border-red-500"
                         : "border-grey "
@@ -369,7 +480,9 @@ export default function Profile() {
                     Email
                   </label>
                   <input
-                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                    className={`placeholder-slate-400 focus:outline-none ${
+                      enabled ? "hover:shadow-md" : null
+                    } md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
                       errors.mail && enabled === true
                         ? "border-red-500  focus:border-red-500"
                         : "border-grey "
@@ -406,7 +519,9 @@ export default function Profile() {
                     Direccion
                   </label>
                   <input
-                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                    className={`placeholder-slate-400 focus:outline-none ${
+                      enabled ? "hover:shadow-md" : null
+                    } md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
                       errors.address && enabled === true
                         ? "border-red-500  focus:border-red-500"
                         : "border-grey "
@@ -443,7 +558,9 @@ export default function Profile() {
                     Contraseña
                   </label>
                   <input
-                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                    className={`placeholder-slate-400 focus:outline-none ${
+                      enabled ? "hover:shadow-md" : null
+                    } md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
                       errors.password && enabled === true
                         ? "border-red-500  focus:border-red-500"
                         : "border-grey "
@@ -478,7 +595,9 @@ export default function Profile() {
                     Image
                   </label>
                   <input
-                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-14 text-grey ${
+                    className={`placeholder-slate-400 focus:outline-none ${
+                      enabled ? "hover:shadow-md" : null
+                    } md:m-2 border bg-transparent rounded-md p-2 pl-14 text-grey ${
                       errors.image && enabled === true
                         ? "border-red-500  focus:border-red-500"
                         : "border-grey "
@@ -502,78 +621,130 @@ export default function Profile() {
                   )}
                 </div>
               )}
-              <button
-                disabled={!enabled}
-                className="bg-cyan-400 mt-5 hover:shadow-xl hover:font-bold transition-all"
-                type="submit"
-              >
-                Confirmar cambios
-              </button>
+
+              {enabled ? (
+                <button
+                  className={
+                    "bg-cyan-400 mt-5 hover:shadow-xl hover:font-bold transition-all"
+                  }
+                  type="submit"
+                >
+                  Confirmar cambios
+                </button>
+              ) : null}
             </form>
           </section>
         )}
         {isComprasView && (
-          <section id="comprasVista" ref={comprasVistaRef}>
-            <h2>Formulario de Puntuación y Reseña</h2>
-            {uniqueProductNames.size > 0
-              ? Array.from(uniqueProductNames).map((productName, i) => {
-                  let coment = review.find(
-                    (c) => c.id === Array.from(uniqueProductIds)[i]
-                  );
-                  console.log(coment);
-                  return (
-                    <section key={productName}>
-                      <p>-----------------------------------</p>
-                      <h2>{productName}</h2>
-                      <p>{}</p>
-                      <form>
-                        <div>
-                          <link
-                            rel="stylesheet"
-                            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          <section
+            className="flex flex-col"
+            id="comprasVista"
+            ref={comprasVistaRef}
+          >
+            <h2 className="mt-20 mb-10 font-bold text-lg border-b-4 border-sky-400 w-fit mx-auto">
+              {showForm === true
+                ? "Formulario de Puntuación y Reseña"
+                : "Mis Compras"}
+            </h2>
+            <div className="flex md:flex-row flex-col">
+              {uniqueProductNames.size > 0
+                ? Array.from(uniqueProductNames).map((productName, i) => {
+                    let id = Array.from(uniqueProductIds)[i];
+                    let img = images.find((i) => i.id === id);
+                    let coment = review.find(
+                      (c) => c.id === Array.from(uniqueProductIds)[i]
+                    );
+                    return (
+                      <div
+                        className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white rounded-xl trnasition-all hover:shadow-xl py-10 px-14"
+                        key={productName}
+                      >
+                        <div className="bg-white relative z-20">
+                          <img
+                            className="w-52 mx-auto rounded-full h-52"
+                            src={img.value}
+                            alt="img"
                           />
-
-                          {[1, 2, 3, 4, 5].map((value) => (
-                            <span
-                              key={value}
-                              className={`fa fa-heart ${
-                                value <= rating[Array.from(uniqueProductIds)[i]]
-                                  ? "checked"
-                                  : ""
-                              }`}
-                              onClick={() =>
-                                handleRating(
-                                  Array.from(uniqueProductIds)[i],
-                                  value
-                                )
-                              }
-                              style={{
-                                color:
-                                  value <=
-                                  rating[Array.from(uniqueProductIds)[i]]
-                                    ? "red"
-                                    : "",
-                                marginRight: 5,
-                              }}
-                            ></span>
-                          ))}
+                          <h2 className="mt-4 w-10/12 mx-auto font-mono">
+                            {productName}
+                          </h2>
                         </div>
-                        <div className="review">
-                          <textarea
-                            name="review"
-                            value={coment.value}
-                            placeholder="Escribe tu reseña aquí"
-                            onChange={handleReviewChange}
-                            id={Array.from(uniqueProductIds)[i]}
-                          ></textarea>
-                        </div>
-                        <button>Enviar Comentario</button>
-                        <p>-----------------------------------</p>
-                      </form>
-                    </section>
-                  );
-                })
-              : "No Hay compras disponibles"}
+                        {
+                          <form
+                            className={`${
+                              showForm === true
+                                ? " translate-x-0 translate-y-0 relative"
+                                : "absolute -translate-y-44 z-0"
+                            } 
+                    transition-all bg-white `}
+                          >
+                            <div>
+                              <link
+                                rel="stylesheet"
+                                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                              />
+                              {[1, 2, 3, 4, 5].map((value) => (
+                                <span
+                                  key={value}
+                                  className={`fa fa-heart ${
+                                    value <=
+                                    rating[Array.from(uniqueProductIds)[i]]
+                                      ? "checked"
+                                      : ""
+                                  }`}
+                                  onClick={() =>
+                                    handleRating(
+                                      Array.from(uniqueProductIds)[i],
+                                      value
+                                    )
+                                  }
+                                  style={{
+                                    color:
+                                      value <=
+                                      rating[Array.from(uniqueProductIds)[i]]
+                                        ? "red"
+                                        : "",
+                                    marginRight: 5,
+                                  }}
+                                ></span>
+                              ))}
+                            </div>
+                            <div className="">
+                              <textarea
+                                className="py-2 px-4"
+                                name="review"
+                                value={coment.value}
+                                placeholder="Escribe tu reseña aquí"
+                                onChange={handleReviewChange}
+                                id={Array.from(uniqueProductIds)[i]}
+                              ></textarea>
+                            </div>
+                            <button
+                              className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg"
+                              onClick={handleSubmitComments}
+                              id={Array.from(uniqueProductIds)[i]}
+                            >
+                              Enviar Comentario
+                            </button>
+                          </form>
+                        }
+                      </div>
+                    );
+                  })
+                : "No Hay compras disponibles"}
+            </div>
+            <p
+              onClick={() => {
+                if (showForm) {
+                  setShowform(false);
+                } else {
+                  setShowform(true);
+                }
+              }}
+              className="bg-sky-400 md:mt-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg"
+            >
+              {showForm === false ? "Dejar Reseña" : "volver"}
+            </p>
           </section>
         )}
       </article>
