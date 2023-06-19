@@ -16,8 +16,8 @@ const getCommentsHandler = async (req, res) => {
 
 const postCommentHandler = async (req, res) => {
   try {
-    let { rate, content } = req.body;
-    let commentCreate = await createComment(rate, content);
+    let { id, rate, content, idUsuario } = req.body;
+    let commentCreate = await createComment(id, rate, content, idUsuario);
     res.status(200).json(commentCreate);
   } catch (error) {
     res.status(400).json({ message: error.message });
