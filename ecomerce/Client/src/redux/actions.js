@@ -146,9 +146,7 @@ export function getUserId(id) {
 }
 export function getAllUsers() {
   return async function (dispatch) {
-    let { data } = await axios(
-      "https://ecomerce-production-8f61.up.railway.app/users"
-    );
+    let { data } = await axios('users');
     return dispatch({ type: GET_ALL_USERS, payload: data });
   };
 }
