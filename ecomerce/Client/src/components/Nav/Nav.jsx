@@ -21,7 +21,15 @@ export default function Nav() {
   if (!userInfo) {
     localStorage.setItem(
       "userData",
-      JSON.stringify({ id: "", imageLocal: "", access: false })
+      JSON.stringify({
+        id: "",
+        imageLocal: "",
+        name: "",
+        lastName: "",
+        email: "",
+        password: "",
+        access: false,
+      })
     );
   }
 
@@ -62,7 +70,7 @@ export default function Nav() {
   }
 
   return (
-    <nav className="bg-transparent">
+    <nav className="bg-transparent relative z-30">
       <div>
         <Toaster />
       </div>
@@ -126,7 +134,7 @@ export default function Nav() {
                     className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                   >
                     <img
-                      src={image.url || image || imageLocal.url || imageLocal}
+                      src={image?.url || image || imageLocal?.url || imageLocal}
                       alt="profile picture logo"
                       className={styles.userProfile}
                     />
@@ -253,7 +261,7 @@ export default function Nav() {
                   className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                 >
                   <img
-                    src={image.url || image || imageLocal.url || imageLocal}
+                    src={image?.url || image || imageLocal?.url || imageLocal}
                     alt="profile picture logo"
                     className={styles.userProfile}
                   />

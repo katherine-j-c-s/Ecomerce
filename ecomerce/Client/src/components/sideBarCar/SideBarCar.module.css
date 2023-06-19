@@ -1,8 +1,8 @@
 .sideMenu {
     position: absolute;
     background-color: #F7F7F7;
-    height: 400%;
     z-index: 20;
+    border-radius: 5% 0 0 5%;
 }
 
 @media only screen and (min-width: 1024px) {

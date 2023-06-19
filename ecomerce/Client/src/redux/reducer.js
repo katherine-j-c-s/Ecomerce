@@ -2,13 +2,16 @@ import {
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
+  USER_ADMIN,
   USER_BY_ID,
+  USER_UPDATE,
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
   SHOW_SIDEBAR,
   DISABLE_CART,
   ADD_QUANTITY,
+  POST_COMMENTS,
   GET_ALL_USERS,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
@@ -18,9 +21,9 @@ import {
   ADD_PRODUCT_CART,
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
+  ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
-  USER_ADMIN,
 } from "./types";
 
 const initialState = {
@@ -48,6 +51,8 @@ const initialState = {
   sizes: [],
   categories: [],
   colors: [],
+  darkModeAdmin: false,
+  commentsUser: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -114,6 +119,36 @@ const rootReducer = (state = initialState, action) => {
         JSON.stringify({
           id: action.payload.id,
           imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
+          access: true,
+        })
+      );
+      return {
+        ...state,
+        userData: {
+          id: action.payload.id,
+          image: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
+          access: true,
+        },
+      };
+
+    case USER_UPDATE:
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          id: action.payload.id,
+          imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
           access: true,
         })
       );
@@ -136,6 +171,10 @@ const rootReducer = (state = initialState, action) => {
         JSON.stringify({
           id: action.payload.id,
           imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
           access: true,
         })
       );
@@ -155,7 +194,15 @@ const rootReducer = (state = initialState, action) => {
     case LOG_OUT:
       localStorage.setItem(
         "userData",
-        JSON.stringify({ id: "", imageLocal: "", access: false })
+        JSON.stringify({
+          id: "",
+          imageLocal: "",
+          name: "",
+          lastName: "",
+          email: "",
+          password: "",
+          access: false,
+        })
       );
       return {
         ...state,
@@ -175,6 +222,10 @@ const rootReducer = (state = initialState, action) => {
         JSON.stringify({
           id: action.payload.id,
           imageLocal: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          password: action.payload.password,
           access: true,
         })
       );
@@ -186,7 +237,10 @@ const rootReducer = (state = initialState, action) => {
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
-          password: "",
+          password: action.payload.password,
+          address: action.payload.address,
+          orders: action.payload.UserOrders,
+          comments: action.payload.comments,
         },
       };
     case GET_ALL_USERS:
@@ -213,17 +267,24 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case ADD_PRODUCT_CART:
-      const newPriceA =
-        parseInt(action.payload.price) * action.payload.quantity;
+      const findProductE = state.sideBarCar.products.find(
+        (element) => element.id === action.payload.id
+      );
 
-      const newTotalA = state.sideBarCar.total + newPriceA;
+      if (!findProductE) {
+        const newPriceA = parseInt(action.payload.price);
+
+        var newTotalA = state.sideBarCar.total + newPriceA;
+      }
 
       return {
         ...state,
         sideBarCar: {
           ...state.sideBarCar,
-          products: [...state.sideBarCar.products, action.payload],
-          total: newTotalA,
+          products: !findProductE
+            ? [...state.sideBarCar.products, action.payload]
+            : [...state.sideBarCar.products],
+          total: newTotalA || state.sideBarCar.total,
         },
       };
 
@@ -232,12 +293,9 @@ const rootReducer = (state = initialState, action) => {
 
       findProduct.quantity++;
 
-      const newPrice = parseInt(findProduct.price) * findProduct.quantity;
+      const newPrice = parseInt(findProduct.price);
 
-      const newTotal = state.sideBarCar.total + newPrice;
-
-      console.log(findProduct);
-      console.log(newPrice);
+      var newTotal = state.sideBarCar.total + newPrice;
 
       return {
         ...state,
@@ -251,21 +309,19 @@ const rootReducer = (state = initialState, action) => {
     case DELETE_QUANTITY:
       let findProduct2 = state.sideBarCar.products[action.payload];
 
-      if (findProduct2.quantity <= 0) {
-        var newProdutcs = state.sideBarCar.products.splice(action.payload, 1);
+      if (findProduct2.quantity <= 1) {
+        state.sideBarCar.products.splice(action.payload, 1);
       }
 
       findProduct2.quantity--;
 
-      const newPrice2 = parseInt(findProduct2.price) - findProduct2.quantity;
-
-      const newTotal2 = state.sideBarCar.total - newPrice2;
+      var newTotal2 = state.sideBarCar.total - findProduct2.price;
 
       return {
         ...state,
         sideBarCar: {
           ...state.sideBarCar,
-          products: newProdutcs || [...state.sideBarCar.products],
+          products: [...state.sideBarCar.products],
           total: newTotal2,
         },
       };
@@ -285,6 +341,13 @@ const rootReducer = (state = initialState, action) => {
 
     case GET_FILTERS:
       return { ...state, [action.payload[0]]: action.payload[1] };
+    case ADD_DARKMODE_ADMIN:
+      return { ...state, darkModeAdmin: action.payload };
+    case POST_COMMENTS:
+      return {
+        ...state,
+        commentsUser: [...state.commentsUser, action.payload],
+      };
     default:
       return state;
   }

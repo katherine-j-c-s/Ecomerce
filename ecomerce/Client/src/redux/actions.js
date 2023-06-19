@@ -1,9 +1,4 @@
 import {
-  SHOW_SIDEBAR,
-  DISABLE_CART,
-  ADD_PRODUCT_CART,
-  ADD_QUANTITY,
-  DELETE_QUANTITY,
   SIGN_IN,
   SIGN_UP,
   LOG_OUT,
@@ -14,18 +9,26 @@ import {
   ADD_PRODUCT,
   GET_FILTERS,
   SET_FILTERS,
+  USER_UPDATE,
+  SHOW_SIDEBAR,
+  DISABLE_CART,
+  ADD_QUANTITY,
   EDIT_PRODUCT,
+  POST_COMMENTS,
   GET_ALL_USERS,
+  GET_ALL_VISITS,
   DELETE_PRODUCT,
   AGREGAR_FILTRO,
   REMOVER_FILTRO,
+  DELETE_QUANTITY,
   PRODUCT_TO_EDIT,
   FILTER_PRODUCTS,
+  ADD_PRODUCT_CART,
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
+  ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
-  GET_ALL_VISITS,
 } from "./types";
 
 import axios from "axios";
@@ -153,6 +156,22 @@ export function userAdmin(user) {
     payload: user,
   };
 }
+export const userUpDate = (id, userUpdate) => {
+  return async function (dispatch) {
+    try {
+      const data = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
+        userUpdate
+      );
+      return dispatch({
+        type: USER_UPDATE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 ////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////////SIDE_BAR////
 
 export function showCart() {
@@ -293,6 +312,34 @@ export const removeImgToProduct = (obj) => {
     }
   };
 };
+////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////
+
+export function addDarkModeAdmin(condicional) {
+  return { type: ADD_DARKMODE_ADMIN, payload:condicional };
+}
+
+
+//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
+
+export const postComments = (envio) => {
+  console.log(envio);
+  return async function (dispatch) {
+    try {
+      const data = await axios.post(
+        `https://ecomerce-production-8f61.up.railway.app/comments`,
+        envio
+      );
+      return dispatch({
+        type: POST_COMMENTS,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////////DASHBOARD////
 
 export const getAppVisits = () => {
   return async function (dispatch) {

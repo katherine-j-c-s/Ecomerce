@@ -8,8 +8,19 @@ import imagen4 from '../../assets/Vector3.png'
 import imagen5 from '../../assets/Vector4.png'
 import imagenOut from '../../assets/VectorOut.png'
 import imageNotf from '../../assets/VectorNotif.png'
+import { useDispatch, useSelector } from 'react-redux'
+import { addDarkModeAdmin } from '../../redux/actions'
 
 export default function SidebarAdmin() {
+  const dispatch = useDispatch()
+  let {darkModeAdmin} =  useSelector(st=>st)
+  const darkMode = () => {
+    if (!darkModeAdmin) {
+      dispatch(addDarkModeAdmin(true))
+    }else {
+      dispatch(addDarkModeAdmin(false))
+    }
+  }
   const [showSB,setShowSB] = useState(false)
   return (
     <main className='md:flex z-20 md:relative absolute'>
@@ -25,36 +36,36 @@ export default function SidebarAdmin() {
           </svg>
         </div>
       </div>
-      <aside className={`${showSB === true ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex transition-all flex-col align-middle justify-between w-60 h-screen bg-[#1C2434] shadow-lg`} >
+      <aside className={`${showSB === true ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex transition-all flex-col align-middle justify-between w-60 h-screen bg-slate-200 dark:bg-slate-950 shadow-slate-500 shadow-lg dark:shadow-black`} >
         <div className='text-left relative h-4/5 flex flex-col justify-center'>
-          <p className='text-sky-200  absolute top-28 left-6'>Control Pannel</p>
+          <p onClick={darkMode} className='dark:text-sky-200 text-sky-400 font-bold absolute top-28 left-6'>Control Pannel</p>
           <div className='flex flex-col'>
-            <Link to={'/admin?pestaña=dashboard'} className="w-36 p-2 rounded-md flex my-2 transition-all  relative align-center justify-start ml-12 text-white">
+            <Link to={'/admin?pestaña=dashboard'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen1} alt="vector" />
               <p className=' font-thin hover:text-cyan-400'>Dashboard</p>
             </Link>
-            <Link to={'/admin?pestaña=usuarios'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 font-thin relative align-center justify-start ml-12 text-slate-500">
+            <Link to={'/admin?pestaña=usuarios'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen2} alt="vector" />
-              <p  className=' font-thin hover:text-cyan-400'>Usuarios</p>
+              <p className=' font-thin hover:text-cyan-400'>Usuarios</p>
             </Link>
-            <Link to={'/admin?pestaña=estadisticas'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 font-thin relative align-center justify-start ml-12 text-slate-500">
+            <Link to={'/admin?pestaña=estadisticas'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen3} alt="vector" />
-              <p  className=' font-thin hover:text-cyan-400'>Estadísticas</p>
+              <p className=' font-thin hover:text-cyan-400'>Estadísticas</p>
             </Link>
-            <Link to={'/admin?pestaña=envios'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 font-thin relative align-center justify-start ml-12 text-slate-500">
+            <Link to={'/admin?pestaña=envios'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen4} alt="vector" />
-              <p  className=' font-thin hover:text-cyan-400'>Envíos</p>
+              <p className=' font-thin hover:text-cyan-400'>Envíos</p>
             </Link>
-            <Link to={'/admin?pestaña=productos'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-900 hover:text-slate-950 font-thin relative align-center justify-start ml-12 text-slate-500">
+            <Link to={'/admin?pestaña=productos'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen5} alt="vector" />
-              <p  className=' font-thin hover:text-cyan-400'>Productos</p>
+              <p className=' font-thin hover:text-cyan-400'>Productos</p>
             </Link>
           </div>
         </div>
         <div className='h-1/5 flex relative justify-center'>
           <Link className='absolute w-fit bottom-0 mb-7 flex' to={'/'}>
             <img className='w-5 h-4 top-1 relative mr-3' src={imagenOut} alt="logout"/>
-            <p className='font-thin text-slate-500'>Log out</p>
+            <p className='font-thin dark:font-mono text-slate-500'>Log out</p>
           </Link> 
         </div>
       </aside>

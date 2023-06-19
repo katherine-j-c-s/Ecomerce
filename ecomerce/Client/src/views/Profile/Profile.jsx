@@ -1,382 +1,670 @@
-import userL from "../../assets/user.svg";
-import styles from "../Profile/Profile.module.css";
+import { useState, useRef, useEffect } from "react";
+import perfil from "../../assets/Vector1.png";
+import edit from "../../assets/edit.png";
+import { useDispatch } from "react-redux";
 
-import { useState, useEffect } from "react";
-
-import { useSelector } from "react-redux";
-
-import { useNavigate } from "react-router-dom";
+import { getProductById, getUserId, userUpDate, postComments } from "../../redux/actions";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+import { useSelector } from "react-redux";
 
 export default function Profile() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const access = useSelector((state) => state.access);
+  const user = useSelector((state) => state.userData);
+  const { productDetail, commentsUser } = useSelector((st) => st);
+  const orders = user.orders;
 
-  useEffect(() => {
-    !access && navigate("/");
-  }, [access, navigate]);
+  const userLocal = JSON.parse(localStorage.getItem("userData"));
 
-  const [inputs, setInputs] = useState({
-    name: "Amadeo",
-    lastName: "Euralto",
-    email: "amadeo@gmail.com",
-    password: "12345",
+  const uniqueProductNames = new Set();
+  const uniqueProductIds = new Set();
+
+  const perfilVistaRef = useRef(null);
+  const comprasVistaRef = useRef(null);
+
+  const [view, setView] = useState("perfil");
+  const [enabled, setEnabled] = useState(false);
+  const [showForm, setShowform] = useState(false);
+
+  const [rating, setRating] = useState({});
+  const [review, setReview] = useState([]);
+  const [images, setImages] = useState([]);
+  const [send, setSend] = useState([])
+
+  const [form, setForm] = useState({
+    mail: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+    address: "",
+    image: "",
   });
   const [errors, setErrors] = useState({
-    name: "",
-    lastName: "",
-    email: "",
+    mail: "",
     password: "",
+    first_name: "",
+    last_name: "",
+    address: "",
+    image: "",
   });
 
-  const [activateInputs, setActivateInputs] = useState(false);
+  useEffect(() => {
+    dispatch(getUserId(userLocal.id));
+    if (user) {
+      setForm({
+        mail: userLocal.email,
+        password: "********",
+        first_name: userLocal.name,
+        last_name: userLocal.lastName,
+        address: userLocal.address,
+        image: userLocal.imageLocal.url,
+      });
+    }
+  }, []);
+  useEffect(() => {
+    if (Object.keys(productDetail).length > 0) {
+      let newlist = { id: productDetail.id, value: productDetail.image[0] };
+      let repetido = images.find((i) => i.id === productDetail.id);
+      if (!repetido) {
+        images.push(newlist);
+      }
+    }
+  }, [productDetail]);
 
-  function validate(inputs) {
+  orders?.forEach((order) => {
+    order.products.forEach((product) => {
+      uniqueProductNames.add(product.title);
+      uniqueProductIds.add(product.id);
+      let newlist = { id: product.id, value: "" };
+      let repetido = review.find((c) => c.id === product.id);
+      if (!repetido) {
+        review.push(newlist);
+        dispatch(getProductById(product.id));
+      }
+    });
+  });
+
+  const handleRating = (productId, value) => {
+    setRating({
+      ...rating,
+      [productId]: value,
+    });
+  };
+
+  console.log(rating)
+
+  const handleReviewChange = (event) => {
+    let value = event.target.value;
+    let id = event.target.id;
+    let newList = review.map((c) => {
+      if (c.id === Number(id)) {
+        let result = { id: c.id, value: value };
+        return result;
+      }
+      return c;
+    });
+    setReview(newList);
+  };
+
+  console.log(review)
+
+  const handleView = (event) => {
+    const value = event.target.value;
+    if (value === "perfil") {
+      setView("perfil");
+    } else if (value === "compras") {
+      setView("compras");
+    }
+  };
+
+  const isPerfilView = view === "perfil";
+  const isComprasView = view === "compras";
+
+  const handleEdit = (event) => {
+    event.preventDefault();
+    setEnabled(!enabled);
+  };
+
+  const validate = (form) => {
     const errors = {};
-    if (!inputs.email) {
-      errors.email = "Debe haber un email";
-    } else if (!inputs.password) {
+    if (!form.first_name) {
+      errors.first_name = "Debe haber un nombre";
+    } else if (form.first_name.length < 3) {
+      errors.first_name = "el nombre debe tener al menos tres letras";
+    } else if (!form.last_name) {
+      errors.last_name = "Debe haber un apellido";
+    } else if (form.last_name.length < 3) {
+      errors.last_name = "el apellido debe tener al menos tres letras";
+    } else if (!form.mail) {
+      errors.mail = "Debe haber un email";
+    } else if (!regexEmail.test(form.mail)) {
+      errors.mail = "Debe ser un email válido";
+    } else if (!form.password) {
       errors.password = "Debe haber un password";
-    } else if (!inputs.name) {
-      errors.name = "Debe haber un nombre";
-    } else if (!inputs.lastName) {
-      errors.lastName = "Debe haber un apellido";
-    } else if (!regexEmail.test(inputs.email)) {
-      errors.email = "Debe ser un email válido";
-    } else if (inputs.password.length < 8) {
+    } else if (form.password.length < 8) {
       errors.password = "Debe tener al menos 8 caracteres";
+    } else if (!form.address) {
+      errors.address = "Debe haber una direccion";
     }
     return errors;
-  }
-  function handleChange(e) {
-    setInputs({
-      ...inputs,
-      [e.target.name]: e.target.value,
+  };
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    setForm({
+      ...form,
+      [name]: value,
     });
     setErrors(
       validate({
-        ...inputs,
-        [e.target.name]: e.target.value,
+        ...form,
+        [name]: value,
       })
     );
-  }
-  function handleSubmit(e) {
-    e.preventDefault();
+  };
+  const handleProfileSubmit = (event) => {
+    event.preventDefault();
+
+    const modifiedUser = {};
+
+    if (form.mail !== userLocal.email) {
+      modifiedUser.mail = form.mail;
+    }
+
+    if (form.password !== "********") {
+      modifiedUser.password = form.password;
+    }
+
+    if (form.first_name !== userLocal.first_name) {
+      modifiedUser.first_name = form.first_name;
+    }
+
+    if (form.last_name !== userLocal.lastName) {
+      modifiedUser.last_name = form.last_name;
+    }
+
+    if (form.address !== userLocal.address) {
+      modifiedUser.address = form.address;
+    }
+
+    if (form.image !== userLocal.imageLocal.url) {
+      modifiedUser.image = form.image;
+    }
+
+    console.log(modifiedUser);
+
+    dispatch(userUpDate(userLocal.id, modifiedUser));
 
     if (Object.keys(errors).length === 0) {
-      setInputs({
-        name: "",
-        lastName: "",
-        email: "",
+      setForm({
+        first_name: "",
+        last_name: "",
+        mail: "",
         password: "",
       });
       setErrors({
-        name: "",
-        lastName: "",
-        email: "",
+        first_name: "",
+        last_name: "",
+        mail: "",
         password: "",
       });
-      alert("Cambios guardados!");
-      setActivateInputs(false);
     }
-  }
+  };
 
-  function toogleInputs() {
-    setActivateInputs(true);
-  }
+ const handleSubmitComments = (event) => {
+  event.preventDefault();
+  let resultado = [];
+  
+  review.forEach(element => {
+    const rate = rating[element.id];
+    resultado.push({
+      id: element.id,
+      content: element.value,
+      rate: rate
+    });
+  })
+  
+  let envio = resultado.find(producto => producto.id === parseInt(event.target.id))
+  send.push(parseInt(event.target.id))
+  dispatch(postComments(envio))
+  console.log(commentsUser)
+}
+
+
   return (
-    <section className={styles.container}>
-      <article className="m-5 p-3 flex flex-col lg:flex-row items-center justify-center gap-4 xl:w-3/4">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <h2 className="text-black capitalize font-bold text-xl">
-            configuración
-          </h2>
-
-          <button className="flex items-center gap-1.5 text-grey capitalize">
-            <svg
-              width="24px"
-              height="24px"
-              strokeWidth="1.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              color="#000000"
+    <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
+      <h2 className="absolute md:top-8 top-56 text-lg w-full font-mono mx-auto md:w-fit">
+        {"Hola" + " " + user.name + "!"}
+      </h2>
+      <section className="md:w-fit w-full mx-auto md:mx-0 md:mt-28 mt-28 flex flex-col">
+        <div className="w-fit md:px-0 flex flex-col md:mr-5 mx-auto">
+          <h1 className="text-xl md:text-left font-bold mb-5 w-full">
+            Configuraciones
+          </h1>
+          <div className="flex md:flex-col w-full justify-between">
+            <div
+              id="perfil"
+              value="perfil"
+              onClick={handleView}
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
             >
-              <path
-                d="M5 20v-1a7 7 0 017-7v0a7 7 0 017 7v1M12 12a4 4 0 100-8 4 4 0 000 8z"
-                stroke="#000000"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-            </svg>
-            cuenta
-          </button>
-
-          <button className="flex items-center gap-1.5 text-grey capitalize">
-            <svg
-              width="24px"
-              height="24px"
-              strokeWidth="1.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              color="#000000"
-            >
-              <path
-                d="M16 16V8M12 16v-5M8 16v-3"
-                stroke="#000000"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-              <path
-                d="M3 20.4V3.6a.6.6 0 01.6-.6h16.8a.6.6 0 01.6.6v16.8a.6.6 0 01-.6.6H3.6a.6.6 0 01-.6-.6z"
-                stroke="#000000"
-                strokeWidth="1.5"
-              ></path>
-            </svg>
-            historial
-          </button>
-          <button className="flex items-center gap-1.5 text-grey capitalize">
-            <svg
-              width="24px"
-              height="24px"
-              strokeWidth="1.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              color="#000000"
-            >
-              <path
-                d="M19.26 9.696l1.385 9A2 2 0 0118.67 21H5.33a2 2 0 01-1.977-2.304l1.385-9A2 2 0 016.716 8h10.568a2 2 0 011.977 1.696zM14 5a2 2 0 10-4 0"
-                stroke="#000000"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-            </svg>
-            productos
-          </button>
-          <button className="flex items-center gap-1.5 text-grey capitalize">
-            <svg
-              width="24px"
-              height="24px"
-              strokeWidth="1.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              color="#000000"
-            >
-              <path
-                d="M21 13V8a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h7"
-                stroke="#000000"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-              <path
-                clipRule="evenodd"
-                d="M20.879 16.917c.494.304.463 1.043-.045 1.101l-2.567.291-1.151 2.312c-.228.459-.933.234-1.05-.334l-1.255-6.116c-.099-.48.333-.782.75-.525l5.318 3.271z"
-                stroke="#000000"
-                strokeWidth="1.5"
-              ></path>
-              <path
-                d="M12 11.01l.01-.011M16 11.01l.01-.011M8 11.01l.01-.011"
-                stroke="#000000"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-            </svg>
-            contraseña
-          </button>
-        </div>
-
-        <article className="m-2 p-6 flex flex-col items-center justify-center gap-11 bg-white shadow-lg rounded-md">
-          <ul className="flex flex-row items-center justify-center gap-3">
-            <li>
-              <img className={styles.userImg} src={userL} alt="user logo" />
-            </li>
-
-            <li>
-              <ul className="flex flex-row items-center gap-2">
-                <li>
-                  <button
-                    className="p-1.5 bg-bluey rounded-full"
-                    onClick={toogleInputs}
-                  >
-                    <svg
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      color="#000000"
-                    >
-                      <path
-                        d="M14.363 5.652l1.48-1.48a2 2 0 012.829 0l1.414 1.414a2 2 0 010 2.828l-1.48 1.48m-4.243-4.242l-9.616 9.615a2 2 0 00-.578 1.238l-.242 2.74a1 1 0 001.084 1.085l2.74-.242a2 2 0 001.24-.578l9.615-9.616m-4.243-4.242l4.243 4.242"
-                        stroke="#000000"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                </li>
-
-                {/* <li>
-                  <button className="p-1.5 border-bluey rounded-full">
-                    <svg
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      color="#000000"
-                    >
-                      <path
-                        d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"
-                        stroke="#000000"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                </li> */}
-              </ul>
-            </li>
-          </ul>
-
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col items-center justify-center gap-2 lg:flex-row flex-wrap"
-          >
-            <div className="flex flex-col items-center justify-center">
-              <label className="relative right-24 top-2 text-cyan-400 capitalize">
-                nombre
-              </label>
-
-              {!activateInputs ? (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="text"
-                  name="name"
-                  value={inputs.name}
-                  onChange={handleChange}
-                  disabled
-                ></input>
-              ) : (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="text"
-                  name="name"
-                  value={inputs.name}
-                  onChange={handleChange}
-                ></input>
-              )}
-
-              <p className="text-rose-500">{errors.name}</p>
-            </div>
-
-            <div className="flex flex-col items-center justify-center">
-              <label className="relative right-24 top-2 text-cyan-400 capitalize">
-                apellido
-              </label>
-
-              {!activateInputs ? (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="text"
-                  name="lastName"
-                  value={inputs.lastName}
-                  onChange={handleChange}
-                  disabled
-                ></input>
-              ) : (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="text"
-                  name="lastName"
-                  value={inputs.lastName}
-                  onChange={handleChange}
-                ></input>
-              )}
-
-              <p className="text-rose-500">{errors.lastName}</p>
-            </div>
-
-            <div className="flex flex-col items-center justify-center">
-              <label className="relative right-24 top-2 text-cyan-400 capitalize">
-                correo
-              </label>
-
-              {!activateInputs ? (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="email"
-                  name="email"
-                  value={inputs.email}
-                  onChange={handleChange}
-                  placeholder="ejemplo@gmail.com"
-                  disabled
-                ></input>
-              ) : (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="email"
-                  name="email"
-                  value={inputs.email}
-                  onChange={handleChange}
-                  placeholder="ejemplo@gmail.com"
-                ></input>
-              )}
-
-              <p className="text-rose-500">{errors.email}</p>
-            </div>
-
-            <div className="flex flex-col items-center justify-center">
-              <label className="relative right-24 top-2 text-cyan-400 capitalize">
-                contraseña
-              </label>
-
-              {!activateInputs ? (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="password"
-                  name="password"
-                  value={inputs.password}
-                  onChange={handleChange}
-                  placeholder=""
-                  disabled
-                ></input>
-              ) : (
-                <input
-                  className="placeholder-slate-400 focus:outline-none focus:border-cyan-500 md:m-2 border border-grey bg-transparent rounded-md p-2 pl-10 text-grey"
-                  type="password"
-                  name="password"
-                  value={inputs.password}
-                  onChange={handleChange}
-                  placeholder="********"
-                ></input>
-              )}
-
-              <p className="text-rose-500">{errors.password}</p>
-            </div>
-
-            {!activateInputs ? null : (
-              <button className="px-16 bg-bluey capitalize md:w-full lg:w-min">
-                guardar
+              <button onClick={handleView} value="perfil">
+                Mi Cuenta
               </button>
-            )}
-          </form>
-        </article>
+            </div>
+            <div
+              id="compras"
+              value="compras"
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button onClick={handleView} value="compras">
+                Compras
+              </button>
+            </div>
+            <div
+              id="Admin"
+              value="Admin"
+              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+            >
+              <button value="admin">Panel de Administrador</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <article className="md:w-fit w-full">
+        {isPerfilView && (
+          <section
+            className="bg-white md:w-fit w-10/12 m-auto mt-20 shadow-lg mb-20 rounded-lg md:px-10 py-8 md:py-16"
+            id="perfilVista"
+            ref={perfilVistaRef}
+          >
+            <form onSubmit={handleProfileSubmit}>
+              <div className="flex md:mb-4 mb-10 w-10/12 mx-auto justify-between">
+                <div className="flex w-fit">
+                  <div className="bg-slate-600 w-fit rounded-full p-6 mr-8">
+                    <img src={perfil} alt="vector" className="w-6 h-6" />
+                  </div>
+                  <ul className="flex flex-row items-center gap-2">
+                    <li className="relative z-10 p-2 bg-sky-500 rounded-full">
+                      <img
+                        onClick={handleEdit}
+                        className=" h-3.5  w-3.5"
+                        src={edit}
+                        alt=""
+                      />
+                    </li>
+                    <li>
+                      <button
+                        type="reset"
+                        className="p-1.5 border-bluey rounded-full"
+                      >
+                        <svg
+                          width="24px"
+                          height="24px"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          color="#000000"
+                        >
+                          <path
+                            d="M20 9l-1.995 11.346A2 2 0 0116.035 22h-8.07a2 2 0 01-1.97-1.654L4 9M21 6h-5.625M3 6h5.625m0 0V4a2 2 0 012-2h2.75a2 2 0 012 2v2m-6.75 0h6.75"
+                            stroke="#000000"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                        </svg>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="flex w-full md:flex-row flex-col justify-center">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.first_name && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? " md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Nombre
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.first_name && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? " border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="first_name"
+                    value={form.first_name}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Nombre"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.first_name}
+                    </p>
+                  )}
+                </div>
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.last_name && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? " md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Apellido
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.last_name && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="last_name"
+                    value={form.last_name}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Apellido"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.last_name}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="flex w-full md:flex-row flex-col  justify-center">
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.mail && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Email
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.mail && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-8 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="mail"
+                    value={form.mail}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Email"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.mail}
+                    </p>
+                  )}
+                </div>
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.address && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Direccion
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.address && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-14 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    name="address"
+                    value={form.address}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Direccion"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.address}
+                    </p>
+                  )}
+                </div>
+                <div className="flex mb-10 md:mb-5 flex-col justify-center w-10/12 mx-auto md:mx-0 md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.password && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400"
+                    } transition-all ${
+                      enabled === false
+                        ? "md:translate-y-6 translate-y-0 translate-x-0"
+                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
+                    }`}
+                  >
+                    Contraseña
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-10 text-grey ${
+                      errors.password && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 md:translate-x-20 translate-x-0"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Contraseña"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {enabled && (
+                <div className="flex mb-5 mx-aut10 flex-col justify-center w-10/12 mx-auto md:w-fit relative">
+                  <label
+                    className={`absolute left-8  ${
+                      errors.image && enabled === true
+                        ? "bottom-14 md:bottom-16 text-red-500"
+                        : "bottom-10 text-cyan-400 bg-white w-16 z-10 h-fit"
+                    } transition-all `}
+                  >
+                    Image
+                  </label>
+                  <input
+                    className={`placeholder-slate-400 focus:outline-none hover:shadow-md md:m-2 border bg-transparent rounded-md p-2 pl-14 text-grey ${
+                      errors.image && enabled === true
+                        ? "border-red-500  focus:border-red-500"
+                        : "border-grey "
+                    }${
+                      enabled === false
+                        ? "border-transparent translate-y-0 translate-x-14"
+                        : "borde translate-x-0 translate-y-0 focus:border-cyan-500 hover:border-cyan-500"
+                    }`}
+                    type="text"
+                    id="profileImage"
+                    name="image"
+                    value={form.image}
+                    onChange={handleChange}
+                    disabled={!enabled}
+                    placeholder="Imagen de perfil"
+                  />
+                  {errors.nombre && (
+                    <p className="text-red-500 relative bottom-0 md:bottom-2">
+                      {errors.image}
+                    </p>
+                  )}
+                </div>
+              )}
+              <button
+                disabled={!enabled}
+                className="bg-cyan-400 mt-5 hover:shadow-xl hover:font-bold transition-all"
+                type="submit"
+              >
+                Confirmar cambios
+              </button>
+            </form>
+          </section>
+        )}
+        {isComprasView && (
+          <section
+            className="flex flex-col"
+            id="comprasVista"
+            ref={comprasVistaRef}
+          >
+            <h2 className="mt-20 mb-10 font-bold text-lg border-b-4 border-sky-400 w-fit mx-auto">
+              {showForm === true
+                ? "Formulario de Puntuación y Reseña"
+                : "Mis Compras"}
+            </h2>
+            <div className="flex md:flex-row flex-col">
+              {uniqueProductNames.size > 0
+                ? Array.from(uniqueProductNames).map((productName, i) => {
+                    let id = Array.from(uniqueProductIds)[i];
+                    let img = images.find((i) => i.id === id);
+                    let coment = review.find(
+                      (c) => c.id === Array.from(uniqueProductIds)[i]
+                    );
+                    return (
+                      <div
+                        className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white rounded-xl trnasition-all hover:shadow-xl py-10 px-14"
+                        key={productName}
+                      >
+                        <div className="bg-white relative z-20">
+                          <img
+                            className="w-52 mx-auto rounded-full h-52"
+                            src={img.value}
+                            alt="img"
+                          />
+                          <h2 className="mt-4 w-10/12 mx-auto font-mono">
+                            {productName}
+                          </h2>
+                        </div>
+                        {<form
+                          className={`${
+                            showForm === true
+                              ? " translate-x-0 translate-y-0 relative"
+                              : "absolute -translate-y-44 z-0"
+                          } 
+                    transition-all bg-white `}
+                        >
+                          <div>
+                            <link
+                              rel="stylesheet"
+                              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                            />
+                            {[1, 2, 3, 4, 5].map((value) => (
+                              <span
+                                key={value}
+                                className={`fa fa-heart ${
+                                  value <=
+                                  rating[Array.from(uniqueProductIds)[i]]
+                                    ? "checked"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleRating(
+                                    Array.from(uniqueProductIds)[i],
+                                    value
+                                  )
+                                }
+                                style={{
+                                  color:
+                                    value <=
+                                    rating[Array.from(uniqueProductIds)[i]]
+                                      ? "red"
+                                      : "",
+                                  marginRight: 5,
+                                }}
+                              ></span>
+                            ))}
+                          </div>
+                          <div className="">
+                            <textarea
+                              className="py-2 px-4"
+                              name="review"
+                              value={coment.value}
+                              placeholder="Escribe tu reseña aquí"
+                              onChange={handleReviewChange}
+                              id={Array.from(uniqueProductIds)[i]}
+                            ></textarea>
+                          </div>
+                          <button className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg" onClick={handleSubmitComments} id={Array.from(uniqueProductIds)[i]}>
+                            Enviar Comentario
+                          </button>
+                        </form>}
+                      </div>
+                    );
+                  })
+                : "No Hay compras disponibles"}
+            </div>
+            <p
+              onClick={() => {
+                if (showForm) {
+                  setShowform(false);
+                } else {
+                  setShowform(true);
+                }
+              }}
+              className="bg-sky-400 md:mt-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg"
+            >
+              {showForm === false ? "Dejar Reseña" : "volver"}
+            </p>
+          </section>
+        )}
       </article>
-    </section>
+    </div>
   );
 }
