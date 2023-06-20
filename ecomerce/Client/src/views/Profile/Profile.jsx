@@ -131,6 +131,7 @@ export default function Profile() {
     setEnabled(!enabled);
   };
 
+  //Funcion para eliminar cuenta
   function handleDelete() {
     swal({
       title: "Eliminar cuenta",
