@@ -52,6 +52,7 @@ export default function Nav() {
   };
 
   function signOut() {
+    //Ahora se usa sweetalert para cerrar sesión
     swal({
       title: "Cerrar Sesión",
       text: "¿Estás seguro de que deseas continuar?",
