@@ -33,11 +33,11 @@ function App() {
     "/product/:id", 
     "/admin", 
     "/profile", 
-    "/cart"
+    "/cart",
   ];
   const isUnknownRoute = !knownPaths.includes(location.pathname);
 
-  const pathsWithoutNav = ["/signIn", "/signUp", "/cart", "/admin"];
+  const pathsWithoutNav = ["/signIn", "/signUp", "/cart", "/admin", ];
   const pathsWithoutFooter = ["/signIn", "/signUp", "/cart", "/admin", "/profile"];
   const displayNav = !pathsWithoutNav.includes(location.pathname) && !isUnknownRoute;
   const displayFooter = !pathsWithoutFooter.includes(location.pathname) && !isUnknownRoute;
@@ -58,8 +58,8 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
-        <Route path="*" element={<NotFound/>} />
         <Route path="/success" element={<Success/>} />
+        <Route path="*" element={<NotFound/>} />
 
       </Routes>
       {displayFooter && <Footer />}
