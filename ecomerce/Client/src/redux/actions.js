@@ -10,6 +10,7 @@ import {
   GET_FILTERS,
   SET_FILTERS,
   USER_UPDATE,
+  DELETE_USER,
   SHOW_SIDEBAR,
   DISABLE_CART,
   ADD_QUANTITY,
@@ -156,10 +157,20 @@ export function userAdmin(user) {
     payload: user,
   };
 }
+
+export function deleteUser(id) {
+  return async function (dispatch) {
+    let { data } = await axios.delete(
+      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
+    );
+
+    return dispatch({ type: DELETE_USER, payload: data });
+  };
+}
 export const userUpDate = (id, userUpdate) => {
   return async function (dispatch) {
     try {
-      const data = await axios.patch(
+      const { data } = await axios.patch(
         `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
         userUpdate
       );
@@ -317,7 +328,6 @@ export const removeImgToProduct = (obj) => {
 export function addDarkModeAdmin(condicional) {
   return { type: ADD_DARKMODE_ADMIN, payload:condicional };
 }
-
 
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
 

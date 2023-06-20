@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { addDarkModeAdmin } from '../../redux/actions'
+import darkmodeStyle from '../SidebarAdmin/StyleDarkBotton.css'
 
 import imagen1 from '../../assets/Vector.png'
 import imagen2 from '../../assets/Vector1.png'
@@ -8,8 +11,6 @@ import imagen4 from '../../assets/Vector3.png'
 import imagen5 from '../../assets/Vector4.png'
 import imagenOut from '../../assets/VectorOut.png'
 import imageNotf from '../../assets/VectorNotif.png'
-import { useDispatch, useSelector } from 'react-redux'
-import { addDarkModeAdmin } from '../../redux/actions'
 
 export default function SidebarAdmin() {
   const dispatch = useDispatch()
@@ -61,6 +62,11 @@ export default function SidebarAdmin() {
               <p className=' font-thin hover:text-cyan-400'>Productos</p>
             </Link>
           </div>
+        </div>
+        <div className='w-full flex justify-center'>
+          <p className="text-gray-600 font-mono">Dark</p>
+          <div className=''></div>
+          <p className="text-gray-600 font-mono">Light</p>
         </div>
         <div className='h-1/5 flex relative justify-center'>
           <Link className='absolute w-fit bottom-0 mb-7 flex' to={'/'}>
