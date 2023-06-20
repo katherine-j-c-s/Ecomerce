@@ -354,10 +354,7 @@ const rootReducer = (state = initialState, action) => {
       };
     
     case ALL_ENHANCE_PRODUCTS:
-      return {
-        ...state,
-        enhanceProducts: [...state.enhanceProducts, action.payload]
-      }
+      return {  ...state, enhanceProducts: action.payload }
     default:
       return state;
   }
