@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut, getUserId, showCart } from "../../redux/actions";
 import { Cart, LogOut } from "iconoir-react";
-import toast, { Toaster } from "react-hot-toast";
+import swal from "sweetalert";
 
 export default function Nav() {
   const location = useLocation();
@@ -52,28 +52,26 @@ export default function Nav() {
   };
 
   function signOut() {
-    toast((t) => (
-      <span>
-        ¿Seguro de cerrar sesión?
-        <button
-          className="hover:bg-bluey hover:text-white"
-          onClick={() => {
-            dispatch(logOut());
-            navigate("/");
-            toast.remove(t.id);
-          }}
-        >
-          Cerrar sesión
-        </button>
-      </span>
-    ));
+    //Ahora se usa sweetalert para cerrar sesión
+    swal({
+      title: "Cerrar Sesión",
+      text: "¿Estás seguro de que deseas continuar?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((confirm) => {
+      if (confirm) {
+        dispatch(logOut());
+        navigate("/");
+      } else {
+        // Lógica a ejecutar si se cancela la confirmación
+        // ...
+      }
+    });
   }
 
   return (
     <nav className="bg-transparent relative z-30">
-      <div>
-        <Toaster />
-      </div>
       <div className="hidden md:block">
         <ul
           className={
@@ -193,7 +191,10 @@ export default function Nav() {
             />
           </Link>
 
-          <button className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300">
+          <button
+            className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+            onClick={() => dispatch(showCart())}
+          >
             <Cart color="#000000" />
           </button>
 

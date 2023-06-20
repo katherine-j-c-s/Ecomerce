@@ -24,7 +24,7 @@ const successHandler = async (req, res) => {
   try {
     const { dni } = req.params;
     await success(dni);
-    res.redirect("https://sportwear.vercel.app/");
+    res.redirect("https://sportwear.vercel.app/success");
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

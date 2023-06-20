@@ -15,6 +15,7 @@ import Admin from "./views/Admin/Admin";
 import Profile from "./views/Profile/Profile";
 import Cart from "./views/Cart/Cart";
 import NotFound from "./views/NotFound/NotFound";
+import Success from "./views/Success/Success";
 
 function App() {
   const location = useLocation();
@@ -58,6 +59,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="*" element={<NotFound/>} />
+        <Route path="/success" element={<Success/>} />
+
       </Routes>
       {displayFooter && <Footer />}
     </>

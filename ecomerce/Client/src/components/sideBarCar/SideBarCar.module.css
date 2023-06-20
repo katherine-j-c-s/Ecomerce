@@ -1,7 +1,7 @@
 .sideMenu {
     position: absolute;
     background-color: #F7F7F7;
-    z-index: 20;
+    z-index: 400;
     border-radius: 5% 0 0 5%;
 }
 
@@ -10,5 +10,13 @@
     .sideMenu {
         right: 0%;
         width: 60%;
+    }
+}
+
+@media only screen and (max-width: 920px) {
+
+    .sideMenu {
+        top: .5%;
+        width: 100%;
     }
 }
