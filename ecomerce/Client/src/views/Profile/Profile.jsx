@@ -152,9 +152,6 @@ export default function Profile() {
             navigate("/");
           }, 2000);
         });
-      } else {
-        // Lógica a ejecutar si se cancela la confirmación
-        // ...
       }
     });
   }
