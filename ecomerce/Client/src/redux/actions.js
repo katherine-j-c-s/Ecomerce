@@ -29,6 +29,8 @@ import {
   ADD_DARKMODE_ADMIN,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  ENHANCE_PRODUCT,
+  ALL_ENHANCE_PRODUCTS,
 } from "./types";
 
 import axios from "axios";
@@ -352,3 +354,27 @@ export const getAppVisits = () => {
     }
   };
 };
+
+
+///DESTACAR PRODUCTOS///DASHBPOARD
+
+export const enhanceProduct = (id) => {
+  return async function() {
+    try {
+      await axios.patch(`https://ecomerce-production-8f61.up.railway.app/products/standout_product/${id}`)
+    } catch (error) {
+      console.log("no se puede destacar el producto", error)
+    }
+  }
+} 
+
+export const allEnhanceProducts = () =>{
+  return async function(dispatch){
+    try {
+      let {data} = await axios.get(`https://ecomerce-production-8f61.up.railway.app/products/get_standouts`)
+      return dispatch({type: ALL_ENHANCE_PRODUCTS, payload: data})
+    } catch (error) {
+      console.log("no se pueden traer los productos destacados", error) 
+    }
+  }
+}

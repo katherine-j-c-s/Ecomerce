@@ -14,21 +14,37 @@ import Products from "./views/Products/Products";
 import Admin from "./views/Admin/Admin";
 import Profile from "./views/Profile/Profile";
 import Cart from "./views/Cart/Cart";
+import NotFound from "./views/NotFound/NotFound";
 
 function App() {
   const location = useLocation();
 
   const { enable } = useSelector((state) => state.sideBarCar);
 
+  const knownPaths = [
+    "/", 
+    "/women", 
+    "/man", 
+    "/kids", 
+    "/alls", 
+    "/signIn", 
+    "/signUp", 
+    "/product/:id", 
+    "/admin", 
+    "/profile", 
+    "/cart"
+  ];
+  const isUnknownRoute = !knownPaths.includes(location.pathname);
+
+  const pathsWithoutNav = ["/signIn", "/signUp", "/cart", "/admin"];
+  const pathsWithoutFooter = ["/signIn", "/signUp", "/cart", "/admin", "/profile"];
+  const displayNav = !pathsWithoutNav.includes(location.pathname) && !isUnknownRoute;
+  const displayFooter = !pathsWithoutFooter.includes(location.pathname) && !isUnknownRoute;
+
   return (
     <>
       {enable ? <SideBarCar /> : null}
-      {location.pathname === "/signIn" ||
-      location.pathname === "/signUp" ||
-      location.pathname === "/cart" ||
-      location.pathname === "/admin" ? null : (
-        <Nav />
-      )}
+      {displayNav && <Nav />}
       <Routes>
         <Route path="/" element={<ViewHome />} />
         <Route path="/women" element={<Products />} />
@@ -41,15 +57,9 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
-
+        <Route path="*" element={<NotFound/>} />
       </Routes>
-      {location.pathname === "/signIn" ||
-      location.pathname === "/signUp" ||
-      location.pathname === "/profile" ||
-      location.pathname === "/cart" ||
-      location.pathname === "/admin" ? null : (
-        <Footer />
-      )}
+      {displayFooter && <Footer />}
     </>
   );
 }
