@@ -14,6 +14,7 @@ import Products from "./views/Products/Products";
 import Admin from "./views/Admin/Admin";
 import Profile from "./views/Profile/Profile";
 import Cart from "./views/Cart/Cart";
+import Success from "./views/Success/Success";
 
 function App() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
+        <Route path="/success" element={<Success/>} />
 
       </Routes>
       {location.pathname === "/signIn" ||
