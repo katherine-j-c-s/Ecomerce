@@ -16,6 +16,7 @@ import Profile from "./views/Profile/Profile";
 import Cart from "./views/Cart/Cart";
 import NotFound from "./views/NotFound/NotFound";
 import Success from "./views/Success/Success";
+import Unsuccess from "./views/Unsuccess/Unsuccess";
 
 function App() {
   const location = useLocation();
@@ -59,6 +60,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="/success" element={<Success/>} />
+        <Route path="/unsuccess" element={<Unsuccess/>} />
         <Route path="*" element={<NotFound/>} />
 
       </Routes>
