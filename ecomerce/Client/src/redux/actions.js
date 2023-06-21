@@ -227,7 +227,6 @@ export const addProduct = (obj) => {
     };
     return prodct;
   });
-  console.log(products);
   return async function (dispatch) {
     try {
       const data = await axios.all(
@@ -280,8 +279,6 @@ export const editProduct = (obj) => {
     category: obj.category,
     size: obj.size,
   };
-  console.log(edit);
-  console.log(obj.id);
   return async function (dispatch) {
     try {
       const data = await axios.patch(
@@ -311,7 +308,6 @@ export const addImgToProduct = (obj) => {
   };
 };
 export const removeImgToProduct = (obj) => {
-  console.log(obj);
   return async function (dispatch) {
     try {
       const data = await axios.patch(
@@ -338,7 +334,6 @@ export function addDarkModeClient(condicional) {
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
 
 export const postComments = (envio) => {
-  console.log(envio);
   return async function (dispatch) {
     try {
       const data = await axios.post(
@@ -370,7 +365,7 @@ export const getAppVisits = () => {
 };
 
 
-///DESTACAR PRODUCTOS///DASHBPOARD
+///DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD///
 
 export const enhanceProduct = (id) => {
   return async function() {
