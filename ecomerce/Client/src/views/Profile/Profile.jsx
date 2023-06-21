@@ -735,7 +735,9 @@ export default function Profile() {
                                 Enviar Comentario
                               </button>
                             </form> 
-                          : <div>COMENTARIO
+                          : <div>
+                            {comentarioRepetido.rate}
+                            {comentarioRepetido.content}
                           </div>}
                         </div>
                       );
