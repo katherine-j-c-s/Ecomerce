@@ -657,7 +657,7 @@ export default function Profile() {
                       }else{
                         image = img.value
                       }
-                      let comentarioRepetido = commentCreated.find(c => c.id === Array.from(uniqueProductIds)[i])
+                      let comentarioRepetido = commentCreated.find(c => c.ProductId === Array.from(uniqueProductIds)[i])
                       console.log(commentCreated)
                       let coment = review.find(
                         (c) => c.id === Array.from(uniqueProductIds)[i]
