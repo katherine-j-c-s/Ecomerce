@@ -678,12 +678,12 @@ export default function Profile() {
                             </h2>
                           </div>
                           {comentarioRepetido !== undefined && comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
-                            <h1>
-                              COMENTARIO NO HECHO
-                            </h1>
-                          : <div>
+                            <div>
                             COMENTARIO HECHO
-                          </div>}
+                          </div>
+                          : <h1>
+                              COMENTARIO NO HECHO
+                            </h1>}
                         </div>
                       );
                     })
