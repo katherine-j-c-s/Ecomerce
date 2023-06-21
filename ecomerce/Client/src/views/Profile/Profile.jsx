@@ -678,9 +678,9 @@ export default function Profile() {
                             </h2>
                           </div>
                           {comentarioRepetido !== undefined && comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
-                            <div>
+                            <h1>
                             COMENTARIO HECHO
-                          </div>
+                          </h1>
                           : <h1>
                               COMENTARIO NO HECHO
                             </h1>}
