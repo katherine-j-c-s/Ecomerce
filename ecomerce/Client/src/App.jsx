@@ -24,9 +24,7 @@ function App() {
 
   const knownPaths = [
     "/", 
-    "/women", 
-    "/man", 
-    "/kids", 
+    "/about",
     "/alls", 
     "/signIn", 
     "/signUp", 
