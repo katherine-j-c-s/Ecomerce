@@ -659,8 +659,6 @@ export default function Profile() {
                       }
                       let comentarioRepetido = commentCreated.find(c => c.ProductId === Array.from(uniqueProductIds)[i])
                       console.log(comentarioRepetido)
-                      console.log("--->"+ typeof commentCreated[0].ProductId)
-                      console.log("//--->"+ typeof Array.from(uniqueProductIds)[i])
                       let coment = review.find(
                         (c) => c.id === Array.from(uniqueProductIds)[i]
                       );
@@ -679,7 +677,7 @@ export default function Profile() {
                               {productName}
                             </h2>
                           </div>
-                          {
+                          {comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
                             <form
                               className={`${
                                 showForm === true
@@ -736,8 +734,9 @@ export default function Profile() {
                               >
                                 Enviar Comentario
                               </button>
-                            </form>
-                          }
+                            </form> 
+                          : <div>COMENTARIO
+                          </div>}
                         </div>
                       );
                     })
