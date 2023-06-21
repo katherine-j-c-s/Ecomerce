@@ -316,9 +316,8 @@ export default function Profile() {
                 className="dark:hover:text-slate-900 md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
               >
                {uniqueProductNames.size > 0
-                  ? <button onClick={handleView} value="compras">
+                  && <button onClick={handleView} value="compras">
                   Compras
-                </button> : <button disabled={true}>
                 </button>}
               </div>
               <div
