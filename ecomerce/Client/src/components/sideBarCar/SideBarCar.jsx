@@ -31,7 +31,7 @@ export default function SideBarCar() {
   }
 
   return (
-    <aside className="absolute bg-white z-30 right-0 md:w-6/12 w-full h-screen">
+    <aside className="absolute bg-white z-40 right-0 md:w-6/12 w-full h-screen">
       <ul className="p-4 flex items-center justify-between ">
         <li>
           <article className="flex items-center gap-2">
