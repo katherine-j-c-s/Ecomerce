@@ -97,8 +97,6 @@ export default function Profile() {
     });
   };
 
-  console.log(rating);
-
   const handleReviewChange = (event) => {
     let value = event.target.value;
     let id = event.target.id;
@@ -111,8 +109,6 @@ export default function Profile() {
     });
     setReview(newList);
   };
-
-  console.log(review);
 
   const handleView = (event) => {
     const value = event.target.value;
@@ -277,7 +273,6 @@ export default function Profile() {
     );
     send.push(parseInt(event.target.id));
     dispatch(postComments(envio));
-    console.log(commentsUser);
   };
 
   const handleAdmin = (event) => {
@@ -653,6 +648,12 @@ export default function Profile() {
                   ? Array.from(uniqueProductNames).map((productName, i) => {
                       let id = Array.from(uniqueProductIds)[i];
                       let img = images.find((i) => i.id === id);
+                      let image = null
+                      if (img.value.url !== undefined) {
+                        image = img.value.url
+                      }else{
+                        image = img.value
+                      }
                       let coment = review.find(
                         (c) => c.id === Array.from(uniqueProductIds)[i]
                       );
@@ -664,7 +665,7 @@ export default function Profile() {
                           <div className="bg-white relative z-20">
                             <img
                               className="w-52 mx-auto rounded-full h-52"
-                              src={img.value}
+                              src={image}
                               alt="img"
                             />
                             <h2 className="mt-4 w-10/12 mx-auto font-mono">
