@@ -92,6 +92,8 @@ const failure = async (dni) => {
     })
   );
 
+  await orden.destroy();
+
   return dni;
 };
 
@@ -110,15 +112,15 @@ const success = async (dni) => {
     await orden.save();
   }
 
-  if(orden.status == 'fullfilled') {
-    let userEmail = orden.email
-    
+  if (orden.status == "fullfilled") {
+    let userEmail = orden.email;
+
     await sendEmail({
-      from: 'grupo_pf_supergenial@test.com',
+      from: "grupo_pf_supergenial@test.com",
       to: userEmail,
-      subject: 'Compra de productos',
-      text: `La compra se ha realizado con exito!`
-    })
+      subject: "Compra de productos",
+      text: `La compra se ha realizado con exito!`,
+    });
   }
 };
 
