@@ -282,7 +282,7 @@ export default function Profile() {
 
   const handleAdmin = (event) => {
     event.preventDefault()
-    navigate("/admin")
+    navigate("/admin?pestaña=dashboard")
   }
 
   return (
