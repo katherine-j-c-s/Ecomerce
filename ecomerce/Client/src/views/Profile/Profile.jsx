@@ -678,10 +678,7 @@ export default function Profile() {
                             </h2>
                           </div>
                           {comentarioRepetido !== undefined && comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
-                            <div>
-                            COMENTARIO HECHO
-                          </div>
-                          : <form
+                            <form
                               className={`${
                                 showForm === true
                                   ? " translate-x-0 translate-y-0 relative"
@@ -737,7 +734,10 @@ export default function Profile() {
                               >
                                 Enviar Comentario
                               </button>
-                            </form>  }
+                            </form> 
+                          : <div>
+                            COMENTARIO HECHO
+                          </div>}
                         </div>
                       );
                     })
