@@ -273,6 +273,7 @@ export default function Profile() {
     );
     send.push(parseInt(event.target.id));
     dispatch(postComments(envio));
+    console.log(envio)
   };
 
   const handleAdmin = (event) => {
