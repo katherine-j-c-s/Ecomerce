@@ -38,9 +38,7 @@ const Home = () => {
       </div>
       <FeaturedSegment />
       <div className="w-full bg-black overflow-x-auto md: flex flex-col p-10 text-left">
-        <Link to={"/admin?pestaña=dashboard"}>
-          <h2 className="ms-20 mb-8 font-bold text-2xl">Nuestras marcas</h2>
-        </Link>
+        <h2 className="ms-20 mb-8 font-bold text-2xl">Nuestras marcas</h2>
         <div className="flex w-full md:justify-evenly justify-start ">
           {brands.map((b, i) => {
             return (
