@@ -14,20 +14,36 @@ import Products from "./views/Products/Products";
 import Admin from "./views/Admin/Admin";
 import Profile from "./views/Profile/Profile";
 import Cart from "./views/Cart/Cart";
+import NotFound from "./views/NotFound/NotFound";
+import Success from "./views/Success/Success";
+import Unsuccess from "./views/Unsuccess/Unsuccess";
 
 function App() {
   const location = useLocation();
   const { enable } = useSelector((state) => state.sideBarCar);
 
+  const knownPaths = [
+    "/", 
+    "/about",
+    "/alls", 
+    "/signIn", 
+    "/signUp", 
+    "/product/:id", 
+    "/admin", 
+    "/profile", 
+    "/cart",
+  ];
+  const isUnknownRoute = !knownPaths.includes(location.pathname);
+
+  const pathsWithoutNav = ["/signIn", "/signUp", "/cart", "/admin", ];
+  const pathsWithoutFooter = ["/signIn", "/signUp", "/cart", "/admin", "/profile"];
+  const displayNav = !pathsWithoutNav.includes(location.pathname) && !isUnknownRoute;
+  const displayFooter = !pathsWithoutFooter.includes(location.pathname) && !isUnknownRoute;
+
   return (
     <>
       {enable ? <SideBarCar /> : null}
-      {location.pathname === "/signIn" ||
-      location.pathname === "/signUp" ||
-      location.pathname === "/cart" ||
-      location.pathname === "/admin" ? null : (
-        <Nav/>
-      )}
+      {displayNav && <Nav />}
       <Routes>
         <Route path="/" element={<ViewHome />} />
         <Route path="/alls" element={<Products />} />
@@ -40,14 +56,13 @@ function App() {
         <Route path="/signUp" element={<SignUp />} />
         
         <Route path="/admin" element={<Admin />} />
+        
+        <Route path="/success" element={<Success/>} />
+        <Route path="/unsuccess" element={<Unsuccess/>} />
+        <Route path="*" element={<NotFound/>} />
+
       </Routes>
-      {location.pathname === "/signIn" ||
-      location.pathname === "/signUp" ||
-      location.pathname === "/profile" ||
-      location.pathname === "/cart" ||
-      location.pathname === "/admin" ? null : (
-        <Footer />
-      )}
+      {displayFooter && <Footer />}
     </>
   );
 }

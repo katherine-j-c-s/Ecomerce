@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
+import React, {useEffect, useState} from 'react'
 
+import { useDispatch } from 'react-redux'
+import { allEnhanceProducts } from "../../redux/actions";
 import FeaturedSegment from "../CardsProduct/FeaturedSegment";
 import GenresHome from "../GenresHome/GenresHome";
 
@@ -11,8 +14,12 @@ import marcas4 from "../../assets/marcas4.png";
 import marcas5 from "../../assets/marcas5.png";
 
 const brands = [marcas1, marcas2, marcas3, marcas4, marcas5];
-
 const Home = () => {
+  const dispatch = useDispatch()
+  
+  useEffect(()=>{
+    dispatch(allEnhanceProducts())
+  },[])
   return (
     <div className="dark:bg-slate-900 transition-all relative z-0">
       <div id={stylesHome.backgroundHome} className="h-screen">
@@ -22,9 +29,6 @@ const Home = () => {
             Descubre nuevos estilos
           </p>
         </article>
-        <Link to="/alls" className="text-white hover:text-black">
-          <button className=" cursor-pointer border md:px-20 px-10 rounded-sm border-bluey">Comprar ya!</button>
-        </Link>
       </div>
       <div className="h-[60vh] w-auto"></div>
       <div className="h-fit w-full mt-6 -mb-20  flex justify-start">

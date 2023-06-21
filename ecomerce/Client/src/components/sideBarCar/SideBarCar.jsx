@@ -1,5 +1,4 @@
 import CardsProduct from "../CardsProduct/CardsProduct";
-import styles from "../sideBarCar/SideBarCar.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -15,9 +14,7 @@ export default function SideBarCar() {
 
   const navigate = useNavigate();
 
-  const { products } = useSelector((state) => state.sideBarCar);
-
-  const { total } = useSelector((state) => state.sideBarCar);
+  const { products,  total } = useSelector((state) => state.sideBarCar);
 
   const userInfo = localStorage.getItem("userData");
 
@@ -34,7 +31,7 @@ export default function SideBarCar() {
   }
 
   return (
-    <aside className={styles.sideMenu}>
+    <aside className="absolute bg-white z-40 right-0 md:w-6/12 w-full h-screen">
       <ul className="p-4 flex items-center justify-between ">
         <li>
           <article className="flex items-center gap-2">

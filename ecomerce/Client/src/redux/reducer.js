@@ -25,6 +25,9 @@ import {
   ADD_DARKMODE_CLIENT,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  ENHANCE_PRODUCT,
+  ALL_ENHANCE_PRODUCTS,
+  
 } from "./types";
 
 const initialState = {
@@ -55,6 +58,7 @@ const initialState = {
   darkModeAdmin: false,
   darkModeClient: false,
   commentsUser: [],
+  enhanceProducts: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -357,6 +361,9 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         commentsUser: [...state.commentsUser, action.payload],
       };
+    
+    case ALL_ENHANCE_PRODUCTS:
+      return {  ...state, enhanceProducts: action.payload }
     default:
       return state;
   }
