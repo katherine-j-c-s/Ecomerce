@@ -11,6 +11,7 @@ export default function Products() {
     
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    let {darkModeClient} = useSelector(st=>st)
     const sizes = useSelector(state => state.sizes)
     const categories = useSelector(state => state.categories)
     const colors = useSelector(state => state.colors)
@@ -35,7 +36,7 @@ export default function Products() {
         dispatch(getFilters('colors'))
     },[filtros.length])
     return (
-        <div >
+        <div className={!darkModeClient ? '' : 'dark bg-slate-950'}>
             <div className="h-auto w-auto flex justify-center mb-16 relative">
                 <img className="object-cover w-full md:h-auto h-96 " src={image} alt="atleta corriendo" />
                 <h1 className="absolute top-44 left-20 text-white font-thin text-5xl ml-3">Find your</h1>
@@ -44,7 +45,7 @@ export default function Products() {
 
             <div className="flex flex-col lg:flex-row  h-auto my-4 px-4 lg:px-[60px] ">
                 <div className="w-full lg:w-1/4 h-auto lg:h-[80vh] p-4 lg:p-10 flex flex-col items-start justify-start overflow-y-auto mb-4 lg:mb-0">
-                    <h1 className="text-black font-extrabold text-2xl text-start mb-10">Filtros</h1>
+                    <h1 className="text-black dark:text-slate-200 font-extrabold text-2xl text-start mb-10">Filtros</h1>
                     <Accordion
                         options={{
                             title: 'Categoría',

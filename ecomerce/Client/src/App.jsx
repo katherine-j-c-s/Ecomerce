@@ -17,7 +17,6 @@ import Cart from "./views/Cart/Cart";
 
 function App() {
   const location = useLocation();
-  const {darkModeClient} = useSelector((st)=>st)
   const { enable } = useSelector((state) => state.sideBarCar);
 
   return (
@@ -30,12 +29,12 @@ function App() {
         <Nav/>
       )}
       <Routes>
-        <Route path="/" element={<ViewHome />} className={darkModeClient === true ? '' : 'dark'} />
-        <Route path="/alls" element={<Products />} className={darkModeClient === true ? '' : '  '} />
-        <Route path="/about" element={<h1>about</h1>} className={darkModeClient === true ? '' : 'dark'} />
-        <Route path="/product/:id" element={<Details />} className={darkModeClient === true ? '' : 'dark'} />
-        <Route path="/profile" element={<Profile />} className={darkModeClient === true ? '' : 'dark'} />
-        <Route path="/cart" element={<Cart/>} className={darkModeClient === true ? '' : 'dark'} />
+        <Route path="/" element={<ViewHome />} />
+        <Route path="/alls" element={<Products />} />
+        <Route path="/about" element={<h1>about</h1>} />
+        <Route path="/product/:id" element={<Details />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/cart" element={<Cart/>} />
          
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />

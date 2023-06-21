@@ -40,7 +40,7 @@ export default function Accordion({ options, isOpen, filtros }) {
   return (
     <div className="mb-4 w-full">
       <div
-        className="select-none cursor-pointer flex items-center justify-start w-full  pr-4 bg-none text-black rounded-md"
+        className="select-none cursor-pointer flex items-center justify-start w-full  pr-4 bg-none dark:text-slate-200 text-black rounded-md"
         onClick={toggleAccordion}
       >
         <svg
@@ -56,7 +56,7 @@ export default function Accordion({ options, isOpen, filtros }) {
             d={isAccordionOpen ? 'M19 9l-7 7-7-7' : 'M9 5l7 7-7 7'}
           />
         </svg>
-        <h2 className='text-lg ml-3'>{options.title}</h2>
+        <h2 className='text-lg ml-3 '>{options.title}</h2>
       </div>
       {isAccordionOpen && (
         <div className="ml-12 mt-2 space-y-2  flex flex-col">
@@ -69,7 +69,7 @@ export default function Accordion({ options, isOpen, filtros }) {
                 onChange={(event) => handleCheckboxChange(event, item, options.name)}
               />
 
-              <span className="ml-2 text-black">{item}</span>
+              <span className="ml-2 text-black dark:text-slate-200">{item}</span>
             </label>
           ))}
         </div>
