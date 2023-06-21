@@ -27,6 +27,7 @@ export default function Footer() {
             <img src={youtubeLogo} alt="" />
             <img src={tiktokLogo} alt="" />
           </article>
+          <h2 className="p-4 text-1xl font-bold">© 2023 Grupo 02 - Proyecto Final</h2>
         </section>
     </footer>
   )
