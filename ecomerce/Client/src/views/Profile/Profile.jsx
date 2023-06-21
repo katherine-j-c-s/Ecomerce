@@ -735,7 +735,8 @@ export default function Profile() {
                                 Enviar Comentario
                               </button>
                             </form> 
-                          : <div>COMENTARIO
+                          : <div>
+                            COMENTARIO HECHO
                           </div>}
                         </div>
                       );
