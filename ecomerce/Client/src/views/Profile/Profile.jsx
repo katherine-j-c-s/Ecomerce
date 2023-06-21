@@ -44,6 +44,7 @@ export default function Profile() {
   const [review, setReview] = useState([]);
   const [images, setImages] = useState([]);
   const [send, setSend] = useState([]);
+  const [commentCreated, setCommentCreated] = useState(false)
 
   const [form, setForm] = useState({
     mail: userLocal.email || user.email,
@@ -69,6 +70,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (Object.keys(productDetail).length > 0) {
+      console.log(productDetail)
       let newlist = { id: productDetail.id, value: productDetail.image[0] };
       let repetido = images.find((i) => i.id === productDetail.id);
       if (!repetido) {
