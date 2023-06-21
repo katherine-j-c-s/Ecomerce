@@ -27,7 +27,6 @@ import {
   CLEAR_PRODUCT_TO_EDIT,
   ENHANCE_PRODUCT,
   ALL_ENHANCE_PRODUCTS,
-  
 } from "./types";
 
 const initialState = {
@@ -130,6 +129,7 @@ const rootReducer = (state = initialState, action) => {
           email: action.payload.mail,
           password: action.payload.password,
           address: action.payload.address,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -142,6 +142,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          role: action.payload.role,
           access: true,
         },
       };
@@ -157,6 +158,7 @@ const rootReducer = (state = initialState, action) => {
           email: action.payload.mail,
           password: action.payload.password,
           address: action.payload.address,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -170,6 +172,7 @@ const rootReducer = (state = initialState, action) => {
           email: action.payload.mail,
           password: action.payload.password,
           address: action.payload.address,
+          role: action.payload.role,
           access: true,
         },
       };
@@ -185,6 +188,7 @@ const rootReducer = (state = initialState, action) => {
           email: action.payload.mail,
           password: action.payload.password,
           address: action.payload.address,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -197,6 +201,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          role: action.payload.role,
           access: true,
         },
       };
@@ -211,6 +216,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: "",
           email: "",
           password: "",
+          role: "",
           access: false,
         })
       );
@@ -223,6 +229,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: "",
           email: "",
           password: "",
+          role: "",
         },
       };
 
@@ -361,9 +368,9 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         commentsUser: [...state.commentsUser, action.payload],
       };
-    
+
     case ALL_ENHANCE_PRODUCTS:
-      return {  ...state, enhanceProducts: action.payload }
+      return { ...state, enhanceProducts: action.payload };
     default:
       return state;
   }
