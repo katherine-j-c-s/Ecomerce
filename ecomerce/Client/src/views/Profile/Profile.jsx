@@ -736,8 +736,7 @@ export default function Profile() {
                               </button>
                             </form> 
                           : <div>
-                            {comentarioRepetido.rating}
-                            {comentarioRepetido.content}
+                            {console.log(comentarioRepetido)}
                           </div>}
                         </div>
                       );
