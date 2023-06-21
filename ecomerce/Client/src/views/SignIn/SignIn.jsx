@@ -154,7 +154,7 @@ export default function SignIn() {
             </p>
 
             <button
-              className="px-32 bg-cyan-400 py-3 my-6 text-slate-300 text-black-500"
+              className="px-32 bg-cyan-400 py-3 my-6 text-black-500"
               type="submit"
             >
               Iniciar
