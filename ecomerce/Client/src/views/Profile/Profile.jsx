@@ -280,6 +280,11 @@ export default function Profile() {
     console.log(commentsUser);
   };
 
+  const handleAdmin = (event) => {
+    event.preventDefault()
+    navigate("/admin")
+  }
+
   return (
     <main className={!darkModeClient ? '' : 'dark'}>
         <div className="dark:bg-slate-950 dark:text-slate-300 bg-slate-300 text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen">
@@ -319,7 +324,7 @@ export default function Profile() {
                 value="Admin"
                 className="dark:hover:text-slate-900 md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
               >
-                <button value="admin">Panel de Administrador</button>
+                <button value="admin" onClick={handleAdmin}>Panel de Administrador</button>
               </div>
             </div>
           </div>
