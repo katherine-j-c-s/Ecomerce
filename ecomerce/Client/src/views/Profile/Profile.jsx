@@ -280,6 +280,8 @@ export default function Profile() {
     navigate("/admin?pestaña=dashboard")
   }
 
+  console.log(user.role)
+
   return (
     <main className={!darkModeClient ? '' : 'dark'}>
         <div className="dark:bg-slate-950 dark:text-slate-300 bg-slate-300 text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen">
