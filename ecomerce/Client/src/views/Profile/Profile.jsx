@@ -736,7 +736,6 @@ export default function Profile() {
                               </button>
                             </form> 
                           : <div>
-                            {console.log(comentarioRepetido)}
                           </div>}
                         </div>
                       );
