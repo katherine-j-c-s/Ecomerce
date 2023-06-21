@@ -141,6 +141,7 @@ export default function SignIn() {
             <input
               className="placeholder-slate-400 py-2 focus:outline-none focus:border-cyan-500 md:m-2 border border-white bg-transparent rounded-md p-1 pl-10"
               name="password"
+              type="password"
               value={inputs.password}
               onChange={handleChange}
               placeholder="********"

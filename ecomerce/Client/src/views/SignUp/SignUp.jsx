@@ -225,6 +225,7 @@ export default function SignUp() {
                 value={inputs.password}
                 onChange={handleChange}
                 placeholder="********"
+                type="password"
               ></input>
             </div>
 
