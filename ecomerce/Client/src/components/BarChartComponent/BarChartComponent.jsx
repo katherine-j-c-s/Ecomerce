@@ -4,31 +4,31 @@ import { BarChart,XAxis, YAxis, Tooltip, Legend, Bar , CartesianGrid, Responsive
 const data = [
     {
       "name": "L",
-      "pv": 1000
+      "pv": 0
     },
     {
       "name": "M",
-      "pv": 2000,
+      "pv": 0,
     },
     {
       "name": "W",
-      "pv": 3000,
+      "pv": 0,
     },
     {
       "name": "J",
-      "pv": 4000,
+      "pv": 0,
     },
     {
       "name": "V",
-      "pv": 5000,
+      "pv": 0,
     },
     {
       "name": "S",
-      "pv": 6000,
+      "pv": 0,
     },
     {
       "name": "D",
-      "pv": 7000,
+      "pv": 0,
     }
   ]
 export default function BarChartComponent() {
