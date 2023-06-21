@@ -61,7 +61,7 @@ export default function SidebarAdmin() {
             <Link to={'/admin?pestaña=envios'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen4} alt="vector" />
               <p className=' font-thin hover:text-cyan-400'>Envíos</p>
-  </Link>*/}
+            </Link>*/}
             <Link to={'/admin?pestaña=productos'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen5} alt="vector" />
               <p className=' font-thin hover:text-cyan-400'>Productos</p>
