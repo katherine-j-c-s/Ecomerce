@@ -310,23 +310,23 @@ export default function Profile() {
                   Mi Cuenta
                 </button>
               </div>
-              <div
+              {uniqueProductNames.size > 0
+                  && <div
                 id="compras"
                 value="compras"
                 className="dark:hover:text-slate-900 md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
               >
-               {uniqueProductNames.size > 0
-                  && <button onClick={handleView} value="compras">
+                <button onClick={handleView} value="compras">
                   Compras
-                </button>}
-              </div>
-              <div
+                </button>
+              </div>}
+             {user.role === "admin" && <div
                 id="Admin"
                 value="Admin"
                 className="dark:hover:text-slate-900 md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
               >
-                <button value="admin" onClick={handleAdmin}>Panel de Administrador</button>
-              </div>
+                 <button value="admin" onClick={handleAdmin}>Panel de Administrador</button>
+              </div>}
             </div>
           </div>
         </section>
