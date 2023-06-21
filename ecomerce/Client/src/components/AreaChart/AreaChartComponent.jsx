@@ -2,18 +2,18 @@ import React from 'react'
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer, Legend  } from 'recharts';
 
 const data = [
-    { month: 'Ene', TotalRevenue: 10, TotalSales: 30 },
-    { month: 'Feb', TotalRevenue: 40, TotalSales: 60 },
-    { month: 'Mar', TotalRevenue: 10, TotalSales: 30 },
-    { month: 'Abr', TotalRevenue: 40, TotalSales: 60 },
-    { month: 'May', TotalRevenue: 10, TotalSales: 30 },
-    { month: 'Jun', TotalRevenue: 40, TotalSales: 60 },
-    { month: 'Jul', TotalRevenue: 10, TotalSales: 30 },
-    { month: 'Aug', TotalRevenue: 40, TotalSales: 60 },
-    { month: 'Sep', TotalRevenue: 10, TotalSales: 30 },
-    { month: 'Oct', TotalRevenue: 40, TotalSales: 60 },
-    { month: 'Nov', TotalRevenue: 10, TotalSales: 30 },
-    { month: 'Dec', TotalRevenue: 40, TotalSales: 60 }
+    { month: 'Ene', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Feb', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Mar', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Abr', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'May', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Jun', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Jul', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Aug', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Sep', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Oct', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Nov', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Dec', TotalRevenue: 0, TotalSales: 0 }
 ];
 
 export default function AreaChartComponents() {
