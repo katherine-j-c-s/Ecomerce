@@ -30,7 +30,6 @@ function App() {
     "/alls", 
     "/signIn", 
     "/signUp", 
-    "/product/:id", 
     "/admin", 
     "/profile", 
     "/cart",
@@ -41,11 +40,11 @@ function App() {
   const pathsWithoutFooter = ["/signIn", "/signUp", "/cart", "/admin", "/profile"];
   const displayNav = !pathsWithoutNav.includes(location.pathname) && !isUnknownRoute;
   const displayFooter = !pathsWithoutFooter.includes(location.pathname) && !isUnknownRoute;
-
+  const isProductRoute = location.pathname.startsWith("/product/");
   return (
     <>
       {enable ? <SideBarCar /> : null}
-      {displayNav && <Nav />}
+      {displayNav || isProductRoute ? <Nav /> : null}
       <Routes>
         <Route path="/" element={<ViewHome />} />
         <Route path="/alls" element={<Products />} />
@@ -64,7 +63,7 @@ function App() {
         <Route path="*" element={<NotFound/>} />
 
       </Routes>
-      {displayFooter && <Footer />}
+      {displayFooter || isProductRoute ? <Footer /> : null}
     </>
   );
 }

@@ -17,22 +17,22 @@ export default function Dashboard() {
     const lastMonth = currentMonth - 1
 
     const productsPercentage = () => {
-        let currentMonthProducts = products?.filter(product => (Number(product.createdAt.split('-')[1])) === currentMonth)
-        let lastMonthProducts = products?.filter(product => (Number(product.createdAt.split('-')[1])) === lastMonth)
+        let currentMonthProducts = products?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
+        let lastMonthProducts = products?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
 
         return (currentMonthProducts.length / lastMonthProducts.length) * 100
     }
 
     const usersPercentage = () => {
-        let currentMonthUsers = users?.filter(product => (Number(product.createdAt.split('-')[1])) === currentMonth)
-        let lastMonthUsers = users?.filter(product => (Number(product.createdAt.split('-')[1])) === lastMonth)
+        let currentMonthUsers = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
+        let lastMonthUsers = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
 
         return (currentMonthUsers.length / lastMonthUsers.length) * 100
     }
 
     const visitsPercentage = () => {
-        let currentMonthVisits = users?.filter(product => (Number(product.createdAt.split('-')[1])) === currentMonth)
-        let lastMonthVisits = users?.filter(product => (Number(product.createdAt.split('-')[1])) === lastMonth)
+        let currentMonthVisits = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
+        let lastMonthVisits = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
 
         return (currentMonthVisits.length / lastMonthVisits.length) * 100
     }
@@ -41,14 +41,14 @@ export default function Dashboard() {
         let currentMothIncomes = 0
         users?.map(user => {
             for(let order in user.UserOrders) {
-                if(Number(order.createdAt.split('-')[1]) === currentMonth) currentMothIncomes = Number(currentMothIncomes) + order.total
+                if(Number(order.createdAt?.split('-')[1]) === currentMonth) currentMothIncomes = Number(currentMothIncomes) + order.total
             }
         })
 
         let lastMothIncomes = 0
         users?.map(user => {
             for(let order in user.UserOrders) {
-                if(Number(order.createdAt.split('-')[1]) === lastMonth) lastMothIncomes = Number(lastMothIncomes) + order.total
+                if(Number(order.createdAt?.split('-')[1]) === lastMonth) lastMothIncomes = Number(lastMothIncomes) + order.total
             }
         })
 
