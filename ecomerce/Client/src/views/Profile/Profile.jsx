@@ -264,7 +264,7 @@ export default function Profile() {
         id: element.id,
         content: element.value,
         rate: rate,
-        id_usuario: user.id,
+        id_usuario: userLocal.id,
       });
     });
 
