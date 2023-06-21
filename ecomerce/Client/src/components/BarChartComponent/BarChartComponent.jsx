@@ -4,11 +4,11 @@ import { BarChart,XAxis, YAxis, Tooltip, Legend, Bar , CartesianGrid, Responsive
 const data = [
     {
       "name": "L",
-      "pv": 0
+      "pv": 1000
     },
     {
       "name": "M",
-      "pv": 0,
+      "pv": 200,
     },
     {
       "name": "W",
@@ -49,10 +49,10 @@ export default function BarChartComponent() {
                             <stop offset="95%" stopColor="#6384E7" stopOpacity={0}/>
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3" vertical= {false}  fill="#fff" />
-                    <XAxis dataKey="name" tick={{fontSize: 12, fill: 'rgba(0, 0, 0, 0.4)'}} />
+                    <CartesianGrid strokeDasharray="3" vertical= {false} className='bg-white' />
+                    <XAxis dataKey="name" tick={{fontSize: 12}} className='text-black' />
                     <Tooltip/>
-                    <YAxis tick={{fontSize: 12, fill: 'rgba(0, 0, 0, 0.4)'}} />
+                    <YAxis tick={{fontSize: 12}} className='text-black' />
                     <Bar dataKey="pv" fill="#31B5FF" />
                 </BarChart>
             </ResponsiveContainer>
