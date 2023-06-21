@@ -2,13 +2,18 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addDarkModeAdmin } from '../../redux/actions'
-import darkmodeStyle from '../SidebarAdmin/StyleDarkBotton.css'
 
 import imagen1 from '../../assets/Vector.png'
 import imagen2 from '../../assets/Vector1.png'
 import imagen3 from '../../assets/Vector2.png'
 import imagen4 from '../../assets/Vector3.png'
 import imagen5 from '../../assets/Vector4.png'
+
+import lunaRellena from '../../assets/moon.png'
+import luna from '../../assets/moon1.png'
+import sol from '../../assets/sun.png'
+import solRelleno from '../../assets/sun1.png'
+
 import imagenOut from '../../assets/VectorOut.png'
 import imageNotf from '../../assets/VectorNotif.png'
 
@@ -39,7 +44,7 @@ export default function SidebarAdmin() {
       </div>
       <aside className={`${showSB === true ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:flex transition-all flex-col align-middle justify-between w-60 h-screen bg-slate-200 dark:bg-slate-950 shadow-slate-500 shadow-lg dark:shadow-black`} >
         <div className='text-left relative h-4/5 flex flex-col justify-center'>
-          <p onClick={darkMode} className='dark:text-sky-200 text-sky-400 font-bold absolute top-28 left-6'>Control Pannel</p>
+          <p className='dark:text-sky-200 text-sky-400 font-bold absolute top-28 left-6'>Control Pannel</p>
           <div className='flex flex-col'>
             <Link to={'/admin?pestaña=dashboard'} className="w-36 p-2 rounded-md flex my-2 transition-all hover:bg-teal-100 hover:text-slate-950 dark:font-mono font-thin relative align-center justify-start ml-12 text-slate-500">
               <img className='mr-4 w-5 h-4 relative top-1 object-contain' src={imagen1} alt="vector" />
@@ -63,12 +68,21 @@ export default function SidebarAdmin() {
             </Link>
           </div>
         </div>
-        <div className='w-full flex justify-center'>
-          <p className="text-gray-600 font-mono">Dark</p>
-          <div className=''></div>
-          <p className="text-gray-600 font-mono">Light</p>
-        </div>
+        
         <div className='h-1/5 flex relative justify-center'>
+          <div className='w-full absolute top-10 flex justify-center'>
+            <div className={`${darkModeAdmin === true ? 'bg-sky-700' : 'bg-slate-400'} flex relative p-2 w-20 justify-between rounded-full`}>
+              <div onClick={darkMode} className='relative cursor-pointer z-10 h-6 w-6 rounded-full p-1'>
+                <img className={`h-4 w-4 absolute top-1`} src={luna} alt="vector" />
+                <img className={`${darkModeAdmin === true ? 'block' : 'hidden'} h-4 w-4 absolute top-1`} src={lunaRellena} alt="vector" />
+              </div>
+              <div className={`${darkModeAdmin === true ? 'bg-sky-200 translate-x-0' : 'bg-gray-100 translate-x-10'} z-0 transition-all h-6 w-6 absolute rounded-full p-1`}></div>
+              <div onClick={darkMode} className='relative cursor-pointer z-10 h-6 w-6 rounded-full p-1'>
+                <img className={`h-4 w-4 absolute top-1`} src={sol} alt="vector" />
+                {darkModeAdmin === false ? <img className='h-4 w-4 absolute top-1' src={solRelleno} alt="vector" /> :null}
+              </div>
+            </div>
+          </div>
           <Link className='absolute w-fit bottom-0 mb-7 flex' to={'/'}>
             <img className='w-5 h-4 top-1 relative mr-3' src={imagenOut} alt="logout"/>
             <p className='font-thin dark:font-mono text-slate-500'>Log out</p>
