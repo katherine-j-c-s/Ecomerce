@@ -29,9 +29,6 @@ const Home = () => {
             Descubre nuevos estilos
           </p>
         </article>
-        <Link to="/alls" className="text-white hover:text-black">
-          <button className=" cursor-pointer border md:px-20 px-10 rounded-sm border-bluey">Comprar ya!</button>
-        </Link>
       </div>
       <div className="h-[60vh] w-auto"></div>
       <div className="h-fit w-full mt-6 -mb-20  flex justify-start">
