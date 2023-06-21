@@ -2,10 +2,10 @@ import React from 'react'
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer, Legend  } from 'recharts';
 
 const data = [
-    { month: 'Ene', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Ene', TotalRevenue: 50, TotalSales: 30 },
     { month: 'Feb', TotalRevenue: 0, TotalSales: 0 },
     { month: 'Mar', TotalRevenue: 0, TotalSales: 0 },
-    { month: 'Abr', TotalRevenue: 0, TotalSales: 0 },
+    { month: 'Abr', TotalRevenue: 80, TotalSales: 10 },
     { month: 'May', TotalRevenue: 0, TotalSales: 0 },
     { month: 'Jun', TotalRevenue: 0, TotalSales: 0 },
     { month: 'Jul', TotalRevenue: 0, TotalSales: 0 },
@@ -44,9 +44,9 @@ export default function AreaChartComponents() {
                         <stop offset="95%" stopColor="#83CBEE" stopOpacity={0}/>
                     </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="2" vertical= {false}  fill="#fff"/>
-                <XAxis dataKey="month" tick={{fontSize: 12, fill: 'rgba(0, 0, 0, 0.4)'}} />
-                <YAxis type="number" domain={[0, 100]} tick={{fontSize: 12, fill: 'rgba(0, 0, 0, 0.4)'}} />
+                <CartesianGrid strokeDasharray="2" vertical= {false} className='bg-white'/>
+                <XAxis dataKey="month"  tick={{fontSize: 12}} className='text-black' />
+                <YAxis type="number" domain={[0, 100]} tick={{fontSize: 12}} className='text-black' />
                 <Tooltip />
                 <Area type="linear" dataKey="TotalRevenue" stackId="1" stroke="#6384E7"  dot={{ stroke: '#6384E7', strokeWidth: 3 }} fill="url(#colorTotalRevenue)" />
                 <Area type="linear" dataKey="TotalSales" stackId="2" stroke="#83CBEE" dot={{  stroke: '#83CBEE', strokeWidth: 3 }} fill="url(#colorTotalSales)" />

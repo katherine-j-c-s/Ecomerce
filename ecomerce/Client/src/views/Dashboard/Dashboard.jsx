@@ -20,13 +20,20 @@ export default function Dashboard() {
         let currentMonthProducts = products?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
         let lastMonthProducts = products?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
 
+        if (lastMonthProducts.length === 0) {
+            return 0;
+        }
+    
         return (currentMonthProducts.length / lastMonthProducts.length) * 100
     }
 
     const usersPercentage = () => {
         let currentMonthUsers = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
         let lastMonthUsers = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
-
+        if (lastMonthUsers.length === 0) {
+            return 0;
+        }
+    
         return (currentMonthUsers.length / lastMonthUsers.length) * 100
     }
 
@@ -34,6 +41,10 @@ export default function Dashboard() {
         let currentMonthVisits = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
         let lastMonthVisits = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
 
+        if (lastMonthVisits.length === 0) {
+            return 0;
+        }
+    
         return (currentMonthVisits.length / lastMonthVisits.length) * 100
     }
 
@@ -51,7 +62,10 @@ export default function Dashboard() {
                 if(Number(order.createdAt?.split('-')[1]) === lastMonth) lastMothIncomes = Number(lastMothIncomes) + order.total
             }
         })
-
+        if (lastMothIncomes === 0) {
+            return 0;
+        }
+    
         return (currentMothIncomes / lastMothIncomes) * 100
     }
 
