@@ -118,6 +118,45 @@ export default function Dashboard() {
         })
     }, [])
 
+     // Obtener datos de ganancias totales en un mes
+    const getMonthlyIncomes = (month) => {
+        let totalIncomes = 0;
+        users.forEach((user) => {
+        user.UserOrders.forEach((order) => {
+            const orderMonth = Number(order.createdAt.split('-')[1]);
+            if (orderMonth === month) {
+            totalIncomes += Number(order.total);
+            }
+        });
+        });
+        return totalIncomes;
+    };
+    //Obtener datos de ventas todales
+    const getMonthlySales = (month) => {
+        let totalSales = 0;
+        users.forEach((user) => {
+          user.UserOrders.forEach((order) => {
+            const orderMonth = Number(order.createdAt.split('-')[1]);
+            if (orderMonth === month) {
+              totalSales += 1;
+            }
+          });
+        });
+        return totalSales;
+      };
+    const monthNames = [
+        'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+        'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+    ];
+    // Crear el array de datos para el componente AreaChartComponents
+    const data = Array.from({ length: 12 }, (_, index) => {
+        const month = index + 1;
+        const totalRevenue = getMonthlyIncomes(month);
+        const totalSales = getMonthlySales(month)
+        return { month: monthNames[index], TotalRevenue: totalRevenue, TotalSales: totalSales };
+    });
+
+
     return (
         <div className='w-full h-auto md:mt-40 mt-20'>
             <div className='flex md:flex-row flex-col w-full justify-between align-center px-14'>
@@ -127,7 +166,7 @@ export default function Dashboard() {
             </div>
             <div className='flex md:flex-row flex-col w-full px-14 mt-8'>
                 <div className='flex flex-col md:w-3/4  w-full  md:h-auto h-auto bg-white dark:bg-transparent dark:border dark:border-dashed dark:rounded-xl md:mr-8  pt-14'>
-                    <AreaChartComponents/>
+                    <AreaChartComponents data={data}/>
                 </div>
                 <div className='flex flex-col  md:w-1/4 w-full h-96 bg-white justify-center items-center md:mt-0 mt-12 dark:bg-transparent dark:border dark:border-dashed dark:rounded-xl'>
                     <BarChartComponent/>
