@@ -244,6 +244,7 @@ const rootReducer = (state = initialState, action) => {
           email: action.payload.mail,
           password: action.payload.password,
           address: action.payload.address,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -256,6 +257,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          role: action.payload.role,
           address: action.payload.address,
           orders: action.payload.UserOrders,
           comments: action.payload.comments,
