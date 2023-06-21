@@ -318,8 +318,7 @@ export default function Profile() {
                {uniqueProductNames.size > 0
                   ? <button onClick={handleView} value="compras">
                   Compras
-                </button> : <button disabled={true} className="bg-slate-400">
-                  Compras
+                </button> : <button disabled={true}>
                 </button>}
               </div>
               <div
