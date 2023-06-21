@@ -267,13 +267,14 @@ export default function Profile() {
         id_usuario: user.id,
       });
     });
+    console.log("----->"+ resultado)
 
     let envio = resultado.find(
       (producto) => producto.id === parseInt(event.target.id)
     );
+    console.log("esto es lo que se envia" + envio)
     send.push(parseInt(event.target.id));
     dispatch(postComments(envio));
-    console.log(envio)
   };
 
   const handleAdmin = (event) => {
