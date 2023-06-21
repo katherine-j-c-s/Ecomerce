@@ -142,10 +142,10 @@ export default function SignUp() {
     <div className="flex justify-between text-white">
       <div className="bg-black w-full sm:w-2/5 h-screen lg:h-full">
         <Link to={"/"}>
-          <p className="text-white relative top-4 left-10 w-fit">Go Back</p>
+          <p className="text-white relative top-4 left-10 w-fit">Volver</p>
         </Link>
         <div className="mt-20">
-          <h2 className="mb-16 font-bold text-3xl">Sign Up</h2>
+          <h2 className="mb-16 font-bold text-3xl">Registrarse</h2>
 
           <div>
             <Toaster position="bottom-right" reverseOrder={false} />
@@ -165,7 +165,7 @@ export default function SignUp() {
                 loading="lazy"
                 alt="google logo"
               />
-              <span>Login with Google</span>
+              <span>Ingresar con Google</span>
             </button>
           </div>
 
@@ -265,7 +265,7 @@ export default function SignUp() {
             ></input> */}
 
             <button
-              className="px-32 bg-cyan-400 py-3 my-6 text-slate-300"
+              className="px-32 bg-cyan-400 py-3 my-6 text-slate-300 text-black-500"
               type="submit"
             >
               Iniciar
