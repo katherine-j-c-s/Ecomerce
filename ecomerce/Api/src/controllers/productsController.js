@@ -280,15 +280,22 @@ const addImage = async (id, images) => {
   return 'Imagen añadida correctamente'
 }
 
-const testController = async () => {
-  message = {
-    from: 'grupo_pf_supergenial@test.com',
-    to: 'sovod47310@ozatvn.com',
-    subject: 'Test001',
-    text: 'This is a test 001 from PF project'
-  }
-  let emailSended = await sendEmail(message)
-  return emailSended
+const standoutProduct = async (id) => {
+  let product = await Product.findOne({
+    where: { id }
+  })
+  product.featured = !product.featured
+  await product.save()
+
+  return product
+}
+
+const getStandouts = async() => {
+  let products = await Product.findAll({
+    where: {featured: true}
+  })
+
+  return products
 }
 
 module.exports = {
@@ -299,5 +306,6 @@ module.exports = {
   updateProduct,
   removeImage,
   addImage,
-  testController,
+  standoutProduct,
+  getStandouts,
 };
