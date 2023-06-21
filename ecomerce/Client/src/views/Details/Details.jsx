@@ -115,6 +115,7 @@ export default function Details() {
       setFixedImage(image);
     }
   }, [detail]);
+  console.log(detail)
   return (
     <article className={!darkModeClient ? '' : 'dark bg-slate-950 pt-10'}>
         <div className="h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 dark:mt-0 sm:mt-20">
@@ -214,12 +215,65 @@ export default function Details() {
             </button>
           </div>
         </div>
-        <div className="flex h-auto flex-col w-full my-10">
+        <div className="flex h-auto flex-col w-full mt-10">
           <h2 className="font-bold text-2xl text-black dark:text-slate-200 text-start my-6 ">
             Descripción
           </h2>
-          <span className="text-black dark:text-slate-200 mb-16 text-justify">{detail.description}</span>
+          <span className="text-black dark:text-slate-200 mb-0 text-justify">{detail.description}</span>
         </div>
+        <div className="flex h-auto flex-col w-full my-10">
+        <h2 className="font-bold text-2xl text-black dark:text-slate-200 text-start my-6">
+          Comentarios
+        </h2>
+        {detail?.comments?.length > 0 ? (
+          detail.comments.map((item) => (
+            <div className="w-full my-6 flex md:flex-row flex-col" key={item.id}>
+              <div className="w-12 h-12 bg-slate-400 rounded-full flex justify-center items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                  />
+                </svg>
+              </div>
+              <div className="w-full md:ml-10 ml-0">
+                <div className="flex justify-start items-center text-cyan-400 py-4">
+                  {[1, 2, 3, 4, 5].map((index) => (
+                    <svg
+                      key={index}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                        clipRule="evenodd"
+                        fill={index <= item.rate ? "currentColor" : "none"}
+                      />
+                    </svg>
+                  ))}
+                </div>
+                <div className="flex justify-start items-center w-full h-auto bg-slate-100 rounded">
+                  <span className="text-black text-start m-4">{item.content}</span>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-black text-start">No hay comentarios disponibles.</p>
+        )}
+      </div>
+
       </div>
     </article>
   );
