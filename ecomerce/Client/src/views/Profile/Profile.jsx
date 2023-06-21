@@ -25,7 +25,7 @@ export default function Profile() {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.userData);
-  const { productDetail, commentsUser } = useSelector((st) => st);
+  const { productDetail, commentsUser,darkModeClient } = useSelector((st) => st);
   const orders = user.orders;
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
@@ -281,7 +281,11 @@ export default function Profile() {
   };
 
   return (
-    <div className="text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen bg-slate-300">
+    <div className={`
+    ${darkModeClient === true 
+      ? 'bg-slate-950 text-slate-300' 
+      : 'bg-slate-300 text-slate-600'}
+       text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen `}>
       <h2 className="absolute md:top-8 top-56 text-lg w-full font-mono mx-auto md:w-fit">
         {"Hola" + " " + user.name + "!"}
       </h2>
@@ -298,7 +302,11 @@ export default function Profile() {
               id="perfil"
               value="perfil"
               onClick={handleView}
-              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+              className={`
+              ${darkModeClient === true 
+                ? 'hover:text-slate-900' 
+                : ''}
+              md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300`}
             >
               <button onClick={handleView} value="perfil">
                 Mi Cuenta
@@ -307,7 +315,11 @@ export default function Profile() {
             <div
               id="compras"
               value="compras"
-              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+              className={`
+              ${darkModeClient === true 
+                ? 'hover:text-slate-900' 
+                : ''}
+              md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300`}
             >
               <button onClick={handleView} value="compras">
                 Compras
@@ -316,7 +328,11 @@ export default function Profile() {
             <div
               id="Admin"
               value="Admin"
-              className="md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300"
+              className={`
+              ${darkModeClient === true 
+                ? 'hover:text-slate-900' 
+                : ''}
+              md:w-full w-fit hover:font-bold transition-all p-2 hover:bg-sky-300`}
             >
               <button value="admin">Panel de Administrador</button>
             </div>
@@ -326,7 +342,11 @@ export default function Profile() {
       <article className="md:w-fit w-full">
         {isPerfilView && (
           <section
-            className="bg-white md:w-fit w-10/12 m-auto mt-20 shadow-lg mb-20 rounded-lg md:px-10 py-8 md:py-16"
+            className={`
+              ${darkModeClient === true 
+                ? 'bg-transparent border border-dashed border-sky-300' 
+                : 'bg-white'}
+             md:w-fit w-10/12 m-auto mt-20 shadow-lg mb-20 rounded-lg md:px-10 py-8 md:py-16`}
             id="perfilVista"
             ref={perfilVistaRef}
           >
@@ -337,18 +357,13 @@ export default function Profile() {
                     <img
                       src={userLocal.imageLocal?.url || perfil}
                       alt="vector"
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                        objectFit: "cover",
-                        borderRadius: "50%",
-                      }}
+                      className="w-14 h-14 rounded-full"
                     />
                   </div>
                   <ul className="flex flex-row items-center gap-2">
                     <li className="relative z-10 p-2 bg-sky-500 rounded-full">
                       <button
-                        className="p-1.5 rounded-full"
+                        className="p-1 rounded-full"
                         onClick={handleEdit}
                       >
                         <img className=" h-3.5  w-3.5" src={edit} alt="" />
@@ -357,7 +372,11 @@ export default function Profile() {
                     <li>
                       <button
                         type="reset"
-                        className="p-1.5 border-bluey rounded-full"
+                        className={`
+                        ${darkModeClient === true 
+                          ? 'bg-sky-300' 
+                          : 'border-bluey'}
+                        p-2.5  rounded-full`}
                         onClick={handleDelete}
                       >
                         <svg
@@ -392,8 +411,11 @@ export default function Profile() {
                     } transition-all ${
                       enabled === false
                         ? " md:translate-y-6 translate-y-0 translate-x-0"
-                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
-                    }`}
+                        : " translate-x-0 translate-y-0 w-16 z-10 h-fit"
+                    } ${darkModeClient === true 
+                      ? 'bg-slate-950' 
+                      : 'bg-white'}
+                    `}
                   >
                     Nombre
                   </label>
@@ -431,8 +453,11 @@ export default function Profile() {
                     } transition-all ${
                       enabled === false
                         ? " md:translate-y-6 translate-y-0 translate-x-0"
-                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
-                    }`}
+                        : " translate-x-0 translate-y-0  w-16 z-10 h-fit"
+                    } ${darkModeClient === true 
+                      ? 'bg-slate-950' 
+                      : 'bg-white'}
+                    `}
                   >
                     Apellido
                   </label>
@@ -472,8 +497,11 @@ export default function Profile() {
                     } transition-all ${
                       enabled === false
                         ? "md:translate-y-6 translate-y-0 translate-x-0"
-                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
-                    }`}
+                        : " translate-x-0 translate-y-0 w-16 z-10 h-fit"
+                    } ${darkModeClient === true 
+                      ? 'bg-slate-950' 
+                      : 'bg-white'}
+                    `}
                   >
                     Email
                   </label>
@@ -511,8 +539,11 @@ export default function Profile() {
                     } transition-all ${
                       enabled === false
                         ? "md:translate-y-6 translate-y-0 translate-x-0"
-                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
-                    }`}
+                        : " translate-x-0 translate-y-0 w-16 z-10 h-fit"
+                    } ${darkModeClient === true 
+                      ? 'bg-slate-950' 
+                      : 'bg-white'}
+                    `}
                   >
                     Direccion
                   </label>
@@ -550,8 +581,11 @@ export default function Profile() {
                     } transition-all ${
                       enabled === false
                         ? "md:translate-y-6 translate-y-0 translate-x-0"
-                        : " translate-x-0 translate-y-0 bg-white w-16 z-10 h-fit"
-                    }`}
+                        : " translate-x-0 translate-y-0 w-16 z-10 h-fit"
+                    } ${darkModeClient === true 
+                      ? 'bg-slate-950' 
+                      : 'bg-white'}
+                    `}
                   >
                     Contraseña
                   </label>
@@ -588,7 +622,10 @@ export default function Profile() {
                       errors.image && enabled === true
                         ? "bottom-14 md:bottom-16 text-red-500"
                         : "bottom-10 text-cyan-400 bg-white w-16 z-10 h-fit"
-                    } transition-all `}
+                    } transition-all  ${darkModeClient === true 
+                      ? 'bg-slate-950' 
+                      : 'bg-white'}
+                    `}
                   >
                     Image
                   </label>
@@ -622,9 +659,11 @@ export default function Profile() {
 
               {enabled ? (
                 <button
-                  className={
-                    "bg-cyan-400 mt-5 hover:shadow-xl hover:font-bold transition-all"
-                  }
+                  className={ `${darkModeClient === true 
+                    ? 'text-slate-900' 
+                    : ''}
+                    bg-cyan-400 mt-5 hover:shadow-xl hover:font-bold transition-all
+                  `}
                   type="submit"
                 >
                   Confirmar cambios

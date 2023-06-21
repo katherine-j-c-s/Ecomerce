@@ -28,6 +28,7 @@ import {
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   ADD_DARKMODE_ADMIN,
+  ADD_DARKMODE_CLIENT,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
 } from "./types";
@@ -327,6 +328,9 @@ export const removeImgToProduct = (obj) => {
 
 export function addDarkModeAdmin(condicional) {
   return { type: ADD_DARKMODE_ADMIN, payload:condicional };
+}
+export function addDarkModeClient(condicional) {
+  return { type: ADD_DARKMODE_CLIENT, payload:condicional };
 }
 
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS

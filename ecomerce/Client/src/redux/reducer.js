@@ -22,6 +22,7 @@ import {
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   ADD_DARKMODE_ADMIN,
+  ADD_DARKMODE_CLIENT,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
 } from "./types";
@@ -52,6 +53,7 @@ const initialState = {
   categories: [],
   colors: [],
   darkModeAdmin: false,
+  darkModeClient: false,
   commentsUser: [],
 };
 
@@ -348,6 +350,8 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, [action.payload[0]]: action.payload[1] };
     case ADD_DARKMODE_ADMIN:
       return { ...state, darkModeAdmin: action.payload };
+    case ADD_DARKMODE_CLIENT:
+      return { ...state, darkModeClient: action.payload };
     case POST_COMMENTS:
       return {
         ...state,
