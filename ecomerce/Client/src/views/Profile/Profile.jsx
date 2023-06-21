@@ -677,7 +677,7 @@ export default function Profile() {
                               {productName}
                             </h2>
                           </div>
-                          {comentarioRepetido !== undefined && comentarioRepetido === Array.from(uniqueProductIds)[i] ?
+                          {comentarioRepetido !== undefined && comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
                             <form
                               className={`${
                                 showForm === true
