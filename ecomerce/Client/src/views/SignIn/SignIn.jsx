@@ -149,12 +149,8 @@ export default function SignIn() {
 
             <p className="text-rose-500">{errors.password}</p>
 
-            <p className="text-cyan-500 underline mt-3 font-thin text-sm">
-              Me olvide mi contraseña
-            </p>
-
             <button
-              className="px-32 bg-cyan-400 py-3 my-6 text-black-500"
+              className="px-32 bg-cyan-400 py-3 my-6 text-black"
               type="submit"
             >
               Iniciar
@@ -162,7 +158,7 @@ export default function SignIn() {
           </form>
           <Link to={"/signUp"}>
             <p className="text-cyan-500 underline mt-3 font-thin text-sm">
-              Sign Up
+              Registrarse
             </p>
           </Link>
         </div>
