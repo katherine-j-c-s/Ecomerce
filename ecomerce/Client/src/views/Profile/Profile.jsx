@@ -338,10 +338,11 @@ export default function Profile() {
                       src={userLocal.imageLocal?.url || perfil}
                       alt="vector"
                       style={{
-                        width: "100%",
-                        height: "auto",
+                        width: "64px",
+                        height: "64px",
                         objectFit: "cover",
                         borderRadius: "50%",
+                        objectPosition: "center",
                       }}
                     />
                   </div>
