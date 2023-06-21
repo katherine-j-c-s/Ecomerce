@@ -736,6 +736,7 @@ export default function Profile() {
                               </button>
                             </form> 
                           : <div>
+                            COMENTARIO HECHO
                           </div>}
                         </div>
                       );
