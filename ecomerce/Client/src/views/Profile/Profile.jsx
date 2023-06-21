@@ -662,10 +662,10 @@ export default function Profile() {
                       );
                       return (
                         <div
-                          className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white rounded-xl trnasition-all hover:shadow-xl py-10 px-14"
+                          className="md:mx-2 w-10/12 md:mb-0 mb-5 mx-auto bg-white dark:bg-transparent dark:border dark:border-sky-400 dark:border-dashed rounded-xl trnasition-all hover:shadow-xl py-10 px-14"
                           key={productName}
                         >
-                          <div className="bg-white relative z-20">
+                          <div className="bg-white dark:bg-slate-950 relative z-20">
                             <img
                               className="w-52 mx-auto rounded-full h-52"
                               src={image}
@@ -682,7 +682,7 @@ export default function Profile() {
                                   ? " translate-x-0 translate-y-0 relative"
                                   : "absolute -translate-y-44 z-0"
                               } 
-                      transition-all bg-white `}
+                      transition-all bg-white dark:bg-transparent`}
                             >
                               <div>
                                 <link
@@ -717,7 +717,7 @@ export default function Profile() {
                               </div>
                               <div className="">
                                 <textarea
-                                  className="py-2 px-4"
+                                  className="py-2 px-4 dark:bg-transparent dark:border-b dark:border-sky-400 "
                                   name="review"
                                   value={coment.value}
                                   placeholder="Escribe tu reseña aquí"
@@ -726,7 +726,7 @@ export default function Profile() {
                                 ></textarea>
                               </div>
                               <button
-                                className="bg-sky-400 hover:bg-sky-500 hover:shadow-lg"
+                                className="bg-sky-400 hover:bg-sky-500 dark:text-slate-900 hover:shadow-lg"
                                 onClick={handleSubmitComments}
                                 id={Array.from(uniqueProductIds)[i]}
                               >
