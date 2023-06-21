@@ -117,7 +117,8 @@ export default function Details() {
   return (
     <div className="h-auto flex flex-col px-4 sm:px-8 lg:px-[60px] mt-10 sm:mt-20">
       <div className="w-full h-auto flex flex-col sm:flex-row">
-        <div className="basis-[10%] mx-2 sm:mx-10 flex flex-col gap-y-4 sm:gap-y-6">
+        <div className="h-[15vh] w-auto"></div>
+        <div className="basis-[10%] flex flex-row mx-4 gap-y-4 sm:flex-col">
           {detail?.image &&
             detail.image
               .filter((image) => image !== fixedImage)
