@@ -679,11 +679,65 @@ export default function Profile() {
                           </div>
                           {comentarioRepetido !== undefined && comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
                             <h1>
-                            COMENTARIO HECHO
+                            COMENTARIO HECHOO
                           </h1>
-                          : <h1>
-                              COMENTARIO NO HECHO
-                            </h1>}
+                          : <form
+                              className={`${
+                                showForm === true
+                                  ? " translate-x-0 translate-y-0 relative"
+                                  : "absolute -translate-y-44 z-0"
+                              } 
+                      transition-all bg-white dark:bg-transparent`}
+                            >
+                              <div>
+                                <link
+                                  rel="stylesheet"
+                                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                                />
+                                {[1, 2, 3, 4, 5].map((value) => (
+                                  <span
+                                    key={value}
+                                    className={`fa fa-heart ${
+                                      value <=
+                                      rating[Array.from(uniqueProductIds)[i]]
+                                        ? "checked"
+                                        : ""
+                                    }`}
+                                    onClick={() =>
+                                      handleRating(
+                                        Array.from(uniqueProductIds)[i],
+                                        value
+                                      )
+                                    }
+                                    style={{
+                                      color:
+                                        value <=
+                                        rating[Array.from(uniqueProductIds)[i]]
+                                          ? "red"
+                                          : "",
+                                      marginRight: 5,
+                                    }}
+                                  ></span>
+                                ))}
+                              </div>
+                              <div className="">
+                                <textarea
+                                  className="py-2 px-4 dark:bg-transparent dark:border-b dark:border-sky-400 "
+                                  name="review"
+                                  value={coment.value}
+                                  placeholder="Escribe tu reseña aquí"
+                                  onChange={handleReviewChange}
+                                  id={Array.from(uniqueProductIds)[i]}
+                                ></textarea>
+                              </div>
+                              <button
+                                className="bg-sky-400 hover:bg-sky-500 dark:text-slate-900 hover:shadow-lg"
+                                onClick={handleSubmitComments}
+                                id={Array.from(uniqueProductIds)[i]}
+                              >
+                                Enviar Comentario
+                              </button>
+                            </form> }
                         </div>
                       );
                     })
