@@ -17,7 +17,6 @@ import Cart from "./views/Cart/Cart";
 
 function App() {
   const location = useLocation();
-
   const { enable } = useSelector((state) => state.sideBarCar);
 
   return (
@@ -27,21 +26,20 @@ function App() {
       location.pathname === "/signUp" ||
       location.pathname === "/cart" ||
       location.pathname === "/admin" ? null : (
-        <Nav />
+        <Nav/>
       )}
       <Routes>
         <Route path="/" element={<ViewHome />} />
-        <Route path="/women" element={<Products />} />
-        <Route path="/man" element={<Products />} />
-        <Route path="/kids" element={<Products />} />
         <Route path="/alls" element={<Products />} />
-        <Route path="/signIn" element={<SignIn />} />
-        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/about" element={<h1>about</h1>} />
         <Route path="/product/:id" element={<Details />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
-
+         
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/signUp" element={<SignUp />} />
+        
+        <Route path="/admin" element={<Admin />} />
       </Routes>
       {location.pathname === "/signIn" ||
       location.pathname === "/signUp" ||

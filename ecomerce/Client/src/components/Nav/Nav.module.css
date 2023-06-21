@@ -3,11 +3,10 @@ select {
 }
 
 .userProfile {
-    border-radius: 50%;
-    height: 52px;
-    object-fit: cover;
-    object-position: center;
-    width: 52px;
+    width: 40px;
+    max-width: 50px;
+    height: 40px;
+    border-radius: 100%;
 }
 
 .homeImg {
