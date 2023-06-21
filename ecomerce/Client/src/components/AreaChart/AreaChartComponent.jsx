@@ -1,7 +1,7 @@
 import React from 'react'
 import { AreaChart, XAxis, YAxis, CartesianGrid, Tooltip, Area, ResponsiveContainer, Legend  } from 'recharts';
 
-const data = [
+/*const data = [
     { month: 'Ene', TotalRevenue: 50, TotalSales: 30 },
     { month: 'Feb', TotalRevenue: 0, TotalSales: 0 },
     { month: 'Mar', TotalRevenue: 0, TotalSales: 0 },
@@ -14,9 +14,9 @@ const data = [
     { month: 'Oct', TotalRevenue: 0, TotalSales: 0 },
     { month: 'Nov', TotalRevenue: 0, TotalSales: 0 },
     { month: 'Dec', TotalRevenue: 0, TotalSales: 0 }
-];
+];*/
 
-export default function AreaChartComponents() {
+export default function AreaChartComponents({data}) {
   return (
     <div >
         <div className='flex md:flex-row flex-col w-full mx-10 mb-8'>
