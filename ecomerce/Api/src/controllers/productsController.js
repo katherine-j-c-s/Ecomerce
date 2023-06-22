@@ -1,8 +1,7 @@
 const { Product, Color, Category, Size } = require("../db");
 const { hard } = require("./mockedData/mockedProducts");
-const cloudinary = require("../cloudinary")
-const sendEmail = require("../nodemailer");
-const UserOrder = require("../models/UserOrder");
+const cloudinary = require("../cloudinary");
+const sendPurchaseMail = require("../mail/purchaseMail");
 require("dotenv").config();
 
 
