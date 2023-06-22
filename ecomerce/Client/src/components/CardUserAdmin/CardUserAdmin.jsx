@@ -6,6 +6,7 @@ import {
   deleteUser,
   getUserId,
   userUpDate,
+  adminUpDate,
 } from "../../redux/actions";
 import swal from "sweetalert";
 
@@ -48,14 +49,12 @@ export default function CardUserAdmin() {
 
   const handleEdit = (id) => {
     let usuario = allUsers.find((u) => u.id == id);
-    console.log(usuario);
+
     let result = {};
 
     if (usuario.status === "active") {
-      console.log(usuario.status);
       result = { status: "inactive" };
     } else {
-      console.log(usuario.status);
       result = { status: "active" };
     }
 
@@ -69,7 +68,7 @@ export default function CardUserAdmin() {
       dangerMode: true,
     }).then((confirm) => {
       if (confirm) {
-        dispatch(userUpDate(Number(id), result)).then(() =>
+        dispatch(adminUpDate(Number(id), result)).then(() =>
           window.location.reload()
         );
       }

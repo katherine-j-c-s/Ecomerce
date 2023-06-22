@@ -27,6 +27,7 @@ import {
   CLEAR_PRODUCT_TO_EDIT,
   ENHANCE_PRODUCT,
   ALL_ENHANCE_PRODUCTS,
+  ADMIN_UPDATE,
 } from "./types";
 
 const initialState = {
@@ -165,6 +166,22 @@ const rootReducer = (state = initialState, action) => {
           access: true,
         })
       );
+      return {
+        ...state,
+        userData: {
+          id: action.payload.id,
+          image: action.payload.image,
+          name: action.payload.first_name,
+          lastName: action.payload.last_name,
+          email: action.payload.mail,
+          status: action.payload.status,
+          password: action.payload.password,
+          address: action.payload.address,
+          role: action.payload.role,
+          access: true,
+        },
+      };
+    case ADMIN_UPDATE:
       return {
         ...state,
         userData: {

@@ -33,6 +33,7 @@ import {
   CLEAR_PRODUCT_TO_EDIT,
   ENHANCE_PRODUCT,
   ALL_ENHANCE_PRODUCTS,
+  ADMIN_UPDATE,
 } from "./types";
 
 import axios from "axios";
@@ -150,7 +151,7 @@ export function getUserId(id) {
 }
 export function getAllUsers() {
   return async function (dispatch) {
-    let { data } = await axios('users');
+    let { data } = await axios("users");
     return dispatch({ type: GET_ALL_USERS, payload: data });
   };
 }
@@ -180,6 +181,22 @@ export const userUpDate = (id, update) => {
       );
       return dispatch({
         type: USER_UPDATE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const adminUpDate = (id, update) => {
+  return async function (dispatch) {
+    try {
+      const { data } = await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
+        update
+      );
+      return dispatch({
+        type: ADMIN_UPDATE,
         payload: data,
       });
     } catch (error) {
@@ -326,10 +343,10 @@ export const removeImgToProduct = (obj) => {
 ////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////////DARKMODE////
 
 export function addDarkModeAdmin(condicional) {
-  return { type: ADD_DARKMODE_ADMIN, payload:condicional };
+  return { type: ADD_DARKMODE_ADMIN, payload: condicional };
 }
 export function addDarkModeClient(condicional) {
-  return { type: ADD_DARKMODE_CLIENT, payload:condicional };
+  return { type: ADD_DARKMODE_CLIENT, payload: condicional };
 }
 
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
@@ -356,35 +373,37 @@ export const postComments = (envio) => {
 export const getAppVisits = () => {
   return async function (dispatch) {
     try {
-      let { data } = await axios.get(`visits`)
-      return dispatch({ type: GET_ALL_VISITS, payload: data })
-      
+      let { data } = await axios.get(`visits`);
+      return dispatch({ type: GET_ALL_VISITS, payload: data });
     } catch (error) {
       console.log("get app visits error ===>", error);
     }
   };
 };
 
-
 ///DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD///
 
 export const enhanceProduct = (id) => {
-  return async function() {
+  return async function () {
     try {
-      await axios.patch(`https://ecomerce-production-8f61.up.railway.app/products/standout_product/${id}`)
+      await axios.patch(
+        `https://ecomerce-production-8f61.up.railway.app/products/standout_product/${id}`
+      );
     } catch (error) {
-      console.log("no se puede destacar el producto", error)
+      console.log("no se puede destacar el producto", error);
     }
-  }
-} 
+  };
+};
 
-export const allEnhanceProducts = () =>{
-  return async function(dispatch){
+export const allEnhanceProducts = () => {
+  return async function (dispatch) {
     try {
-      let {data} = await axios.get(`https://ecomerce-production-8f61.up.railway.app/products/get_standouts`)
-      return dispatch({type: ALL_ENHANCE_PRODUCTS, payload: data})
+      let { data } = await axios.get(
+        `https://ecomerce-production-8f61.up.railway.app/products/get_standouts`
+      );
+      return dispatch({ type: ALL_ENHANCE_PRODUCTS, payload: data });
     } catch (error) {
-      console.log("no se pueden traer los productos destacados", error) 
+      console.log("no se pueden traer los productos destacados", error);
     }
-  }
-}
+  };
+};
