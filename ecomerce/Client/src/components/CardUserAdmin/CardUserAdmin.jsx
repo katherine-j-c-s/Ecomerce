@@ -59,8 +59,7 @@ export default function CardUserAdmin() {
                 dangerMode: true,
             }).then((confirm) => {
                 if (confirm) {
-                    dispatch(userUpDate(Number(id),result))
-                    dispatch(getAllUsers())
+                    dispatch(userUpDate(Number(id),result)).then(() => window.location.reload())
                 }
             });
         }
