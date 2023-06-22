@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { signIn } from "../../redux/actions";
 import toast, { Toaster } from "react-hot-toast";
+import swal from "sweetalert";
 
 const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 
@@ -58,14 +59,26 @@ export default function SignIn() {
 
     dispatch(signIn({ mail: inputs.email, password: inputs.password }))
       .then((user) => {
-        toast.success(`¡Bienvenidos ${user.payload.first_name}!`, {
-          duration: 2000,
-        });
+        if (user.payload.status === "inactive") {
+          swal({
+            title: "Cuenta inactiva",
+            text: "Por favor, crea una nueva cuenta.",
+            icon: "error",
+          }).then((confirm) => {
+            if (confirm) {
+              navigate("/signUp");
+            }
+          });
+        } else {
+          toast.success(`¡Bienvenidos ${user.payload.first_name}!`, {
+            duration: 2000,
+          });
 
-        setTimeout(() => {
-          toast.remove();
-          navigate("/");
-        }, 3000);
+          setTimeout(() => {
+            toast.remove();
+            navigate("/");
+          }, 3000);
+        }
       })
       .catch((err) => {
         err.message === "Network Error"

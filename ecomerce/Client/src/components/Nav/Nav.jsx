@@ -54,7 +54,19 @@ export default function Nav() {
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get("userId");
     if (userId) {
-      dispatch(getUserId(userId));
+      dispatch(getUserId(userId)).then((user) => {
+        if (user.payload.status === "inactive") {
+          swal({
+            title: "Cuenta inactiva",
+            text: "Por favor, crea una nueva cuenta.",
+            icon: "error",
+          }).then((confirm) => {
+            if (confirm) {
+              navigate("/signUp");
+            }
+          });
+        }
+      });
     }
   }, []);
 

@@ -120,34 +120,49 @@ const rootReducer = (state = initialState, action) => {
       };
     }
     case SIGN_IN:
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          id: action.payload.id,
-          imageLocal: action.payload.image,
-          name: action.payload.first_name,
-          lastName: action.payload.last_name,
-          email: action.payload.mail,
-          status: action.payload.status,
-          password: action.payload.password,
-          address: action.payload.address,
-          role: action.payload.role,
-          access: true,
-        })
-      );
+      if (action.payload.status !== "inactive") {
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({
+            id: action.payload.id,
+            imageLocal: action.payload.image,
+            name: action.payload.first_name,
+            lastName: action.payload.last_name,
+            email: action.payload.mail,
+            status: action.payload.status,
+            password: action.payload.password,
+            address: action.payload.address,
+            role: action.payload.role,
+            access: true,
+          })
+        );
+      }
+
       return {
         ...state,
-        userData: {
-          id: action.payload.id,
-          image: action.payload.image,
-          name: action.payload.first_name,
-          lastName: action.payload.last_name,
-          email: action.payload.mail,
-          status: action.payload.status,
-          password: action.payload.password,
-          role: action.payload.role,
-          access: true,
-        },
+        userData:
+          action.payload.status !== "inactive"
+            ? {
+                id: action.payload.id,
+                image: action.payload.image,
+                name: action.payload.first_name,
+                lastName: action.payload.last_name,
+                email: action.payload.mail,
+                status: action.payload.status,
+                password: action.payload.password,
+                role: action.payload.role,
+                access: true,
+              }
+            : {
+                id: "",
+                image: "",
+                name: "",
+                lastName: "",
+                email: "",
+                password: "",
+                role: "",
+                status: "",
+              },
       };
 
     case USER_UPDATE:
@@ -240,6 +255,7 @@ const rootReducer = (state = initialState, action) => {
           email: "",
           password: "",
           role: "",
+          status: "",
           access: false,
         })
       );
@@ -253,40 +269,56 @@ const rootReducer = (state = initialState, action) => {
           email: "",
           password: "",
           role: "",
+          status: "",
         },
       };
 
     case USER_BY_ID:
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          id: action.payload.id,
-          imageLocal: action.payload.image,
-          name: action.payload.first_name,
-          lastName: action.payload.last_name,
-          email: action.payload.mail,
-          password: action.payload.password,
-          address: action.payload.address,
-          status: action.payload.status,
-          role: action.payload.role,
-          access: true,
-        })
-      );
+      if (action.payload.status !== "inactive") {
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({
+            id: action.payload.id,
+            imageLocal: action.payload.image,
+            name: action.payload.first_name,
+            lastName: action.payload.last_name,
+            email: action.payload.mail,
+            password: action.payload.password,
+            address: action.payload.address,
+            status: action.payload.status,
+            role: action.payload.role,
+            access: true,
+          })
+        );
+      }
+
       return {
         ...state,
-        userData: {
-          id: action.payload.id,
-          image: action.payload.image,
-          name: action.payload.first_name,
-          lastName: action.payload.last_name,
-          email: action.payload.mail,
-          password: action.payload.password,
-          role: action.payload.role,
-          address: action.payload.address,
-          orders: action.payload.UserOrders,
-          status: action.payload.status,
-          comments: action.payload.comments,
-        },
+        userData:
+          action.payload.status !== "inactive"
+            ? {
+                id: action.payload.id,
+                image: action.payload.image,
+                name: action.payload.first_name,
+                lastName: action.payload.last_name,
+                email: action.payload.mail,
+                password: action.payload.password,
+                role: action.payload.role,
+                address: action.payload.address,
+                orders: action.payload.UserOrders,
+                status: action.payload.status,
+                comments: action.payload.comments,
+              }
+            : {
+                id: "",
+                image: "",
+                name: "",
+                lastName: "",
+                email: "",
+                password: "",
+                role: "",
+                status: "",
+              },
       };
     case GET_ALL_USERS:
       return {
