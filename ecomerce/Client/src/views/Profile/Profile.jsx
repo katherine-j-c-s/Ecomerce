@@ -258,7 +258,7 @@ export default function Profile() {
     }
   };
 
-  const handleSubmitComments = async (event) => {
+  const handleSubmitComments = (event) => {
     event.preventDefault();
     let resultado = [];
 
@@ -276,8 +276,7 @@ export default function Profile() {
       (producto) => producto.id === parseInt(event.target.id)
     );
     send.push(parseInt(event.target.id));
-    await dispatch(postComments(envio));
-    window.location.reload();
+    dispatch(postComments(envio)).then(() => window.location.reload());
   };
 
   const handleAdmin = (event) => {
