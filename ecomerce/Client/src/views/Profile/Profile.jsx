@@ -25,7 +25,7 @@ export default function Profile() {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.userData);
-  const { productDetail, commentsUser,darkModeClient } = useSelector((st) => st);
+  const { productDetail, commentsUser ,darkModeClient } = useSelector((st) => st);
   const orders = user.orders;
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
@@ -281,6 +281,8 @@ export default function Profile() {
     event.preventDefault()
     navigate("/admin?pestaña=dashboard")
   }
+
+  console.log(commentsUser)
 
   return (
     <main className={!darkModeClient ? '' : 'dark'}>
