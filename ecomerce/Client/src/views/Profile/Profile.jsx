@@ -277,7 +277,7 @@ export default function Profile() {
     );
     send.push(parseInt(event.target.id));
     dispatch(postComments(envio));
-    navigate("/profile")
+    window.location.reload();
   };
 
   const handleAdmin = (event) => {
