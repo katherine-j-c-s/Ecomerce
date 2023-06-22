@@ -32,13 +32,7 @@ module.exports = (sequelize) => {
       },
       products: { type: DataTypes.ARRAY(DataTypes.JSONB) },
       status: {
-        type: DataTypes.ENUM([
-          "cart",
-          "created",
-          "in_process",
-          "fullfilled",
-          "rejected",
-        ]),
+        type: DataTypes.ENUM(["in_process", "completada", "rejected"]),
         defaultValue: "cart",
         allowNull: false,
       },
@@ -51,5 +45,6 @@ module.exports = (sequelize) => {
     },
     {
       timestamps: true,
-    })
+    }
+  );
 };

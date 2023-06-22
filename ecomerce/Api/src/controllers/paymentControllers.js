@@ -108,11 +108,11 @@ const success = async (dni) => {
   });
 
   if (orden) {
-    orden.status = "fullfilled"; // Corregido para tener una ortografía correcta
+    orden.status = "completada"; // Corregido para tener una ortografía correcta
     await orden.save();
   }
 
-  if (orden.status == "fullfilled") {
+  if (orden.status == "completada") {
     let userEmail = orden.email;
 
     await sendEmail({
