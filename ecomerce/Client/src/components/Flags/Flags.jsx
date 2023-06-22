@@ -24,8 +24,22 @@ export default function CountrySelect({onSelect, errors}) {
   const handleCountryChange = (option) => {
     setSelectedCountry(option);
     setIsOpen(false);
-    onSelect(option)
-  };
+
+    const { value, codigoPais, label, flag } = option;
+    let formattedOption = option;
+
+    // Check if the selected option already has a country code appended
+    if (!value.startsWith(codigoPais)) {
+        formattedOption = {
+            value: codigoPais + value,
+            codigoPais,
+            label,
+            flag,
+        };
+    }
+
+    onSelect(formattedOption);
+};
   useEffect(() => {
     const savedPayForm = localStorage.getItem('payForm');
     if (savedPayForm) {

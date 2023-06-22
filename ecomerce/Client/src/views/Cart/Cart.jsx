@@ -45,12 +45,24 @@ export default function Cart() {
     })
 
     const handleCountrySelect = (option) => {
-        setPayForm(prevState => ({
-          ...prevState,
-          locality: option.label,    
-          currency_id: option.value,  
-          phone: option.codigoPais + prevState.phone 
-        }));
+        setPayForm(prevState => {
+            let phone;
+            if (prevState.phone.startsWith(option.codigoPais)) {
+                // Si ya se ha añadido el código del país, mantenemos el número de teléfono tal como está.
+                phone = prevState.phone;
+            } else {
+                // De lo contrario, agregamos el código del país al principio del número de teléfono.
+                phone = option.codigoPais + prevState.phone;
+            }
+            const newPayForm = {
+                ...prevState,
+                locality: option.label,    
+                currency_id: option.value,  
+                phone: phone 
+            }
+            validate(newPayForm);
+            return newPayForm;
+        });
       }
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
