@@ -45,8 +45,8 @@ export default function Cart() {
     })
 
     const handleCountrySelect = (option) => {
-        setPayForm(prevState => {
-            console.log("🧑‍💻Reparando cositas")
+        setPayForm(prevState => { 
+            console.log("🧑‍💻Reparando cositas jsjs")
             let phone;
             if (prevState.phone.startsWith(option.codigoPais)) {
                 // Si ya se ha añadido el código del país, mantenemos el número de teléfono tal como está.
@@ -109,11 +109,6 @@ export default function Cart() {
         if (!form.locality) {
             newErrors.locality = "Seleccione un país";
         }
-        
-        if (!form.currency_id) {
-            newErrors.currency_id = "Seleccione un país";
-        }
-        
         setErrors(newErrors)
     })
 
