@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-// import Typewriter from "typewriter-effect";
-// "typewriter-effect": "^2.20.1"
-import katheImg from '../../assets/Kathe.png'
+
+import katheImg from '../../assets/kathe.png'
 import AmadeoImg from '../../assets/amadeo.png'
 import PabloImg from '../../assets/Pablo.png'
 import AgusImg from '../../assets/agus.png'
