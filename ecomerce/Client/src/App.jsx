@@ -17,6 +17,7 @@ import Cart from "./views/Cart/Cart";
 import NotFound from "./views/NotFound/NotFound";
 import Success from "./views/Success/Success";
 import Unsuccess from "./views/Unsuccess/Unsuccess";
+import About from "./views/About/About";
 
 function App() {
   const location = useLocation();
@@ -46,7 +47,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ViewHome />} />
         <Route path="/alls" element={<Products />} />
-        <Route path="/about" element={<h1>about</h1>} />
+        <Route path="/about" element={<About/>} />
         <Route path="/product/:id" element={<Details />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
