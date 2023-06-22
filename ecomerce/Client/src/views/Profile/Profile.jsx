@@ -75,6 +75,7 @@ export default function Profile() {
       if (!repetido) {
         images.push(newlist);
         setCommentCreated(productDetail.comments)
+        console.log(productDetail.comments)
       }
     }
   }, [productDetail]);
@@ -281,8 +282,6 @@ export default function Profile() {
     event.preventDefault()
     navigate("/admin?pestaña=dashboard")
   }
-
-  console.log(commentsUser)
 
   return (
     <main className={!darkModeClient ? '' : 'dark'}>
