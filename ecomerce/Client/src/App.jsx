@@ -14,42 +14,54 @@ import Products from "./views/Products/Products";
 import Admin from "./views/Admin/Admin";
 import Profile from "./views/Profile/Profile";
 import Cart from "./views/Cart/Cart";
+import NotFound from "./views/NotFound/NotFound";
+import Success from "./views/Success/Success";
+import Unsuccess from "./views/Unsuccess/Unsuccess";
 
 function App() {
   const location = useLocation();
-
   const { enable } = useSelector((state) => state.sideBarCar);
 
+  const knownPaths = [
+    "/", 
+    "/about",
+    "/alls", 
+    "/signIn", 
+    "/signUp", 
+    "/admin", 
+    "/profile", 
+    "/cart",
+  ];
+  const isUnknownRoute = !knownPaths.includes(location.pathname);
+
+  const pathsWithoutNav = ["/signIn", "/signUp", "/cart", "/admin", ];
+  const pathsWithoutFooter = ["/signIn", "/signUp", "/cart", "/admin", "/profile"];
+  const displayNav = !pathsWithoutNav.includes(location.pathname) && !isUnknownRoute;
+  const displayFooter = !pathsWithoutFooter.includes(location.pathname) && !isUnknownRoute;
+  const isProductRoute = location.pathname.startsWith("/product/");
   return (
     <>
       {enable ? <SideBarCar /> : null}
-      {location.pathname === "/signIn" ||
-      location.pathname === "/signUp" ||
-      location.pathname === "/cart" ||
-      location.pathname === "/admin" ? null : (
-        <Nav />
-      )}
+      {displayNav || isProductRoute ? <Nav /> : null}
       <Routes>
         <Route path="/" element={<ViewHome />} />
-        <Route path="/women" element={<Products />} />
-        <Route path="/man" element={<Products />} />
-        <Route path="/kids" element={<Products />} />
         <Route path="/alls" element={<Products />} />
-        <Route path="/signIn" element={<SignIn />} />
-        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/about" element={<h1>about</h1>} />
         <Route path="/product/:id" element={<Details />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart/>} />
+         
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/signUp" element={<SignUp />} />
+        
+        <Route path="/admin" element={<Admin />} />
+        
+        <Route path="/success" element={<Success/>} />
+        <Route path="/unsuccess" element={<Unsuccess/>} />
+        <Route path="*" element={<NotFound/>} />
 
       </Routes>
-      {location.pathname === "/signIn" ||
-      location.pathname === "/signUp" ||
-      location.pathname === "/profile" ||
-      location.pathname === "/cart" ||
-      location.pathname === "/admin" ? null : (
-        <Footer />
-      )}
+      {displayFooter || isProductRoute ? <Footer /> : null}
     </>
   );
 }

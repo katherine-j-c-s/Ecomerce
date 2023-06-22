@@ -22,8 +22,11 @@ import {
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   ADD_DARKMODE_ADMIN,
+  ADD_DARKMODE_CLIENT,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  ENHANCE_PRODUCT,
+  ALL_ENHANCE_PRODUCTS,
 } from "./types";
 
 const initialState = {
@@ -52,7 +55,9 @@ const initialState = {
   categories: [],
   colors: [],
   darkModeAdmin: false,
+  darkModeClient: false,
   commentsUser: [],
+  enhanceProducts: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -122,7 +127,10 @@ const rootReducer = (state = initialState, action) => {
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
+          status: action.payload.status,
           password: action.payload.password,
+          address: action.payload.address,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -134,7 +142,9 @@ const rootReducer = (state = initialState, action) => {
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
+          status: action.payload.status,
           password: action.payload.password,
+          role: action.payload.role,
           access: true,
         },
       };
@@ -148,7 +158,10 @@ const rootReducer = (state = initialState, action) => {
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
+          status: action.payload.status,
           password: action.payload.password,
+          address: action.payload.address,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -160,7 +173,10 @@ const rootReducer = (state = initialState, action) => {
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
+          status: action.payload.status,
           password: action.payload.password,
+          address: action.payload.address,
+          role: action.payload.role,
           access: true,
         },
       };
@@ -174,7 +190,10 @@ const rootReducer = (state = initialState, action) => {
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
+          status: action.payload.status,
           password: action.payload.password,
+          address: action.payload.address,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -186,7 +205,9 @@ const rootReducer = (state = initialState, action) => {
           name: action.payload.first_name,
           lastName: action.payload.last_name,
           email: action.payload.mail,
+          status: action.payload.status,
           password: action.payload.password,
+          role: action.payload.role,
           access: true,
         },
       };
@@ -201,6 +222,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: "",
           email: "",
           password: "",
+          role: "",
           access: false,
         })
       );
@@ -213,6 +235,7 @@ const rootReducer = (state = initialState, action) => {
           lastName: "",
           email: "",
           password: "",
+          role: "",
         },
       };
 
@@ -226,6 +249,9 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          address: action.payload.address,
+          status: action.payload.status,
+          role: action.payload.role,
           access: true,
         })
       );
@@ -238,8 +264,10 @@ const rootReducer = (state = initialState, action) => {
           lastName: action.payload.last_name,
           email: action.payload.mail,
           password: action.payload.password,
+          role: action.payload.role,
           address: action.payload.address,
           orders: action.payload.UserOrders,
+          status: action.payload.status,
           comments: action.payload.comments,
         },
       };
@@ -343,11 +371,16 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, [action.payload[0]]: action.payload[1] };
     case ADD_DARKMODE_ADMIN:
       return { ...state, darkModeAdmin: action.payload };
+    case ADD_DARKMODE_CLIENT:
+      return { ...state, darkModeClient: action.payload };
     case POST_COMMENTS:
       return {
         ...state,
         commentsUser: [...state.commentsUser, action.payload],
       };
+
+    case ALL_ENHANCE_PRODUCTS:
+      return { ...state, enhanceProducts: action.payload };
     default:
       return state;
   }

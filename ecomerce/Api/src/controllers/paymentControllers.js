@@ -93,6 +93,8 @@ const failure = async (dni) => {
     })
   );
 
+  await orden.destroy();
+
   return dni;
 };
 

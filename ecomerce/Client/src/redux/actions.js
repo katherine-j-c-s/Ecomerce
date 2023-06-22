@@ -10,6 +10,7 @@ import {
   GET_FILTERS,
   SET_FILTERS,
   USER_UPDATE,
+  DELETE_USER,
   SHOW_SIDEBAR,
   DISABLE_CART,
   ADD_QUANTITY,
@@ -27,8 +28,11 @@ import {
   GET_ALL_PRODUCTS,
   GET_PRODUCT_BY_ID,
   ADD_DARKMODE_ADMIN,
+  ADD_DARKMODE_CLIENT,
   CLEAR_PRODUCT_DETAIL,
   CLEAR_PRODUCT_TO_EDIT,
+  ENHANCE_PRODUCT,
+  ALL_ENHANCE_PRODUCTS,
 } from "./types";
 
 import axios from "axios";
@@ -156,12 +160,23 @@ export function userAdmin(user) {
     payload: user,
   };
 }
-export const userUpDate = (id, userUpdate) => {
+
+export function deleteUser(id) {
+  return async function (dispatch) {
+    let { data } = await axios.delete(
+      `https://ecomerce-production-8f61.up.railway.app/users/${id}`
+    );
+
+    return dispatch({ type: DELETE_USER, payload: data });
+  };
+}
+export const userUpDate = (id, update) => {
+  console.log(update);
   return async function (dispatch) {
     try {
-      const data = await axios.patch(
+      const { data } = await axios.patch(
         `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
-        userUpdate
+        update
       );
       return dispatch({
         type: USER_UPDATE,
@@ -213,7 +228,6 @@ export const addProduct = (obj) => {
     };
     return prodct;
   });
-  console.log(products);
   return async function (dispatch) {
     try {
       const data = await axios.all(
@@ -266,8 +280,6 @@ export const editProduct = (obj) => {
     category: obj.category,
     size: obj.size,
   };
-  console.log(edit);
-  console.log(obj.id);
   return async function (dispatch) {
     try {
       const data = await axios.patch(
@@ -297,7 +309,6 @@ export const addImgToProduct = (obj) => {
   };
 };
 export const removeImgToProduct = (obj) => {
-  console.log(obj);
   return async function (dispatch) {
     try {
       const data = await axios.patch(
@@ -317,12 +328,13 @@ export const removeImgToProduct = (obj) => {
 export function addDarkModeAdmin(condicional) {
   return { type: ADD_DARKMODE_ADMIN, payload:condicional };
 }
-
+export function addDarkModeClient(condicional) {
+  return { type: ADD_DARKMODE_CLIENT, payload:condicional };
+}
 
 //// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS//// COMMENTS
 
 export const postComments = (envio) => {
-  console.log(envio);
   return async function (dispatch) {
     try {
       const data = await axios.post(
@@ -352,3 +364,27 @@ export const getAppVisits = () => {
     }
   };
 };
+
+
+///DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD//////DESTACAR PRODUCTOS///DASHBPOARD///
+
+export const enhanceProduct = (id) => {
+  return async function() {
+    try {
+      await axios.patch(`https://ecomerce-production-8f61.up.railway.app/products/standout_product/${id}`)
+    } catch (error) {
+      console.log("no se puede destacar el producto", error)
+    }
+  }
+} 
+
+export const allEnhanceProducts = () =>{
+  return async function(dispatch){
+    try {
+      let {data} = await axios.get(`https://ecomerce-production-8f61.up.railway.app/products/get_standouts`)
+      return dispatch({type: ALL_ENHANCE_PRODUCTS, payload: data})
+    } catch (error) {
+      console.log("no se pueden traer los productos destacados", error) 
+    }
+  }
+}

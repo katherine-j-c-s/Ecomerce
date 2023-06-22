@@ -5,16 +5,16 @@ import CardGenres from '../CardG/CardG'
 
 const genres = [
     {
-        title:'Women',
-        desc:'here are all the products related to the women',
+        title:'Mujeres',
+        desc:'tenemos productos para Mujeres',
         image: image1
     },{
-        title:'Men',
-        desc:'here are all the products related to the men',
+        title:'Hombres',
+        desc:'tenemos productos para Hombres',
         image: image2
     },{
-        title:'Kids',
-        desc:'here are all the products related to the kids',
+        title:'Niños',
+        desc:'tenemos productos para Niños',
         image: image3
     }
 ]
@@ -22,7 +22,7 @@ const genres = [
 const GenresHome = ()=>{
     return (
         <div className='w-full text-center mt-12 md:text-left'>
-            <h1 className='text-2xl font-bold text-black md:ms-20'>Categorías</h1>
+            <h1 className='text-2xl font-bold dark:text-slate-200 text-black md:ms-32'>Nuestros Productos son para:</h1>
             <div className='flex justify-evenly mt-20 text-center flex-col md:flex-row'>
                 {genres.map(g=>{
                     return(

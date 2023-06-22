@@ -1,7 +1,7 @@
-const { Comment } = require("../db");
+const { Comment, Product, User } = require("../db");
 
 const getComments = async () => {
-  let comments = await Comment.findAll();
+  const comments = await Comment.findAll();
   if (comments.length === 0) {
     throw new Error("No comments found.");
   }
@@ -9,25 +9,30 @@ const getComments = async () => {
 };
 
 const getCommentByID = async (id) => {
-  let comment = await Comment.findOne({
+  const comment = await Comment.findOne({
     where: { id },
   });
 
   return comment;
 };
 
-const createComment = async (rate, content) => {
-  let comment = await Comment.create({
+const createComment = async (id, rate, content, idUsuario) => {
+  const comment = await Comment.create({
     rate,
     content,
   });
-    console.log("commentController.js:24 rate, content,:", rate, content,)
+
+  const product = await Product.findByPk(id);
+  const user = await User.findByPk(idUsuario);
+
+  await comment.setUser(user);
+  await comment.setProduct(product);
 
   return comment;
 };
 
 const deleteComment = async (id) => {
-  let removedComment = await Comment.destroy({
+  const removedComment = await Comment.destroy({
     where: { id },
   });
 

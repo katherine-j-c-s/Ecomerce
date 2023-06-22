@@ -88,11 +88,11 @@ export default function SignIn() {
     <div className="flex justify-between text-white">
       <div className="bg-black w-full sm:w-2/5 h-screen">
         <Link to={"/"}>
-          <p className="text-white relative top-4 left-10 w-fit">Go Back</p>
+          <p className="text-white relative top-4 left-10 w-fit">Volver</p>
         </Link>
 
         <div className="mt-20">
-          <h2 className="mb-16 font-bold text-3xl">Sign In</h2>
+          <h2 className="mb-16 font-bold text-3xl">Iniciar Sesión</h2>
 
           <div>
             <Toaster />
@@ -112,7 +112,7 @@ export default function SignIn() {
                 loading="lazy"
                 alt="google logo"
               />
-              <span>Login with Google</span>
+              <span>Iniciar con Google</span>
             </button>
           </div>
 
@@ -141,6 +141,7 @@ export default function SignIn() {
             <input
               className="placeholder-slate-400 py-2 focus:outline-none focus:border-cyan-500 md:m-2 border border-white bg-transparent rounded-md p-1 pl-10"
               name="password"
+              type="password"
               value={inputs.password}
               onChange={handleChange}
               placeholder="********"
@@ -148,12 +149,8 @@ export default function SignIn() {
 
             <p className="text-rose-500">{errors.password}</p>
 
-            <p className="text-cyan-500 underline mt-3 font-thin text-sm">
-              Me olvide mi contraseña
-            </p>
-
             <button
-              className="px-32 bg-cyan-400 py-3 my-6 text-slate-300"
+              className="px-32 bg-cyan-400 py-3 my-6 text-black"
               type="submit"
             >
               Iniciar
@@ -161,7 +158,7 @@ export default function SignIn() {
           </form>
           <Link to={"/signUp"}>
             <p className="text-cyan-500 underline mt-3 font-thin text-sm">
-              Sign Up
+              Registrarse
             </p>
           </Link>
         </div>

@@ -17,23 +17,34 @@ export default function Dashboard() {
     const lastMonth = currentMonth - 1
 
     const productsPercentage = () => {
-        let currentMonthProducts = products?.filter(product => (Number(product.createdAt.split('-')[1])) === currentMonth)
-        let lastMonthProducts = products?.filter(product => (Number(product.createdAt.split('-')[1])) === lastMonth)
+        let currentMonthProducts = products?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
+        let lastMonthProducts = products?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
 
+        if (lastMonthProducts.length === 0) {
+            return 0;
+        }
+    
         return (currentMonthProducts.length / lastMonthProducts.length) * 100
     }
 
     const usersPercentage = () => {
-        let currentMonthUsers = users?.filter(product => (Number(product.createdAt.split('-')[1])) === currentMonth)
-        let lastMonthUsers = users?.filter(product => (Number(product.createdAt.split('-')[1])) === lastMonth)
-
+        let currentMonthUsers = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
+        let lastMonthUsers = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
+        if (lastMonthUsers.length === 0) {
+            return 0;
+        }
+    
         return (currentMonthUsers.length / lastMonthUsers.length) * 100
     }
 
     const visitsPercentage = () => {
-        let currentMonthVisits = users?.filter(product => (Number(product.createdAt.split('-')[1])) === currentMonth)
-        let lastMonthVisits = users?.filter(product => (Number(product.createdAt.split('-')[1])) === lastMonth)
+        let currentMonthVisits = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === currentMonth)
+        let lastMonthVisits = users?.filter(product => (Number(product.createdAt?.split('-')[1])) === lastMonth)
 
+        if (lastMonthVisits.length === 0) {
+            return 0;
+        }
+    
         return (currentMonthVisits.length / lastMonthVisits.length) * 100
     }
 
@@ -41,17 +52,20 @@ export default function Dashboard() {
         let currentMothIncomes = 0
         users?.map(user => {
             for(let order in user.UserOrders) {
-                if(Number(order.createdAt.split('-')[1]) === currentMonth) currentMothIncomes = Number(currentMothIncomes) + order.total
+                if(Number(order.createdAt?.split('-')[1]) === currentMonth) currentMothIncomes = Number(currentMothIncomes) + order.total
             }
         })
 
         let lastMothIncomes = 0
         users?.map(user => {
             for(let order in user.UserOrders) {
-                if(Number(order.createdAt.split('-')[1]) === lastMonth) lastMothIncomes = Number(lastMothIncomes) + order.total
+                if(Number(order.createdAt?.split('-')[1]) === lastMonth) lastMothIncomes = Number(lastMothIncomes) + order.total
             }
         })
-
+        if (lastMothIncomes === 0) {
+            return 0;
+        }
+    
         return (currentMothIncomes / lastMothIncomes) * 100
     }
 
@@ -104,6 +118,45 @@ export default function Dashboard() {
         })
     }, [])
 
+     // Obtener datos de ganancias totales en un mes
+    const getMonthlyIncomes = (month) => {
+        let totalIncomes = 0;
+        users.forEach((user) => {
+        user.UserOrders.forEach((order) => {
+            const orderMonth = Number(order.createdAt.split('-')[1]);
+            if (orderMonth === month) {
+            totalIncomes += Number(order.total);
+            }
+        });
+        });
+        return totalIncomes;
+    };
+    //Obtener datos de ventas todales
+    const getMonthlySales = (month) => {
+        let totalSales = 0;
+        users.forEach((user) => {
+          user.UserOrders.forEach((order) => {
+            const orderMonth = Number(order.createdAt.split('-')[1]);
+            if (orderMonth === month) {
+              totalSales += 1;
+            }
+          });
+        });
+        return totalSales;
+      };
+    const monthNames = [
+        'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+        'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+    ];
+    // Crear el array de datos para el componente AreaChartComponents
+    const data = Array.from({ length: 12 }, (_, index) => {
+        const month = index + 1;
+        const totalRevenue = getMonthlyIncomes(month);
+        const totalSales = getMonthlySales(month)
+        return { month: monthNames[index], TotalRevenue: totalRevenue, TotalSales: totalSales };
+    });
+
+
     return (
         <div className='w-full h-auto md:mt-40 mt-20'>
             <div className='flex md:flex-row flex-col w-full justify-between align-center px-14'>
@@ -112,10 +165,10 @@ export default function Dashboard() {
                 )) }
             </div>
             <div className='flex md:flex-row flex-col w-full px-14 mt-8'>
-                <div className='flex flex-col md:w-3/4  w-full  md:h-auto h-auto bg-white md:mr-8  pt-14'>
-                    <AreaChartComponents/>
+                <div className='flex flex-col md:w-3/4  w-full  md:h-auto h-auto bg-white dark:bg-transparent dark:border dark:border-dashed dark:rounded-xl md:mr-8  pt-14'>
+                    <AreaChartComponents data={data}/>
                 </div>
-                <div className='flex flex-col  md:w-1/4 w-full h-96 bg-white justify-center items-center md:mt-0 mt-12 '>
+                <div className='flex flex-col  md:w-1/4 w-full h-96 bg-white justify-center items-center md:mt-0 mt-12 dark:bg-transparent dark:border dark:border-dashed dark:rounded-xl'>
                     <BarChartComponent/>
                 </div>
                     

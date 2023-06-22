@@ -5,9 +5,19 @@ import homeLogo from "../../assets/Logo_Marca_Personal_Minimalista_Elegante_y_Or
 import { useState, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { logOut, getUserId, showCart } from "../../redux/actions";
+import {
+  logOut,
+  getUserId,
+  showCart,
+  addDarkModeClient,
+} from "../../redux/actions";
 import { Cart, LogOut } from "iconoir-react";
-import toast, { Toaster } from "react-hot-toast";
+import swal from "sweetalert";
+
+import lunaRellena from "../../assets/moon.png";
+import luna from "../../assets/moon1.png";
+import sol from "../../assets/sun.png";
+import solRelleno from "../../assets/sun1.png";
 
 export default function Nav() {
   const location = useLocation();
@@ -15,7 +25,7 @@ export default function Nav() {
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
 
   const { image } = useSelector((state) => state.userData);
-
+  const { darkModeClient } = useSelector((st) => st);
   const userInfo = localStorage.getItem("userData");
 
   if (!userInfo) {
@@ -28,6 +38,7 @@ export default function Nav() {
         lastName: "",
         email: "",
         password: "",
+        role: "",
         access: false,
       })
     );
@@ -52,28 +63,36 @@ export default function Nav() {
   };
 
   function signOut() {
-    toast((t) => (
-      <span>
-        ¿Seguro de cerrar sesión?
-        <button
-          className="hover:bg-bluey hover:text-white"
-          onClick={() => {
-            dispatch(logOut());
-            navigate("/");
-            toast.remove(t.id);
-          }}
-        >
-          Cerrar sesión
-        </button>
-      </span>
-    ));
+    //Ahora se usa sweetalert para cerrar sesión
+    swal({
+      title: "Cerrar Sesión",
+      text: "¿Estás seguro de que deseas continuar?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((confirm) => {
+      if (confirm) {
+        dispatch(logOut());
+        navigate("/");
+      } else {
+        // Lógica a ejecutar si se cancela la confirmación
+        // ...
+      }
+    });
   }
-
+  const darkMode = () => {
+    if (!darkModeClient) {
+      dispatch(addDarkModeClient(true));
+    } else {
+      dispatch(addDarkModeClient(false));
+    }
+  };
   return (
-    <nav className="bg-transparent relative z-30">
-      <div>
-        <Toaster />
-      </div>
+    <nav
+      className={`${
+        darkModeClient === true ? " bg-slate-900 relative" : "bg-transparent"
+      } transition-all  z-30`}
+    >
       <div className="hidden md:block">
         <ul
           className={
@@ -88,32 +107,24 @@ export default function Nav() {
                 <img
                   src={homeLogo}
                   alt="home route image"
-                  className="md:h-20 md:w-20 h-10 w-10 absolute md:left-0 -left-10 -top-8"
+                  className={`${
+                    darkModeClient === true
+                      ? "bg-slate-100 rounded-full md:h-14 md:w-14 -top-7"
+                      : "bg-transparent md:h-20 md:w-20 -top-8"
+                  } transition-all h-10 w-10 absolute md:left-0 -left-10 `}
                 />
-              </Link>
-              <Link
-                className={actualRoute !== "" ? "text-teal-400" : "text-white"}
-                to="/women"
-              >
-                Mujeres
-              </Link>
-              <Link
-                className={actualRoute !== "" ? "text-teal-400" : "text-white"}
-                to="/man"
-              >
-                Hombres
-              </Link>
-              <Link
-                className={actualRoute !== "" ? "text-teal-400" : "text-white"}
-                to="/kids"
-              >
-                Niños
               </Link>
               <Link
                 className={actualRoute !== "" ? "text-teal-400" : "text-white"}
                 to="/alls"
               >
-                Todos
+                Productos
+              </Link>
+              <Link
+                className={actualRoute !== "" ? "text-teal-400" : "text-white"}
+                to="/about"
+              >
+                Nosotros
               </Link>
             </article>
           </li>
@@ -122,8 +133,57 @@ export default function Nav() {
             <article className="flex items-center jusfify-center gap-2">
               {access ? (
                 <>
+                  <div className="w-full flex justify-center">
+                    <div
+                      className={`${
+                        darkModeClient === true ? "bg-sky-700" : "bg-slate-400"
+                      } flex relative p-2 w-20 justify-between rounded-full`}
+                    >
+                      <div
+                        onClick={darkMode}
+                        className="relative cursor-pointer z-10 h-6 w-6 rounded-full p-1"
+                      >
+                        <img
+                          className={`h-4 w-4 absolute top-1`}
+                          src={luna}
+                          alt="vector"
+                        />
+                        <img
+                          className={`${
+                            darkModeClient === true ? "block" : "hidden"
+                          } h-4 w-4 absolute top-1`}
+                          src={lunaRellena}
+                          alt="vector"
+                        />
+                      </div>
+                      <div
+                        className={`${
+                          darkModeClient === true
+                            ? "bg-sky-200 translate-x-0"
+                            : "bg-gray-100 translate-x-10"
+                        } z-0 transition-all h-6 w-6 absolute rounded-full p-1`}
+                      ></div>
+                      <div
+                        onClick={darkMode}
+                        className="relative cursor-pointer z-10 h-6 w-6 rounded-full p-1"
+                      >
+                        <img
+                          className={`h-4 w-4 absolute top-1`}
+                          src={sol}
+                          alt="vector"
+                        />
+                        {darkModeClient === false ? (
+                          <img
+                            className="h-4 w-4 absolute top-1"
+                            src={solRelleno}
+                            alt="vector"
+                          />
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
                   <button
-                    className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                    className="transition bg-sky-300 ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                     onClick={() => dispatch(showCart())}
                   >
                     <Cart color={actualRoute === "/" ? "#FFFFFF" : "#000000"} />
@@ -143,19 +203,76 @@ export default function Nav() {
                   <button
                     onClick={signOut}
                     className={
-                      actualRoute === "/"
-                        ? "flex items-center gap-2 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
-                        : "flex items-center gap-2 text-black transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                      darkModeClient === false
+                        ? "flex items-center gap-2 text-slate-800 dark:text-sky-300 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
+                        : "flex items-center gap-2 text-sky-200 ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300"
                     }
                   >
                     <LogOut
-                      color={actualRoute === "/" ? "#FFFFFF" : "#000000"}
+                      color={darkModeClient === false ? "#000000" : "#FFFFFF"}
                     />
                     Cerrar sesión
                   </button>
                 </>
               ) : (
                 <>
+                  <div className="w-full flex justify-center">
+                    <div
+                      className={`${
+                        darkModeClient === true ? "bg-sky-700" : "bg-slate-400"
+                      } flex relative p-2 w-20 justify-between rounded-full`}
+                    >
+                      <div
+                        onClick={darkMode}
+                        className="relative cursor-pointer z-10 h-6 w-6 rounded-full p-1"
+                      >
+                        <img
+                          className={`h-4 w-4 absolute top-1`}
+                          src={luna}
+                          alt="vector"
+                        />
+                        <img
+                          className={`${
+                            darkModeClient === true ? "block" : "hidden"
+                          } h-4 w-4 absolute top-1`}
+                          src={lunaRellena}
+                          alt="vector"
+                        />
+                      </div>
+                      <div
+                        className={`${
+                          darkModeClient === true
+                            ? "bg-sky-200 translate-x-0"
+                            : "bg-gray-100 translate-x-10"
+                        } z-0 transition-all h-6 w-6 absolute rounded-full p-1`}
+                      ></div>
+                      <div
+                        onClick={darkMode}
+                        className="relative cursor-pointer z-10 h-6 w-6 rounded-full p-1"
+                      >
+                        <img
+                          className={`h-4 w-4 absolute top-1`}
+                          src={sol}
+                          alt="vector"
+                        />
+                        {darkModeClient === false ? (
+                          <img
+                            className="h-4 w-4 absolute top-1"
+                            src={solRelleno}
+                            alt="vector"
+                          />
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    className="transition ease-in-out delay-150 hover:-translate-y-1 bg-sky-300 hover:scale-110 hover:bg-bluey duration-300"
+                    onClick={() => dispatch(showCart())}
+                  >
+                    <Cart color={actualRoute === "/" ? "#FFFFFF" : "#000000"} />
+                  </button>
+
                   <Link
                     to="/signIn"
                     className={
@@ -166,6 +283,7 @@ export default function Nav() {
                   >
                     <button className="hover:bg-bluey">Inicia sesión</button>
                   </Link>
+
                   <Link
                     to="/signUp"
                     className={
@@ -184,18 +302,23 @@ export default function Nav() {
       </div>
 
       <div className="block md:hidden">
-        <div className="flex flex-row justify-around items-center fixed w-full h-24 bg-white z-20 shadow-blue-500/50">
+        <div
+          className={`${
+            darkModeClient === true ? "dark bg-slate-900" : "bg-white"
+          } transition-all flex flex-row justify-around items-center fixed w-full h-24  z-20 shadow-blue-500/50`}
+        >
           <Link to="/">
             <img
               src={homeLogo}
               alt="home route image"
-              className={styles.homeImg}
+              className={`${
+                darkModeClient === true
+                  ? "bg-slate-100 rounded-full h-14 w-14 -left-5"
+                  : `${styles.homeImg}`
+              } relative `}
             />
           </Link>
-
-          <button className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-bluey duration-300">
-            <Cart color="#000000" />
-          </button>
+          {/* className={`${darkModeClient === true ? 'dark bg-slate-900' : 'bg-white'} transition-all `} */}
 
           <div className="text-teal-400 cursor-pointer" onClick={toggleSideBar}>
             <svg
@@ -241,19 +364,70 @@ export default function Nav() {
           </div>
 
           <div className="h-full w-full flex flex-col justify-center items-center gap-y-5">
-            <Link className="text-white" to="/women" onClick={toggleSideBar}>
-              Women
-            </Link>
-            <Link className="text-white" to="/man" onClick={toggleSideBar}>
-              Man
-            </Link>
-            <Link className="text-white" to="/kids" onClick={toggleSideBar}>
-              Kids
+            <Link className="text-white" to="/" onClick={toggleSideBar}>
+              Home
             </Link>
             <Link className="text-white" to="/alls" onClick={toggleSideBar}>
-              Alls
+              Productos
             </Link>
-
+            <Link className="text-white" to="/about" onClick={toggleSideBar}>
+              Nosotros
+            </Link>
+            <button
+              className="transition ease-in-out delay-150 hover:-translate-y-1 bg-slate-300 hover:scale-110 hover:bg-bluey duration-300"
+              onClick={() => dispatch(showCart())}
+            >
+              <Cart color="#000000" />
+            </button>
+            <div className="w-full flex justify-center">
+              <div
+                className={`${
+                  darkModeClient === true ? "bg-sky-700" : "bg-slate-400"
+                } flex relative p-2 w-20 justify-between rounded-full`}
+              >
+                <div
+                  onClick={darkMode}
+                  className="relative cursor-pointer z-10 h-6 w-6 rounded-full p-1"
+                >
+                  <img
+                    className={`h-4 w-4 absolute top-1`}
+                    src={luna}
+                    alt="vector"
+                  />
+                  <img
+                    className={`${
+                      darkModeClient === true ? "block" : "hidden"
+                    } h-4 w-4 absolute top-1`}
+                    src={lunaRellena}
+                    alt="vector"
+                  />
+                </div>
+                <div
+                  className={`${
+                    darkModeClient === true
+                      ? "bg-sky-200 translate-x-0"
+                      : "bg-gray-100 translate-x-10"
+                  } z-0 transition-all h-6 w-6 absolute rounded-full p-1`}
+                ></div>
+                <div
+                  onClick={darkMode}
+                  className="relative cursor-pointer z-10 h-6 w-6 rounded-full p-1"
+                >
+                  <img
+                    className={`h-4 w-4 absolute top-1`}
+                    src={sol}
+                    alt="vector"
+                  />
+                  {darkModeClient === false ? (
+                    <img
+                      className="h-4 w-4 absolute top-1"
+                      src={solRelleno}
+                      alt="vector"
+                    />
+                  ) : null}
+                </div>
+              </div>
+            </div>
             {access ? (
               <>
                 <button
