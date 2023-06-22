@@ -1,7 +1,8 @@
 const mercadoPago = require("mercadopago");
 const { UserOrder, User, Product } = require("../db");
 const { Op } = require("sequelize");
-const sendEmail = require("../nodemailer");
+const sendEmail = require("../mail/nodemailerConfig");
+const sendPurchaseMail = require("../mail/purchaseMail");
 
 const createOrder = async (carrito) => {
   mercadoPago.configure({
@@ -112,15 +113,8 @@ const success = async (dni) => {
     await orden.save();
   }
 
-  if (orden.status == "fullfilled") {
-    let userEmail = orden.email;
-
-    await sendEmail({
-      from: "grupo_pf_supergenial@test.com",
-      to: userEmail,
-      subject: "Compra de productos",
-      text: `La compra se ha realizado con exito!`,
-    });
+  if(orden.status == 'fullfilled') {
+    await sendPurchaseMail(orden.email, orden.id, orden.products)
   }
 };
 
