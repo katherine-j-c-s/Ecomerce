@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Typewriter from "typewriter-effect";
-
+// import Typewriter from "typewriter-effect";
+// "typewriter-effect": "^2.20.1"
 import katheImg from '../../assets/Kathe.png'
 import AmadeoImg from '../../assets/amadeo.png'
 import PabloImg from '../../assets/Pablo.png'
@@ -65,12 +65,12 @@ export default function About() {
     useEffect(()=>{
         setTimeout(()=>{
             setInicio(true)
-        },10000)
+        },100)
     })
   return (
     <main  className={!darkModeClient ? '' : 'dark bg-slate-950'}>
         <div className='w-full pt-32 md:pt-20'>
-            <div className='text-slate-900 dark:text-slate-200 md:text-3xl text-xl font-bold mb-10'>
+            {/* <div className='text-slate-900 dark:text-slate-200 md:text-3xl text-xl font-bold mb-10'>
                 <Typewriter onInit={(typewriter)=> {
                 typewriter.typeString("Nosotros somos...")
                 .pauseFor(1000)
@@ -79,7 +79,8 @@ export default function About() {
                 .start();
                 }}
                 />
-            </div>
+            </div> */}
+            <h1  className='text-slate-900 dark:text-slate-200 md:text-3xl text-xl font-bold mb-10'>Nosotros somos...</h1>
             <div className='w-10/12 flex justify-center mx-auto flex-col'>
                 {participantes.map((p,i)=>{
                     let impart = false
