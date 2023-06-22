@@ -259,6 +259,7 @@ export default function Profile() {
   };
 
   const handleSubmitComments = (event) => {
+    event.preventDefault();
     let resultado = [];
 
     review.forEach((element) => {
@@ -276,6 +277,7 @@ export default function Profile() {
     );
     send.push(parseInt(event.target.id));
     dispatch(postComments(envio));
+    navigate("/profile")
   };
 
   const handleAdmin = (event) => {
