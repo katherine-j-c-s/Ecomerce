@@ -65,7 +65,7 @@ export default function About() {
     useEffect(()=>{
         setTimeout(()=>{
             setInicio(true)
-        },100)
+        },10000)
     })
   return (
     <main  className={!darkModeClient ? '' : 'dark bg-slate-950'}>

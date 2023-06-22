@@ -4,7 +4,7 @@ import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-// import Typewriter from "typewriter-effect";
+import Typewriter from "typewriter-effect";
 
 import {
   getProductById,
@@ -288,14 +288,14 @@ export default function Profile() {
   return (
     <main className={!darkModeClient ? '' : 'dark'}>
         <div className="dark:bg-slate-950 dark:text-slate-300 bg-slate-300 text-black w-full flex md:flex-row flex-col justify-center relative h-fit md:h-screen">
-        {/* <div className="absolute md:top-8 top-56 text-lg w-full font-bold mx-auto md:w-fit">
+        <div className="absolute md:top-8 top-56 text-lg w-full font-bold mx-auto md:w-fit">
           <Typewriter onInit={(typewriter)=> {
             typewriter.typeString(`${"Hola" + " " + user.name + "!"}`)
             .start();
             }}
           />
-        </div> */}
-        <h1 className="absolute md:top-8 top-56 text-lg w-full font-bold mx-auto md:w-fit">{"Hola" + " " + user.name + "!"}</h1>
+        </div>
+        {/* <h1 className="absolute md:top-8 top-56 text-lg w-full font-bold mx-auto md:w-fit">{"Hola" + " " + user.name + "!"}</h1> */}
         <div> 
           <Toaster />
         </div>
