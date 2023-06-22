@@ -42,7 +42,7 @@ const participantes = [
         icons: [icons5,icons6]
     },
     {
-        name:'Agustin',
+        name:'Pablo',
         desc: 'Soy Pablo de Argentina. amo la música, los deportes . y me apasiona el desarrollo web, la tecnología y los videojuegos 🤓',
         image: PabloImg,
         icons: [icons4,icons6]
