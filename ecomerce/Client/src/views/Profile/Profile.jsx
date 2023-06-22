@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import perfil from "../../assets/Vector1.png";
+import perfil from "../../assets/Vector1.png"; 
 import edit from "../../assets/edit.png";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
