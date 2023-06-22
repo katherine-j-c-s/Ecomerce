@@ -295,7 +295,7 @@ export default function Profile() {
             }}
           />
         </div>
-        <div>
+        <div> 
           <Toaster />
         </div>
         <section className="md:w-fit w-full mx-auto md:mx-0 md:mt-28 mt-28 flex flex-col">
