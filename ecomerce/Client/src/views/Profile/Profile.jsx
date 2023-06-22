@@ -658,7 +658,6 @@ export default function Profile() {
                         image = img.value
                       }
                       let comentarioRepetido = commentCreated.find(c => c.ProductId === Array.from(uniqueProductIds)[i])
-                      console.log(comentarioRepetido)
                       let coment = review.find(
                         (c) => c.id === Array.from(uniqueProductIds)[i]
                       );
@@ -678,10 +677,28 @@ export default function Profile() {
                             </h2>
                           </div>
                           {comentarioRepetido !== undefined && comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
-                            <h1>
-                            {comentarioRepetido.content}
-                            {comentarioRepetido.rate}
-                          </h1>
+                            <div>
+                              <div>
+                                <p>{comentarioRepetido.content}</p>
+                              </div>
+                              {[1, 2, 3, 4, 5].map((value) => {
+                                {comentarioRepetido.rate}
+                                return(
+                                  <span
+                                    key={value}
+                                    className={`fa fa-heart`}
+                                    style={{
+                                      color:
+                                        value <=
+                                        comentarioRepetido.rate
+                                          ? "red"
+                                          : "",
+                                      marginRight: 5,
+                                    }}
+                                  ></span>
+                                )})}
+                              
+                          </div>
                           : <form
                               className={`${
                                 showForm === true
