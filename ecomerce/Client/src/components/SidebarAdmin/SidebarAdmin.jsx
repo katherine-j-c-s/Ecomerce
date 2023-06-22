@@ -85,7 +85,7 @@ export default function SidebarAdmin() {
           </div>
           <Link className='absolute w-fit bottom-0 mb-7 flex' to={'/'}>
             <img className='w-5 h-4 top-1 relative mr-3' src={imagenOut} alt="logout"/>
-            <p className='font-thin dark:font-mono text-slate-500'>Log out</p>
+            <p className='font-thin dark:font-mono text-slate-500'>Volver</p>
           </Link> 
         </div>
       </aside>
