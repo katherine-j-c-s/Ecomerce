@@ -46,6 +46,7 @@ export default function Cart() {
 
     const handleCountrySelect = (option) => {
         setPayForm(prevState => {
+            console.log("🧑‍💻Reparando cositas")
             let phone;
             if (prevState.phone.startsWith(option.codigoPais)) {
                 // Si ya se ha añadido el código del país, mantenemos el número de teléfono tal como está.
@@ -56,8 +57,8 @@ export default function Cart() {
             }
             const newPayForm = {
                 ...prevState,
-                locality: option.label,    
-                currency_id: option.value,  
+                locality: option.label,
+                currency_id: option.currency,  // Aquí se asigna sólo la moneda
                 phone: phone 
             }
             validate(newPayForm);
