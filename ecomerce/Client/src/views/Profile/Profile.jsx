@@ -259,7 +259,6 @@ export default function Profile() {
   };
 
   const handleSubmitComments = (event) => {
-    event.preventDefault();
     let resultado = [];
 
     review.forEach((element) => {
