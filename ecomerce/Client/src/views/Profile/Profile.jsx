@@ -25,7 +25,7 @@ export default function Profile() {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.userData);
-  const { productDetail, commentsUser,darkModeClient } = useSelector((st) => st);
+  const { productDetail, commentsUser ,darkModeClient } = useSelector((st) => st);
   const orders = user.orders;
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
@@ -74,8 +74,10 @@ export default function Profile() {
       let repetido = images.find((i) => i.id === productDetail.id);
       if (!repetido) {
         images.push(newlist);
-        setCommentCreated(productDetail.comments)
-      }
+        let idComentarios = productDetail.comments.find(c => c.UserId === userLocal.id)
+        if(idComentarios){commentCreated.push(idComentarios)}
+        }
+        
     }
   }, [productDetail]);
 
@@ -274,7 +276,7 @@ export default function Profile() {
       (producto) => producto.id === parseInt(event.target.id)
     );
     send.push(parseInt(event.target.id));
-    dispatch(postComments(envio));
+    dispatch(postComments(envio)).then(() => window.location.reload());
   };
 
   const handleAdmin = (event) => {
@@ -672,13 +674,17 @@ export default function Profile() {
                               src={image}
                               alt="img"
                             />
-                            <h2 className="mt-4 w-10/12 mx-auto font-mono">
+                            <h2 className="mt-4 w-10/12  mx-auto font-bold">
                               {productName}
                             </h2>
                           </div>
                           {comentarioRepetido !== undefined && comentarioRepetido.ProductId === Array.from(uniqueProductIds)[i] ?
                             <div>
                               <div>
+                                <link
+                                  rel="stylesheet"
+                                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+                                />
                                 <p>{comentarioRepetido.content}</p>
                               </div>
                               {[1, 2, 3, 4, 5].map((value) => {
@@ -760,7 +766,7 @@ export default function Profile() {
                     })
                   : "No Hay compras disponibles"}
               </div>
-              <p
+              {commentCreated.length < Array.from(uniqueProductNames).length ? <p
                 onClick={() => {
                   if (showForm) {
                     setShowform(false);
@@ -771,7 +777,7 @@ export default function Profile() {
                 className="bg-sky-400 md:mt-10 mt-2 mb-10 cursor-pointer w-fit mx-auto p-2 rounded-xl font-mono hover:bg-sky-500 hover:shadow-lg"
               >
                 {showForm === false ? "Dejar Reseña" : "volver"}
-              </p>
+              </p> : null}
             </section>
           )}
         </article>
