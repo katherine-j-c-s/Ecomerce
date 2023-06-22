@@ -50,7 +50,7 @@ export default function UserDetailAdmin() {
         </div>
       </div>
       <div className='w-10/12 md:w-2/5 mx-auto'>
-        <p className='text-sky-400 font-bold my-3'>Orders</p>
+        <p className='text-sky-400 font-bold my-3'>Compras</p>
         {user.UserOrders.length > 0 ?
           user.UserOrders.map((o,i)=>{
             return(
@@ -140,7 +140,7 @@ export default function UserDetailAdmin() {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <p className='text-sky-400 font-bold my-3'>Comments</p>
+        <p className='text-sky-400 font-bold my-3'>Comentarios</p>
         {user.Comments.length > 0 ?
           <div className='flex flex-wrap w-6/12 mx-auto justify-evenly h-fit'>{
             user.Comments.map(coment=>(
