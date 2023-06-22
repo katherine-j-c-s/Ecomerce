@@ -170,12 +170,13 @@ export function deleteUser(id) {
     return dispatch({ type: DELETE_USER, payload: data });
   };
 }
-export const userUpDate = (id, userUpdate) => {
+export const userUpDate = (id, update) => {
+  console.log(update);
   return async function (dispatch) {
     try {
       const { data } = await axios.patch(
         `https://ecomerce-production-8f61.up.railway.app/users/${id}`,
-        userUpdate
+        update
       );
       return dispatch({
         type: USER_UPDATE,

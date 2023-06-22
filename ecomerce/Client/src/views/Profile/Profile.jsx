@@ -697,8 +697,7 @@ export default function Profile() {
                                     }}
                                   ></span>
                                 )})}
-                              
-                          </div>
+                            </div>
                           : <form
                               className={`${
                                 showForm === true

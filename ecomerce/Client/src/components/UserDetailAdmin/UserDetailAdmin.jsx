@@ -12,7 +12,7 @@ export default function UserDetailAdmin() {
     setShowProducts({id:order.id, show:true})
   }
   return (
-    <div className='w-screen mt-20 h-full md:h-screen relative'>
+    <div className='w-screen mt-20 h-fit md:h-screen relative'>
       <Link to={"/admin?pestaña=usuarios"}>
         <p className='text-sky-400 absolute cursor-pointer -top-14 right-10'>Volver</p>
       </Link>
@@ -135,12 +135,34 @@ export default function UserDetailAdmin() {
           </div>)
         }
       </div>
-      <div className='w-full md:w-3/5 mx-auto mb-10'>
+      <div className='w-full bg-slate-300 dark:bg-slate-900 relative z-0 mb-10'>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
         <p className='text-sky-400 font-bold my-3'>Comments</p>
         {user.Comments.length > 0 ?
-          (<div className='bg-white rounded-md'> 
-            <p className='text-slate-500 py-2'>Si ha comentado algo</p>
-          </div>)
+          <div className='flex flex-wrap w-6/12 mx-auto justify-evenly h-fit'>{
+            user.Comments.map(coment=>(
+            <div className='bg-white w-52 h-32 p-2 mb-10 rounded-xl transition-all dark:hover:bg-slate-950 dark:hover:border-slate-950 dark:bg-transparent dark:border-sky-400 border cursor-pointer hover:shadow-lg dark:hover:shadow-slate-950'> 
+              {[1, 2, 3, 4, 5].map((value) => (
+                  <span
+                    key={value}
+                    className={`fa fa-heart`}
+                    style={{
+                      color:
+                        value <=
+                        coment.rate
+                          ? "red"
+                          : "",
+                      marginRight: 5,
+                    }}
+                  ></span>
+                ))}
+              <p className='text-slate-500 py-2'>{coment.content}</p>
+            </div>))
+          }</div>
+          
         : 
           (<div className='flex md:flex-row flex-col justify-center md:justify-between'>
             <div className='bg-white w-10/12 mx-auto md:w-5/12 rounded-lg transition-all dark:hover:bg-slate-950 dark:hover:border-slate-950 dark:bg-transparent dark:border-sky-400 border mb-5 cursor-pointer hover:shadow-lg dark:hover:shadow-slate-950'> 

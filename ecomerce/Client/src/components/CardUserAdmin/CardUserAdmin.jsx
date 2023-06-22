@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {getAllUsers, userAdmin, deleteUser,getUserId} from '../../redux/actions'
+import {getAllUsers, userAdmin, deleteUser,getUserId,userUpDate} from '../../redux/actions'
 import swal from "sweetalert";
 
 import editPhoto from '../../assets/edit.png'
 import { useNavigate } from 'react-router-dom'
-import EditUserStatus from '../EditUserStatus/EditUserStatus';
 
 export default function CardUserAdmin() {
     const navegate = useNavigate()
     const dispatch = useDispatch()
 
     const {allUsers,userData} = useSelector(st=>st)
-    let [stado,setStado]= useState(false)
+    let [stado,setStado]= useState('')
     useEffect(()=>{
         dispatch(getAllUsers())
     },[])
@@ -43,41 +42,28 @@ export default function CardUserAdmin() {
     const handleEdit = (id) => {
         dispatch(getUserId(id))
         if (userData?.id === Number(id)) {
-            if (userData?.role === 'admin') {
-                console.log(userData?.role);
-                setStado('admin')
-            }else if (userData?.role === 'client') {
-                console.log(userData?.role);
-                setStado('Cliente')
-            }else if (user?.role !== 'admin' & user?.role !== 'client') {
-                setStado('')
+            if (userData?.status === 'active') {
+                console.log(userData?.status);
+                setStado('inactive')
+            }else{
+                console.log(userData?.status);
+                setStado('active')
             }
-            console.log(userData?.role);
+            let result = {status:stado}
+            console.log(result);
             swal({
-                title: `${userData?.role === '' ? "Activar cuenta" : "Desactivar Cuenta"}`,
+                title: `${userData?.status === 'inactive' ? "Activar cuenta" : "Desactivar Cuenta"}`,
                 text: "¿Estás seguro de que deseas continuar?",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
             }).then((confirm) => {
-            if (confirm) {
-                console.log('fue editado correctamente').then((success) => {
-                toast.success("Proceso exitoso.", {
-                    duration: 2000,
-                });
-        
-                setTimeout(() => {
-                    toast.remove();
-                    dispatch(logOut());
-                    navegate("/admin?pestaña=usuarios");
-                }, 2000);
-                });
-            }
+                if (confirm) {
+                    dispatch(userUpDate(Number(id),result))
+                    dispatch(getAllUsers())
+                }
             });
         }
-    }
-    const closeEdit = () => {
-        setEdit({show:false,id:null,user:null})
     }
     const userDetail = (e) =>{
         let id = e.target.id.split('/')
@@ -91,7 +77,7 @@ export default function CardUserAdmin() {
         <div className='flex flex-wrap'>
             {allUsers?.map(u=>{
                 return(
-                    <div className='bg-white dark:text-slate-400 dark:bg-transparent dark:hover:bg-sky-700 dark:border-sky-300 dark:hover:border-sky-700 border text-black flex p-2 py-4 m-3 justify-evenly rounded-xl' key={u.id}>
+                    <div className={`${u.status === 'active' ? 'border-sky-300 border dark:hover:bg-sky-700 dark:border-sky-300 dark:hover:border-sky-700 dark:text-slate-400 dark:bg-transparent ' : 'border-red-800 border text-red-800'}  flex p-2 py-4 m-3 justify-evenly rounded-xl`} key={u.id}>
                         <div className='mx-6'>
                             <img className='h-10 w-10 rounded-full' src={u.image.url} alt="vector" />
                         </div>
